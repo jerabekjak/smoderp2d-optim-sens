@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 
-import agent
-
-
+from agent_def import Agent
 
 if __name__ == '__main__' : 
     
-    print (object)
+    a = Agent(3)
+    print (a._pos)
