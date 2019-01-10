@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from agent_def import Agent
+from diff_evol.agent_def import Agent
 
 if __name__ == '__main__' : 
     
