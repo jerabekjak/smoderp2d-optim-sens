@@ -20,7 +20,8 @@ def main(pars):
 
 
 def init():
-    parser = argparse.ArgumentParser(description='Run Smoderp2D.')
+    parser = argparse.ArgumentParser(
+        description='Run Smoderp2D optimalization with differential evolution.')
 
     parser.add_argument(
         '-obs_data',
