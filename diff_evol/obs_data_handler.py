@@ -31,11 +31,11 @@ class ObsData(object):
                 continue
             else:
                 if (not(n_read)):
-                    self.n = self.read_line_n(line)
+                    self.n = self._read_line_n(line)
                     n_read = True
                 else:
-                    time = (self.read_line_vals(line)[0])
-                    val = (self.read_line_vals(line)[1])
+                    time = (self._read_line_vals(line)[0])
+                    val = (self._read_line_vals(line)[1])
                     self.data.append(RecObsData(time, val))
 
         for i in range(3, (3+self.n)):
@@ -43,14 +43,14 @@ class ObsData(object):
 
         ob_f.close()
 
-    def read_line_n(self, _line):
+    def _read_line_n(self, _line):
         try:
             val = int(_line)
         except ValueError:
             raise IncorrectDataInObsFile(_line)
         return val
 
-    def read_line_vals(self, _line):
+    def _read_line_vals(self, _line):
 
         _line = _line.replace('\n', '').split('\t')
         if not(len(_line) == 2):
