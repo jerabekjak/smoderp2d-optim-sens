@@ -1,14 +1,19 @@
 from exceptions import IncorrectDataInObsFile
-
+import numpy as np
 
 class RecObsData(object):
     """ RecObsData contains data of one observed record """
 
-    def __init__(self, time, val):
+    def __init__(self, n):
 
-        self.time = time
-        self.val = val
-
+        self.time = np.zeros(n,float)
+        self.val = np.zeros(n,float)
+        
+    def set_vals(self,i,time,val):
+        
+        self.time[i] = time
+        self.val[i]  = val
+    
 
 class ObsData(object):
     """ ObsData handle obs data reading 
@@ -19,9 +24,9 @@ class ObsData(object):
     def __init__(self, obs_path):
 
         ob_f = open(obs_path, 'r')
-
         ob_ls = ob_f.readlines()
-
+        
+        i = 0
         n_read = False
 
         self.data = []
@@ -32,14 +37,13 @@ class ObsData(object):
             else:
                 if (not(n_read)):
                     self.n = self._read_line_n(line)
+                    self.data = RecObsData(self.n)
                     n_read = True
                 else:
                     time = (self._read_line_vals(line)[0])
                     val = (self._read_line_vals(line)[1])
-                    self.data.append(RecObsData(time, val))
-
-        for i in range(3, (3+self.n)):
-            l = ob_ls[i]
+                    self.data.set_vals(i=i, time=time, val=val)
+                    i += 1
 
         ob_f.close()
 
