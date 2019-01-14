@@ -2,16 +2,16 @@
 
 import argparse
 
+from diff_evol.obs_data_handler import ObsData
+
 def main(pars):
     
-    pass
+    # load observation data
+    OD = ObsData(pars.obs_data)
     
-
-
 def init() :
     parser = argparse.ArgumentParser(description='Run Smoderp2D.')
 
-    # type of computation
     parser.add_argument(
         '-obs_data',
         help='location of observed data',
@@ -19,7 +19,6 @@ def init() :
         required=True
     )
 
-    # data file (only required for runoff)
     parser.add_argument(
         '-outputdir',
         help='directory to store the ',

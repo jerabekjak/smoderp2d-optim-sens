@@ -1,11 +1,11 @@
 # rows
 21
-# data time and obs var
+# data time and obs var separated with tab
 2	2
 4	2
 6	2
 8	2
-10	3
+10	3 
 12	3
 14	3
 16	3
