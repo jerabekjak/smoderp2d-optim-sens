@@ -21,7 +21,7 @@ class DiffEvol(object):
         
         print (params)
         
-        sm.run()
+        sm.run(self._mod_conf)
         
         
         # return SS

@@ -7,34 +7,16 @@ else:
 
 from model.smoderp2d.core.general import Globals
 from model.smoderp2d.providers.base import BaseProvider, Logger
+from argparse import Namespace
 
 class CmdProvider(BaseProvider):
-    def __init__(self):
+    def __init__(self,indata_path):
         """Create argument parser."""
         super(CmdProvider, self).__init__()
         
-        # define CLI parser
-        parser = argparse.ArgumentParser(description='Run model.smoderp2d.')
-
-        # type of computation
-        parser.add_argument(
-            '--typecomp',
-            help='type of computation',
-            type=str,
-            choices=['full',
-                     'dpre',
-                     'roff'],
-            required=True
-        )
-
-        # data file (only required for runoff)
-        parser.add_argument(
-            '--indata',
-            help='file with prepared data',
-            type=str
-        )
-        self._args = parser.parse_args()
-
+        # create parser "by hard"
+        self._args = Namespace(indata = indata_path, typecomp = 'roff')
+        
         # load configuration
         self._config = ConfigParser()
         if self._args.typecomp == 'roff':

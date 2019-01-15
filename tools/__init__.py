@@ -23,6 +23,7 @@ def read_parser():
         '--mod_conf',
         help='location of model config file',
         type=str,
+        default='model/test.ini',
         required=False
     )
 
