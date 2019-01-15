@@ -19,9 +19,7 @@ class DiffEvol(object):
 
     def model(self, params):
         
-        print (params)
-        
-        sm.run(self._mod_conf)
+        sm.run(self._mod_conf, params, self._obs.time*60.0)
         
         
         # return SS

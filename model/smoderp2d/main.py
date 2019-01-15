@@ -14,13 +14,10 @@ The computing itself is performed in src.runoff
 import os
 from model.smoderp2d.providers.cmd import CmdProvider
 
-def run(indata_path):
+def run(indata_path, params, time):
     # initialize provider
     provider = CmdProvider(indata_path)
-
-    # print logo
-    provider.logo()
-
+    
     # load configuration (set global variables)
     provider.load()
 
