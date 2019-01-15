@@ -1,6 +1,7 @@
 from scipy.optimize import differential_evolution
 
 
+
 class DiffEvol(object):
 
     def __init__(self, obs, pars):
@@ -11,7 +12,8 @@ class DiffEvol(object):
 
         :param obs: list of obs_data_handler.RecObsData instances  
         """
-
+        print (os.path.join(os.path.dirname(__file__), '..'))
+        
         self._obs = obs
         self._de = differential_evolution
         self._mod_conf = pars.mod_conf
