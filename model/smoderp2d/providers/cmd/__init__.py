@@ -51,6 +51,7 @@ class CmdProvider(BaseProvider):
             #
             # Change vals for optimalization
             self._set_philips_to_glob(philip)
+            self._set_rainfall_to_glob(rainfall)
             #
             #
             #
@@ -72,6 +73,15 @@ class CmdProvider(BaseProvider):
         for l in Globals.combinatIndex :
             l[1] = ks
             l[2] = s
+
+            
+    def _set_rainfall_to_glob(self,rainfall):
+        """ change rainfall intensity in globals.sr """
+        pass
+    
+    def _set_slope_to_glob(self):
+        """ change surface slope in globals.mat_slope """
+        pass 
         
         
         
