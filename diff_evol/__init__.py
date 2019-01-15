@@ -1,6 +1,6 @@
 from scipy.optimize import differential_evolution
 
-
+import model.smoderp2d.main as sm
 
 class DiffEvol(object):
 
@@ -12,10 +12,16 @@ class DiffEvol(object):
 
         :param obs: list of obs_data_handler.RecObsData instances  
         """
-        print (os.path.join(os.path.dirname(__file__), '..'))
-        
         self._obs = obs
         self._de = differential_evolution
         self._mod_conf = pars.mod_conf
+        
 
-        pass
+    def model(self, params):
+        
+        print (params)
+        
+        sm.run()
+        
+        
+        # return SS
