@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-
 from diff_evol.obs_data_handler import ObsData
 from diff_evol import DiffEvol
 from philip_optim import get_ks_s
