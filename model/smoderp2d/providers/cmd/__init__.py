@@ -31,7 +31,7 @@ class CmdProvider(BaseProvider):
         # must be defined for _cleanup() method
         Globals.outdir = self._config.get('Other', 'outdir')
 
-    def load(self, philip, obs):
+    def load(self, philip, params, obs):
         """Load configuration data.
 
         Only roff procedure supported.
@@ -54,6 +54,7 @@ class CmdProvider(BaseProvider):
             self._set_philips_to_glob(philip)
             self._set_rainfall_to_glob(obs.rainfall)
             self._set_slope_to_glob(obs.slope)
+            self._set_optim_params_to_glob(params,obs.slope)
             #
             #
             #
@@ -85,3 +86,11 @@ class CmdProvider(BaseProvider):
     def _set_slope_to_glob(self,slope):
         """ change surface slope in globals.mat_slope """
         Globals.mat_slope.fill(slope)
+        
+    def _set_optim_params_to_glob(self,params,slope):
+        """ change surface slope in globals.mat_aa a globals.mat_aa """
+        X = params[0]
+        Y = params[1]
+        b = params[2]
+        Globals.mat_aa = X*Globals.mat_slope**Y
+        Globals.mat_b.fill(b)

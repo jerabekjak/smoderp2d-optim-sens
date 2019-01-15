@@ -19,7 +19,7 @@ def run(indata_path, params, obs):
     provider = CmdProvider(indata_path)
     
     # load configuration (set global variables)
-    provider.load('philip_optim/.philip', obs)
+    provider.load('philip_optim/.philip', params, obs)
 
     # must be called after initialization
     from model.smoderp2d.runoff import Runoff
