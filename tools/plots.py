@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-
 def plot_philip(fnc, ks, s, out_dir, obs_data):
 
     path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
