@@ -16,7 +16,7 @@ def main(pars):
     # stores ks and s into .philip file
     get_ks_s(OD.data)
 
-    DE = DiffEvol(OD.data)
+    DE = DiffEvol(obs = OD.data, pars = pars)
 
 
 if __name__ == '__main__':

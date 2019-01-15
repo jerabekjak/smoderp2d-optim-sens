@@ -3,7 +3,7 @@ from scipy.optimize import differential_evolution
 
 class DiffEvol(object):
 
-    def __init__(self, obs):
+    def __init__(self, obs, pars):
         """ init diff evol 
         1 tell the model which times to store
         2 prepare the model config
@@ -14,5 +14,6 @@ class DiffEvol(object):
 
         self._obs = obs
         self._de = differential_evolution
+        self._mod_conf = pars.mod_conf
 
         pass
