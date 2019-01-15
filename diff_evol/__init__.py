@@ -3,6 +3,7 @@ from scipy.optimize import differential_evolution
 import model.smoderp2d.main as sm
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
+from tools.plots import plot_de
 
 # objective function
 
@@ -23,7 +24,7 @@ class DiffEvol(object):
         2 prepare the model config
         3 fo the optimizatoin (see https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.differential_evolution.html)
 
-        :param obs: list of obs_data_handler.RecObsData instances
+        :param pars: parser namespace
         :param obs: list of obs_data_handler.RecObsData instances  
         """
         self._obs = obs
@@ -32,9 +33,11 @@ class DiffEvol(object):
         self._mod_data_interp = None
         self._de = differential_evolution
         self._mod_conf = pars.mod_conf
+        self._out_dir = pars.out_dir
         self._mod_file = obs.model_file
         self._read_mod_file = read_mod_file
         self._interp_mod_data = interpolate
+        self._plot = True
 
     def model(self, params):
         """ compute model and comare it with the data
@@ -50,3 +53,11 @@ class DiffEvol(object):
             mod=self._mod_data, obs=self._obs_data)
 
         return sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
+
+    def make_de(self):
+
+        bounds = [(0, 20), (0, 20), (0, 2)]
+        result = differential_evolution(self.model, bounds)
+
+        if self._plot:
+            plot_de(self._obs_data, self._mod_data_interp, result, self._out_dir)
