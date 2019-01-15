@@ -16,10 +16,9 @@ class DiffEvol(object):
         self._de = differential_evolution
         self._mod_conf = pars.mod_conf
         
-
     def model(self, params):
         
-        sm.run(self._mod_conf, params, self._obs.time*60.0)
+        sm.run(self._mod_conf, params, self._obs)
         
         
         # return SS

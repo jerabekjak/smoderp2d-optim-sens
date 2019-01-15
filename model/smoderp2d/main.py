@@ -14,12 +14,12 @@ The computing itself is performed in src.runoff
 import os
 from model.smoderp2d.providers.cmd import CmdProvider
 
-def run(indata_path, params, time):
+def run(indata_path, params, obs):
     # initialize provider
     provider = CmdProvider(indata_path)
     
     # load configuration (set global variables)
-    provider.load('philip_optim/.philip')
+    provider.load('philip_optim/.philip', obs)
 
     # must be called after initialization
     from model.smoderp2d.runoff import Runoff

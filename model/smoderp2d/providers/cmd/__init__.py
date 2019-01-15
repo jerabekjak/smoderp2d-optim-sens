@@ -9,14 +9,15 @@ from model.smoderp2d.core.general import Globals
 from model.smoderp2d.providers.base import BaseProvider, Logger
 from argparse import Namespace
 
+
 class CmdProvider(BaseProvider):
-    def __init__(self,indata_path):
+    def __init__(self, indata_path):
         """Create argument parser."""
         super(CmdProvider, self).__init__()
-        
+
         # create parser "by hard"
-        self._args = Namespace(indata = indata_path, typecomp = 'roff')
-        
+        self._args = Namespace(indata=indata_path, typecomp='roff')
+
         # load configuration
         self._config = ConfigParser()
         if self._args.typecomp == 'roff':
@@ -30,7 +31,7 @@ class CmdProvider(BaseProvider):
         # must be defined for _cleanup() method
         Globals.outdir = self._config.get('Other', 'outdir')
 
-    def load(self,philip):
+    def load(self, philip, obs):
         """Load configuration data.
 
         Only roff procedure supported.
@@ -44,14 +45,14 @@ class CmdProvider(BaseProvider):
             )
 
             self._set_globals(data)
-            
+
             #
             #
             #
             #
             # Change vals for optimalization
             self._set_philips_to_glob(philip)
-            self._set_rainfall_to_glob(rainfall)
+            self._set_rainfall_to_glob(obs.rainfall)
             #
             #
             #
@@ -62,26 +63,24 @@ class CmdProvider(BaseProvider):
             raise ProviderError('Unsupported partial computing: {}'.format(
                 self._args.typecomp
             ))
-    
-    def _set_philips_to_glob(self,philip):
+
+    def _set_philips_to_glob(self, philip):
         """ read philip paramaters from hidden file """
         with open(philip, 'r') as pf:
             lines = pf.readlines()
-            s = float(lines[1].replace('\n',''))
-            ks = float(lines[2].replace('\n',''))
-        
-        for l in Globals.combinatIndex :
+            s = float(lines[1].replace('\n', ''))
+            ks = float(lines[2].replace('\n', ''))
+
+        for l in Globals.combinatIndex:
             l[1] = ks
             l[2] = s
 
-            
-    def _set_rainfall_to_glob(self,rainfall):
+    def _set_rainfall_to_glob(self, rainfall):
         """ change rainfall intensity in globals.sr """
-        pass
-    
+        for l in Globals.sr:
+            l[0] = 3600
+            l[1] = rainfall/1000./3600.
+
     def _set_slope_to_glob(self):
         """ change surface slope in globals.mat_slope """
-        pass 
-        
-        
-        
+        pass
