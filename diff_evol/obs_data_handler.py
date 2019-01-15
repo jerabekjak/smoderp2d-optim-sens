@@ -52,6 +52,7 @@ class ObsData(object):
                 i += 1
 
         self.data.calc_infiltration(self.rainfall)
+        self.data.time = self.data.time*60.
         
     def _read_line_int(self, _line):
         try:

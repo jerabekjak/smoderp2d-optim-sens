@@ -32,10 +32,26 @@ def read_mod_file(path, col='Waterlevel[m]', t_col='time[s]'):
         for i in range(nlineheader, nlines):
             line = lines[i].replace('\n', '').split(';')
             for j in range(ncols):
-                data[header[j]][i-nlineheader] = line[j]
+                data[header[j]][i-nlineheader] = float(line[j])
 
         cdata = RecModData(nlines-nlineheader)
 
         cdata.set_vals(data[t_col], data[col])
 
         return cdata
+
+
+def interpolate(mod,obs):
+    
+    cdata = RecModData(len(obs.time))
+    
+    y_interp = np.interp(obs.time,mod.time,mod.val)
+    
+    cdata.set_vals(obs.time, y_interp)
+    
+    return cdata
+    
+        
+        
+        
+        
