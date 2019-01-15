@@ -32,7 +32,7 @@ def read_parser():
         '--obs_data',
         help='location of observed data',
         type=str,
-        default='obs_data/data.dat',
+        default='obs_data/data.cfg',
         required=False
     )
 

@@ -1,6 +1,6 @@
 from exceptions import IncorrectDataInObsFile
 import numpy as np
-
+from configparser import ConfigParser
 
 class RecObsData(object):
     """ RecObsData contains data of one observed record """
@@ -30,35 +30,28 @@ class ObsData(object):
     """
 
     def __init__(self, obs_path):
-
-        ob_f = open(obs_path, 'r')
-        ob_ls = ob_f.readlines()
-
+        
+        self._config = ConfigParser()
+        self._config.read(obs_path)
+        
+        self.rainfall = self._config.getfloat('Params', 'rainfall')
+        self.slope = self._config.getfloat('Params', 'slope')
+        self.n = self._config.getint('Data', 'rows')
+        file_ = self._config.get('Data', 'file')
+        
+        self.data = RecObsData(self.n)
+        
         i = 0
-        n_read = False
-        intensit_read = False
-
-        for line in ob_ls:
-            if ('#' in line[0:4]):
-                continue
-            else:
-                if (not(n_read) and not(intensit_read)):
-                    self.rainfall = self._read_line_float(line)
-                    intensit_read = True
-                elif (not(n_read) and intensit_read):
-                    self.n = self._read_line_int(line)
-                    self.data = RecObsData(self.n)
-                    n_read = True
-                else:
-                    time = (self._read_line_vals(line)[0])
-                    val = (self._read_line_vals(line)[1])
-                    self.data.set_vals(i=i, time=time, val=val)
-                    i += 1
+        with open(file_, 'r') as ob_ls:
+            ob_ls = ob_ls.readlines()
+            for line in ob_ls:
+                time = (self._read_line_vals(line)[0])
+                val = (self._read_line_vals(line)[1])
+                self.data.set_vals(i=i, time=time, val=val)
+                i += 1
 
         self.data.calc_infiltration(self.rainfall)
-
-        ob_f.close()
-
+        
     def _read_line_int(self, _line):
         try:
             val = int(_line)
