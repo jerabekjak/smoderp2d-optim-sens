@@ -5,7 +5,7 @@ if sys.version_info > (3, 0):
 else:
     from ConfigParser import ConfigParser
 
-from model.smoderp2d.core.general import Globals
+from model.smoderp2d.core.general import Globals, OptimGlobals
 from model.smoderp2d.providers.base import BaseProvider, Logger
 from argparse import Namespace
 
@@ -50,12 +50,13 @@ class CmdProvider(BaseProvider):
             #
             #
             #
-            # Change vals for optimalization
+            # Change vals in globs for optimalization
             self._set_philips_to_glob(philip)
             self._set_rainfall_to_glob(obs.rainfall)
             self._set_slope_to_glob(obs.slope)
             self._set_optim_params_to_glob(params,obs.slope)
             #
+            self._set_print_rec_glob(obs.data.time)
             #
             #
             #
@@ -94,3 +95,9 @@ class CmdProvider(BaseProvider):
         b = params[2]
         Globals.mat_aa = X*Globals.mat_slope**Y
         Globals.mat_b.fill(b)
+
+    def _set_print_rec_glob(self,time):
+        OptimGlobals.times_to_rec = time*3600.
+    
+    
+    

@@ -13,6 +13,11 @@ class Size(object):
         """
         # arrayNBytes eq self.state.nbytes
         return (self.n * arrayNBytes) / m
+    
+class OptimGlobals(object):
+    # times to print the computed values
+    times_to_rec = None
+    
 
 class GridGlobals(object):
     # number of raster rows (int)
