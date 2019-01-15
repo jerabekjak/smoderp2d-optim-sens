@@ -6,7 +6,7 @@
 import sys
 import numpy as np
 
-from smoderp2d.providers import Logger
+from model.smoderp2d.providers import Logger
 
 # definice erroru  na urovni modulu
 #

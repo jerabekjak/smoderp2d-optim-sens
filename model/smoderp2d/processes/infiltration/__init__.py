@@ -1,7 +1,7 @@
 import numpy as np
 import math
-from smoderp2d.exceptions import NegativeWaterLevel
-from smoderp2d.core.general import Globals, GridGlobals
+from model.smoderp2d.exceptions import NegativeWaterLevel
+from model.smoderp2d.core.general import Globals, GridGlobals
 
 
 # combinatIndex muze byt tady jako globalni

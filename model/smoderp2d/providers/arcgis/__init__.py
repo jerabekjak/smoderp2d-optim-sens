@@ -3,11 +3,11 @@ import logging
 
 import arcpy
 
-from smoderp2d.core.general import Globals
-from smoderp2d.providers.base import BaseProvider
-from smoderp2d.providers.arcgis import constants
-from smoderp2d.providers.arcgis.logger import ArcPyLogHandler
-from smoderp2d.providers.base import Logger
+from model.smoderp2d.core.general import Globals
+from model.smoderp2d.providers.base import BaseProvider
+from model.smoderp2d.providers.arcgis import constants
+from model.smoderp2d.providers.arcgis.logger import ArcPyLogHandler
+from model.smoderp2d.providers.base import Logger
 
 class ArcGisProvider(BaseProvider):
     
@@ -39,7 +39,7 @@ class ArcGisProvider(BaseProvider):
 
         :return dict: loaded data
         """
-        from smoderp2d.providers.arcgis.data_preparation import PrepareData
+        from model.smoderp2d.providers.arcgis.data_preparation import PrepareData
        
         prep = PrepareData()
         return prep.run()

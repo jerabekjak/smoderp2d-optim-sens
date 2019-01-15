@@ -9,7 +9,7 @@ if __name__ == "__main__":
     stand_alone = True
     BaseInfiltration = object
 else:
-    from smoderp2d.processes.infiltration import BaseInfiltration
+    from model.smoderp2d.processes.infiltration import BaseInfiltration
     stand_alone = False
 
 

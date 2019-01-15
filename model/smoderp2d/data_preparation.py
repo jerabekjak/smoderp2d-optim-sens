@@ -1,4 +1,4 @@
-# @package smoderp2d.data_preparation
+# @package model.smoderp2d.data_preparation
 #  Method to performe the preprocessing with arcpy package
 
 
@@ -20,9 +20,9 @@ import csv
 import numpy as np
 
 
-import smoderp2d.processes.rainfall as rainfall
+import model.smoderp2d.processes.rainfall as rainfall
 import constants
-import smoderp2d.flow_algorithm.arcgis_dmtfce as arcgis_dmtfce
+import model.smoderp2d.flow_algorithm.arcgis_dmtfce as arcgis_dmtfce
 
 
 def zapis(name, array_export, l_x, l_y, spix, vpix, NoDataValue, folder):
@@ -959,7 +959,7 @@ def prepare_data(args):
 
         arcpy.AddMessage('Stream preparation...')
 
-        import smoderp2d.stream_functions.stream_preparation as sp
+        import model.smoderp2d.stream_functions.stream_preparation as sp
         toky, cell_stream, mat_tok_usek, STREAM_RATIO, tokyLoc = sp.prepare_streams(
             dmt, dmt_copy, mat_dmt_fill, null_shp,
             mat_nan, mat_fd, vpix,

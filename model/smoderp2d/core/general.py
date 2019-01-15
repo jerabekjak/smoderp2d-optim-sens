@@ -1,6 +1,6 @@
 import numpy as np
 
-from smoderp2d.exceptions import SmoderpError
+from model.smoderp2d.exceptions import SmoderpError
 
 class Size(object):
     @staticmethod

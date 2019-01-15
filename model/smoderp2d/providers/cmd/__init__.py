@@ -5,8 +5,8 @@ if sys.version_info > (3, 0):
 else:
     from ConfigParser import ConfigParser
 
-from smoderp2d.core.general import Globals
-from smoderp2d.providers.base import BaseProvider, Logger
+from model.smoderp2d.core.general import Globals
+from model.smoderp2d.providers.base import BaseProvider, Logger
 
 class CmdProvider(BaseProvider):
     def __init__(self):
@@ -14,7 +14,7 @@ class CmdProvider(BaseProvider):
         super(CmdProvider, self).__init__()
         
         # define CLI parser
-        parser = argparse.ArgumentParser(description='Run Smoderp2D.')
+        parser = argparse.ArgumentParser(description='Run model.smoderp2d.')
 
         # type of computation
         parser.add_argument(

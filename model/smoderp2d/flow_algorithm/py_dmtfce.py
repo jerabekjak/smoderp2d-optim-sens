@@ -2,7 +2,7 @@ import numpy as np
 import math
 
 
-from smoderp2d.providers import Logger
+from model.smoderp2d.providers import Logger
 
 
 FB = math.pi / 4  # facet boundary

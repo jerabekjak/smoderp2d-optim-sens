@@ -1,9 +1,9 @@
 import numpy as np
 import os
-from smoderp2d.core.general import *
-from smoderp2d.providers import Logger
+from model.smoderp2d.core.general import *
+from model.smoderp2d.providers import Logger
 
-from smoderp2d.core.general import Globals
+from model.smoderp2d.core.general import Globals
 
 
 class TimesPrt(object):

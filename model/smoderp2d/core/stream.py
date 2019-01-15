@@ -1,6 +1,6 @@
-from smoderp2d.stream_functions import stream_f
-from smoderp2d.core.general import GridGlobals, Globals as Gl
-from smoderp2d.providers import Logger
+from model.smoderp2d.stream_functions import stream_f
+from model.smoderp2d.core.general import GridGlobals, Globals as Gl
+from model.smoderp2d.providers import Logger
 
 class Reach(object):
     def __init__(self, id_, POINT_X, POINT_Y, POINT_X_1, POINT_Y_1,

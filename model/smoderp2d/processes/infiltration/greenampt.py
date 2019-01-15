@@ -1,5 +1,5 @@
-from smoderp2d.core.general import GridGlobals
-from smoderp2d.processes.infiltration import BaseInfiltration
+from model.smoderp2d.core.general import GridGlobals
+from model.smoderp2d.processes.infiltration import BaseInfiltration
 from scipy.optimize import newton
 
 import math

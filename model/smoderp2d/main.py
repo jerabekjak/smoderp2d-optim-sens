@@ -12,19 +12,11 @@ The computing itself is performed in src.runoff
 """
 
 import os
+from model.smoderp2d.providers.cmd import CmdProvider
 
 def run():
     # initialize provider
-    if os.getenv('ESRIACTIVEINSTALLATION'):
-        from smoderp2d.providers.arcgis import ArcGisProvider
-        provider_class = ArcGisProvider
-    elif os.getenv('GISRC'):
-        from smoderp2d.providers.grass import GrassProvider
-        provider_class = GrassProvider
-    else:
-        from smoderp2d.providers.cmd import CmdProvider
-        provider_class = CmdProvider
-    provider = provider_class()
+    provider = CmdProvider()
 
     # print logo
     provider.logo()
@@ -33,7 +25,7 @@ def run():
     provider.load()
 
     # must be called after initialization
-    from smoderp2d.runoff import Runoff
+    from model.smoderp2d.runoff import Runoff
     
     # the computation
     runoff = Runoff(provider)

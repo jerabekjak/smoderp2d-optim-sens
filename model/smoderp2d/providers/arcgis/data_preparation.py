@@ -5,15 +5,15 @@ import numpy as np
 import math
 import csv
 
-import smoderp2d.processes.rainfall as rainfall
+import model.smoderp2d.processes.rainfall as rainfall
 
-from smoderp2d.providers.base import Logger
-from smoderp2d.providers.base.data_preparation import PrepareDataBase
-from smoderp2d.providers.base.exception import DataPreparationInvalidInput
+from model.smoderp2d.providers.base import Logger
+from model.smoderp2d.providers.base.data_preparation import PrepareDataBase
+from model.smoderp2d.providers.base.exception import DataPreparationInvalidInput
 
-from smoderp2d.providers.arcgis.stream_preparation import StreamPreparation
-from smoderp2d.providers.arcgis.dmtfce import dmtfce
-import smoderp2d.providers.arcgis.constants as constants
+from model.smoderp2d.providers.arcgis.stream_preparation import StreamPreparation
+from model.smoderp2d.providers.arcgis.dmtfce import dmtfce
+import model.smoderp2d.providers.arcgis.constants as constants
 
 from arcpy.sa import *
 import arcpy

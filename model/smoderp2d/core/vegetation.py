@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from smoderp2d.core.general import GridGlobals, DataGlobals, Size, Globals
+from model.smoderp2d.core.general import GridGlobals, DataGlobals, Size, Globals
 
 class VegArrs(object):
     def __init__(self, veg, ppl, pi):

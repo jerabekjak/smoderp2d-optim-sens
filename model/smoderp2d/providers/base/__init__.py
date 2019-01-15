@@ -6,9 +6,9 @@ import shutil
 import math
 import pickle
 
-from smoderp2d.core.general import GridGlobals, DataGlobals, Globals
-from smoderp2d.providers.base.logger import logger
-from smoderp2d.exceptions import ProviderError
+from model.smoderp2d.core.general import GridGlobals, DataGlobals, Globals
+from model.smoderp2d.providers.base.logger import logger
+from model.smoderp2d.exceptions import ProviderError
 
 Logger = logger()
 
@@ -39,7 +39,7 @@ class BaseProvider(object):
 
         :return dict: loaded data
         """
-        from smoderp2d.processes import rainfall
+        from model.smoderp2d.processes import rainfall
 
         # the data are loared from a pickle file
         try:

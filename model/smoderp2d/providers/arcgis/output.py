@@ -1,7 +1,7 @@
 import arcpy
 
-from smoderp2d.base.general import GridGlobals, Globals
-from smoderp2d.base.output import RasterAsciiBase
+from model.smoderp2d.base.general import GridGlobals, Globals
+from model.smoderp2d.base.output import RasterAsciiBase
 
 class RasterAscii(RasterAsciiBase):
     def __init__(self, filename):

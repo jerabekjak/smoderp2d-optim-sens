@@ -9,9 +9,9 @@ __date__ = "$29.12.2015 18:20:20$"
 
 # INITIAL SETTINGS:
 # importing project moduls
-import smoderp2d.constants as constants
-# import smoderp2d.data_preparation
-import smoderp2d.flow_algorithm.arcgis_dmtfce as arcgis_dmtfce
+import model.smoderp2d.constants as constants
+# import model.smoderp2d.data_preparation
+import model.smoderp2d.flow_algorithm.arcgis_dmtfce as arcgis_dmtfce
 
 
 # importing system moduls
@@ -25,7 +25,7 @@ from arcpy.sa import *
 import math
 
 
-import smoderp2d.io_functions.prt as prt
+import model.smoderp2d.io_functions.prt as prt
 
 
 # definice erroru  na urovni modulu

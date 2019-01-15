@@ -1,1 +1,1 @@
-from smoderp2d.providers.base import BaseProvider, Logger
+from model.smoderp2d.providers.base import BaseProvider, Logger

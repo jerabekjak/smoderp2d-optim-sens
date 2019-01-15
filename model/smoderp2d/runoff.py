@@ -10,24 +10,24 @@ Vypocet probiha v zadanem casovem kroku, pripade je cas kracen podle
 import time
 import os
 
-from smoderp2d.core.general import Globals, GridGlobals
-from smoderp2d.core.vegetation import Vegetation
-from smoderp2d.core.surface import Surface
-from smoderp2d.core.subsurface import Subsurface
-from smoderp2d.core.cumulative_max import Cumulative
+from model.smoderp2d.core.general import Globals, GridGlobals
+from model.smoderp2d.core.vegetation import Vegetation
+from model.smoderp2d.core.surface import Surface
+from model.smoderp2d.core.subsurface import Subsurface
+from model.smoderp2d.core.cumulative_max import Cumulative
 
-from smoderp2d.time_step import TimeStep
-from smoderp2d.courant import Courant
+from model.smoderp2d.time_step import TimeStep
+from model.smoderp2d.courant import Courant
 
-from smoderp2d.tools.times_prt import TimesPrt
-from smoderp2d.io_functions import post_proc
-from smoderp2d.io_functions import hydrographs as wf
+from model.smoderp2d.tools.times_prt import TimesPrt
+from model.smoderp2d.io_functions import post_proc
+from model.smoderp2d.io_functions import hydrographs as wf
 
-from smoderp2d.providers import Logger
+from model.smoderp2d.providers import Logger
 
-from smoderp2d.exceptions import MaxIterationExceeded
-from smoderp2d.exceptions import SmoderpError
-from smoderp2d.exceptions import IncorrectInfiltrationType
+from model.smoderp2d.exceptions import MaxIterationExceeded
+from model.smoderp2d.exceptions import SmoderpError
+from model.smoderp2d.exceptions import IncorrectInfiltrationType
 
 class FlowControl(object):
     """FlowControl manage variables contains variables related to main
@@ -135,16 +135,16 @@ class Runoff(object):
         # instance of infiltration calc
         # TODO currently only philips infiltation is implemented 
         if Globals.get_infiltration_type() == 1 :
-            from smoderp2d.processes.infiltration import BaseInfiltration
+            from model.smoderp2d.processes.infiltration import BaseInfiltration
             self.infiltration = BaseInfiltration(Globals.get_combinatIndex())
         elif Globals.get_infiltration_type() == 2 :
-            from smoderp2d.processes.infiltration.greenampt import GreenAmptInfiltration
+            from model.smoderp2d.processes.infiltration.greenampt import GreenAmptInfiltration
             self.infiltration = GreenAmptInfiltration(Globals.get_combinatIndex())
         elif Globals.get_infiltration_type() == 3 : 
-            from smoderp2d.processes.infiltration.richards import RichardsInfiltration
+            from model.smoderp2d.processes.infiltration.richards import RichardsInfiltration
             self.infiltration = RichardsInfiltration(Globals.get_combinatIndex())
         elif Globals.get_infiltration_type() == 4 : 
-            from smoderp2d.processes.infiltration.greenamptunsteadyrain import GreenAmptInfiltrationUnsteadyRain
+            from model.smoderp2d.processes.infiltration.greenamptunsteadyrain import GreenAmptInfiltrationUnsteadyRain
             self.infiltration = GreenAmptInfiltrationUnsteadyRain(Globals.get_combinatIndex())
         else :
             raise IncorrectInfiltrationType(Globals.get_infiltration_type())

@@ -1,6 +1,6 @@
 # TODO: not tested yet
 
-from smoderp2d.providers.base import BaseProvider
+from model.smoderp2d.providers.base import BaseProvider
 
 class GrassProvider(BaseProvider):
     def __init__(self):

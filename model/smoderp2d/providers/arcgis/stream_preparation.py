@@ -7,7 +7,7 @@
 __author__ = "edlman"
 __date__ = "$29.12.2015 18:20:20$"
 
-from smoderp2d.providers.arcgis.dmtfce import dmtfce
+from model.smoderp2d.providers.arcgis.dmtfce import dmtfce
 
 
 # importing system moduls
@@ -20,9 +20,9 @@ import numpy as np
 from arcpy.sa import *
 import math
 
-from smoderp2d.providers.base import Logger
+from model.smoderp2d.providers.base import Logger
 
-from smoderp2d.providers.base.stream_preparation import StreamPreparationBase, Error, ZeroSlopeError
+from model.smoderp2d.providers.base.stream_preparation import StreamPreparationBase, Error, ZeroSlopeError
 
 class StreamPreparation(StreamPreparationBase):
 

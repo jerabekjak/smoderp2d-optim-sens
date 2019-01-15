@@ -4,16 +4,16 @@
 import numpy as np
 import math
 
-from smoderp2d.core.general import Globals, GridGlobals, Size
+from model.smoderp2d.core.general import Globals, GridGlobals, Size
 if Globals.isStream:
-    from smoderp2d.core.stream import Stream
+    from model.smoderp2d.core.stream import Stream
 else:
-    from smoderp2d.core.stream import StreamPass as Stream
-from smoderp2d.core.kinematic_diffuse import Kinematic
-import smoderp2d.processes.rill as rill
-import smoderp2d.processes.surface as surfacefce
+    from model.smoderp2d.core.stream import StreamPass as Stream
+from model.smoderp2d.core.kinematic_diffuse import Kinematic
+import model.smoderp2d.processes.rill as rill
+import model.smoderp2d.processes.surface as surfacefce
 
-from smoderp2d.providers import Logger
+from model.smoderp2d.providers import Logger
 
 courantMax = 1.0
 RILL_RATIO = 0.7

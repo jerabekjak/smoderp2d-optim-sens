@@ -1,4 +1,4 @@
-# @package smoderp2d.core.cumulative_max
+# @package model.smoderp2d.core.cumulative_max
 #
 #  package contains classes save the cumulative or maximum
 #  values of the results in each time step.
@@ -11,10 +11,10 @@ import numpy as np
 
 
 # smoderp import
-from smoderp2d.core.general import *
-from smoderp2d.providers import Logger
+from model.smoderp2d.core.general import *
+from model.smoderp2d.providers import Logger
 
-from smoderp2d.core.general import GridGlobals, Globals
+from model.smoderp2d.core.general import GridGlobals, Globals
 
 
 # Max and cumulative values of the subsurface flow
@@ -69,7 +69,7 @@ class CumulativeSubsurface(object):
 
     # Method is used after each time step to save the desired variables.
     #
-    #  Method is called in smoderp2d.runoff
+    #  Method is called in model.smoderp2d.runoff
     #
     def update_cumulative_subsur(self, i, j, sub, q_subsur):
 
@@ -91,7 +91,7 @@ class CumulativeSubsurfacePass(object):
 
     # Method is used after each time step.
     #
-    #  Method is called in smoderp2d.runoff
+    #  Method is called in model.smoderp2d.runoff
     #
 
     def update_cumulative_sur(self, i, j, sub, q_subsur):
@@ -117,7 +117,7 @@ class Cumulative(GridGlobals, CumulativeSubsurface if Globals.subflow else Cumul
 
         # Dictionary stores the python arrays identification.
         #
-        #  self.arr is used in the smoderp2d.io_functions.post_proc
+        #  self.arr is used in the model.smoderp2d.io_functions.post_proc
         #
         self.arrs = {1: 'infiltration',
                      2: 'precipitation',
@@ -141,7 +141,7 @@ class Cumulative(GridGlobals, CumulativeSubsurface if Globals.subflow else Cumul
 
         # Dictionary stores the the arrays name used in the output rasters.
         #
-        #  self.names is used in the smoderp2d.io_functions.post_proc
+        #  self.names is used in the model.smoderp2d.io_functions.post_proc
         #
         self.names = {1: 'cinfil_m',
                       2: 'crainf_m',
@@ -203,7 +203,7 @@ class Cumulative(GridGlobals, CumulativeSubsurface if Globals.subflow else Cumul
 
     # Method is used after each time step to save the desired variables.
     #
-    #  Method is called in smoderp2d.runoff
+    #  Method is called in model.smoderp2d.runoff
     #
     def update_cumulative(self, i, j, surface, subsurface, delta_t):
 

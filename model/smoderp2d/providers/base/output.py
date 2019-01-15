@@ -1,6 +1,6 @@
 import numpy as np
 
-from smoderp2d.base.general import GridGlobals, Globals
+from model.smoderp2d.base.general import GridGlobals, Globals
 
 class RasterAsciiBase(object):
     def __init__(self, filename):

@@ -1,5 +1,5 @@
-from smoderp2d.providers.base import Logger
-from smoderp2d.providers.base.data_preparation import PrepareDataBase
+from model.smoderp2d.providers.base import Logger
+from model.smoderp2d.providers.base.data_preparation import PrepareDataBase
 
 class PrepareData(PrepareDataBase):
     def __init__(self):

@@ -1,4 +1,4 @@
-# @package smoderp2d.post_proc Contain a function for the post-processing
+# @package model.smoderp2d.post_proc Contain a function for the post-processing
 
 
 import numpy as np
@@ -7,8 +7,8 @@ import sys
 import shutil
 
 
-import smoderp2d.tools.tools as tools
-from smoderp2d.core.general import Globals as Gl
+import model.smoderp2d.tools.tools as tools
+from model.smoderp2d.core.general import Globals as Gl
 
 
 def raster_output_arcgis(arrin, G, fs, outname, reachNA=True):

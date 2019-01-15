@@ -1,7 +1,7 @@
 import os
 
-from smoderp2d.core.general import GridGlobals, Globals
-from smoderp2d.providers import Logger
+from model.smoderp2d.core.general import GridGlobals, Globals
+from model.smoderp2d.providers import Logger
 
 class Hydrographs:
     def __init__(self):
