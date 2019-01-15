@@ -20,7 +20,7 @@ def main(pars):
     get_ks_s(OD.data, pars.out_dir)
 
     DE = DiffEvol(pars = pars, obs = OD)
-    print (DE.model([1,1,1]))
+    DE.make_de()
 
 if __name__ == '__main__':
 
