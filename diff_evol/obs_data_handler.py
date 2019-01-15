@@ -38,6 +38,7 @@ class ObsData(object):
         self.slope = self._config.getfloat('Params', 'slope')
         self.n = self._config.getint('Data', 'rows')
         file_ = self._config.get('Data', 'file')
+        self.model_file = self._config.get('Model', 'mod_file')
         
         self.data = RecObsData(self.n)
         

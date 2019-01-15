@@ -1,6 +1,7 @@
 from scipy.optimize import differential_evolution
 
 import model.smoderp2d.main as sm
+from diff_evol.mod_data_handling import read_mod_file
 
 class DiffEvol(object):
 
@@ -14,8 +15,12 @@ class DiffEvol(object):
         :param obs: list of obs_data_handler.RecObsData instances  
         """
         self._obs = obs
+        self._obs_data = obs.data
+        self._mod_data = None
         self._de = differential_evolution
         self._mod_conf = pars.mod_conf
+        self._mod_file = obs.model_file
+        self._read_mod_file = read_mod_file
         
     def model(self, params):
         """ compute model and comare it with the data
@@ -25,5 +30,5 @@ class DiffEvol(object):
         
         sm.run(self._mod_conf, params, self._obs)
         
+        self._mod_data = self._read_mod_file(self._mod_file)
         
-        # return SS
