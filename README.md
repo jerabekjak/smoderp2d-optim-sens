@@ -1,10 +1,15 @@
 ```
-usage: ./optim.py [-h] -obs_data OBS_DATA -outputdir OUTPUTDIR
+usage: optim.py [-h] [-o OUT_DIR] [-m MOD_CONF] [-d OBS_DATA]
 
-Run Smoderp2D optimalization with differential evolution.
+Optimize smoderp2d with differential evolution.
+-----------------------------------------------
 
 optional arguments:
   -h, --help            show this help message and exit
-  -obs_data OBS_DATA    location of observed data
-  -outputdir OUTPUTDIR  directory to store the
+  -o OUT_DIR, --out_dir OUT_DIR
+                        directory to store the results
+  -m MOD_CONF, --mod_conf MOD_CONF
+                        location of model config file
+  -d OBS_DATA, --obs_data OBS_DATA
+                        location of observed data
 ```
