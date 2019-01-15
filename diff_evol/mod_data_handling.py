@@ -41,17 +41,12 @@ def read_mod_file(path, col='Waterlevel[m]', t_col='time[s]'):
         return cdata
 
 
-def interpolate(mod,obs):
-    
+def interpolate(mod, obs):
+
     cdata = RecModData(len(obs.time))
-    
-    y_interp = np.interp(obs.time,mod.time,mod.val)
-    
+
+    y_interp = np.interp(obs.time, mod.time, mod.val)
+
     cdata.set_vals(obs.time, y_interp)
-    
+
     return cdata
-    
-        
-        
-        
-        
