@@ -30,7 +30,7 @@ class CmdProvider(BaseProvider):
         # must be defined for _cleanup() method
         Globals.outdir = self._config.get('Other', 'outdir')
 
-    def load(self):
+    def load(self,philip):
         """Load configuration data.
 
         Only roff procedure supported.
@@ -44,7 +44,34 @@ class CmdProvider(BaseProvider):
             )
 
             self._set_globals(data)
+            
+            #
+            #
+            #
+            #
+            # Change vals for optimalization
+            self._set_philips_to_glob(philip)
+            #
+            #
+            #
+            #
+            #
+            #
         else:
             raise ProviderError('Unsupported partial computing: {}'.format(
                 self._args.typecomp
             ))
+    
+    def _set_philips_to_glob(self,philip):
+        """ read philip paramaters from hidden file """
+        with open(philip, 'r') as pf:
+            lines = pf.readlines()
+            s = float(lines[1].replace('\n',''))
+            ks = float(lines[2].replace('\n',''))
+        
+        for l in Globals.combinatIndex :
+            l[1] = ks
+            l[2] = s
+        
+        
+        
