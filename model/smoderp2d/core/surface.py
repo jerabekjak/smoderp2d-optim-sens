@@ -104,9 +104,10 @@ class Surface(GridGlobals, Size, Stream, Kinematic):
 
         # Water_level_[m];Flow_[m3/s];v_runoff[m3];v_rest[m3];Infiltration[];surface_retention[l]
         if not extra_out:
-            line = '{0}{sep}{1}{sep}{2}'.format(
+            line = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(
                 arr.h_total_new,
                 arr.v_runoff / dt + arr.v_runoff_rill / dt,
+                (arr.v_runoff + arr.v_runoff_rill) / GridGlobals.domain_area / dt,
                 arr.v_runoff + arr.v_runoff_rill,
                 sep=sep
             )
@@ -126,13 +127,14 @@ class Surface(GridGlobals, Size, Stream, Kinematic):
             )
 
             if Globals.isRill:
-                line += '{sep}{0}{sep}{1}{sep}{2}{sep}{3}{sep}{4}{sep}{5}{sep}{6}'.format(
+                line += '{sep}{0}{sep}{1}{sep}{2}{sep}{3}{sep}{4}{sep}{5}{sep}{6}{sep}{7}'.format(
                     arr.h_rill,
                     arr.rillWidth,
                     arr.v_runoff_rill / dt,
                     arr.v_runoff_rill,
                     arr.v_rill_rest,
                     arr.v_runoff / dt + arr.v_runoff_rill / dt,
+                    (arr.v_runoff + arr.v_runoff_rill) / GridGlobals.domain_area / dt,
                     arr.v_runoff + arr.v_runoff_rill,
                     sep=sep
                 )

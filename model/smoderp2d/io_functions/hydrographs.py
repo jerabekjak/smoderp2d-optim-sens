@@ -98,12 +98,12 @@ class Hydrographs:
                 header += '# {}{}'.format(self.pixel_area, os.linesep)
 
                 if not Globals.extraOut:
-                    header += '# time[s];deltaTime[s];rainfall[m];totalWaterLevel[m];surfaceFlow[m3/s];surfaceVolRunoff[m3]{}'
+                    header += '# time[s];deltaTime[s];rainfall[m];totalWaterLevel[m];surfaceFlow[m3/s];surfaceRunoff[m/s];surfaceVolRunoff[m3]{}'
                 else:
                     header += '# time[s];deltaTime[s];Rainfall[m];Water_level_[m];Sheet_Flow[m3/s];Sheet_V_runoff[m3];Sheet_V_rest[m3];Infiltration[m];Surface_retetion[m];State;V_inflow[m3];WlevelTotal[m]'
 
                     if Globals.isRill:
-                        header += ';WlevelRill[m];Rill_width[m];Rill_flow[m3/s];Rill_V_runoff[m3];Rill_V_rest;Surface_Flow[m3/s];Surface_V_runoff[m3]'
+                        header += ';WlevelRill[m];Rill_width[m];Rill_flow[m3/s];Rill_V_runoff[m3];Rill_V_rest;Surface_Flow[m3/s];surfaceRunoff[m/s];Surface_V_runoff[m3]'
                     header += ';SurfaceBil[m3]'
                     if Globals.subflow:
                         header += ';Sub_Water_level_[m];Sub_Flow_[m3/s];Sub_V_runoff[m3];Sub_V_rest[m3];Percolation[];exfiltration[]'
