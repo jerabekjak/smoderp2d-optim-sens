@@ -10,7 +10,7 @@ import os
 def main(pars):
 
     # load observation data
-    OD = ObsData(pars.obs_data)
+    OD = ObsData(pars.opt_conf)
     
     if not os.path.exists(pars.out_dir):
         os.makedirs(pars.out_dir)

@@ -29,10 +29,11 @@ class ObsData(object):
     public list self.data of RecObsData instances
     """
 
-    def __init__(self, obs_path):
+    def __init__(self, config_path):
         
         self._config = ConfigParser()
-        self._config.read(obs_path)
+        print (config_path)
+        self._config.read(config_path)
         
         self.rainfall = self._config.getfloat('Params', 'rainfall')
         self.slope = self._config.getfloat('Params', 'slope')
