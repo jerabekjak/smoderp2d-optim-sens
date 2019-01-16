@@ -6,7 +6,6 @@ from philip_optim import get_ks_s
 from tools import read_parser
 import os
 
-
 def main(pars):
 
     # load observation data
