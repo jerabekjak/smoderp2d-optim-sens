@@ -38,6 +38,7 @@ class DiffEvol(object):
         self._read_mod_file = read_mod_file
         self._interp_mod_data = interpolate
         self._plot = True
+        self._model_runs = 0
 
     def model(self, params):
         """ compute model and comare it with the data
@@ -53,7 +54,7 @@ class DiffEvol(object):
         
         ss = sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
         
-        print ('model runs...' + str(ss))
+        self._model_runs += 1
         
         return sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
 
@@ -61,8 +62,31 @@ class DiffEvol(object):
 
         # bounds for parameters [X,Y,b]
         bounds = [(7, 13), (0.2, 0.7), (1.6, 1.9)]
-        result = differential_evolution(self.model, bounds, disp=True, maxiter=30)
-        print (result.message)
+        self.result = differential_evolution(self.model, bounds, disp=True, maxiter=30)
 
         if self._plot:
             plot_de(self._obs_data, self._mod_data_interp, result, self._out_dir)
+            
+            
+    def __del__(self):
+        
+        print (self.result.message)
+        print ('{} model runs during optimalization'.format(self._model_runs))
+        print ('final parameters: X={:.2E}, Y={:.2E}, b={:.2E}'.format(self.result.x[0], self.result.x[1], self.result.x[2]))
+        print ('sum of squares = {:.2E}'.format(self.result.fun))
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
