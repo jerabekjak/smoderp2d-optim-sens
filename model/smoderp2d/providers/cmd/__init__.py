@@ -51,6 +51,7 @@ class CmdProvider(BaseProvider):
             #
             #
             # Change vals in globs for optimalization
+            self._adjust_domain_size()
             self._set_philips_to_glob(philip)
             self._set_rainfall_to_glob(obs.rainfall)
             self._set_slope_to_glob(obs.slope)
@@ -95,7 +96,13 @@ class CmdProvider(BaseProvider):
         b = params[2]
         Globals.mat_aa = X*Globals.mat_slope**Y
         Globals.mat_b.fill(b)
-
+        
+    def _adjust_domain_size(self):
+        """ set domain size to lab rainfal simulator plot """
+        GridGlobals.dx =0.9/4.
+        GridGlobals.dy =8.0/13.
+        GridGlobals.pixel_area =  0.9*8.0
+        
     def _set_total_raster_area(self):
         rr = GridGlobals.rr
         rc = GridGlobals.rc
