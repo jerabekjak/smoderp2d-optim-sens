@@ -44,20 +44,25 @@ class DiffEvol(object):
 
         :param params: smoderp parameters [X,Y,b]
         """
-
         sm.run(self._mod_conf, params, self._obs)
 
         self._mod_data = self._read_mod_file(self._mod_file)
 
         self._mod_data_interp = self._interp_mod_data(
             mod=self._mod_data, obs=self._obs_data)
-
+        
+        ss = sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
+        
+        print ('model runs...' + str(ss))
+        
         return sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
 
     def make_de(self):
 
-        bounds = [(0, 20), (0, 20), (0, 2)]
-        result = differential_evolution(self.model, bounds)
+        # bounds for parameters [X,Y,b]
+        bounds = [(7, 13), (0.2, 0.7), (1.6, 1.9)]
+        result = differential_evolution(self.model, bounds, disp=True, maxiter=30)
+        print (result.message)
 
         if self._plot:
             plot_de(self._obs_data, self._mod_data_interp, result, self._out_dir)
