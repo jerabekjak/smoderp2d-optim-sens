@@ -33,3 +33,27 @@ def plot_de(obs, mod, de_results, out_dir):
     plt.ylabel('runoff water level [L]')
     plt.legend()
     plt.savefig(path)
+
+
+
+def plot_sa(out_dir,p1,p2,ss):
+
+    path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
+        os.path.realpath(__file__)), '..', out_dir, 'sa_surface.png', sep=os.sep)
+    
+    plt.figure(1)
+    x=np.array(p1)
+    y=np.array(p2)
+    z=np.array(ss)
+
+    x=np.unique(x)
+    y=np.unique(y)
+    X,Y = np.meshgrid(x,y)
+
+    Z=z.reshape(len(y),len(x))
+
+    plt.pcolormesh(X,Y,Z)
+
+    plt.savefig(path)
+
+

@@ -2,7 +2,9 @@ from diff_evol import DiffEvol
 
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
+from tools.plots import plot_sa
 
+import os
 
 class SensAna(DiffEvol):
 
@@ -37,10 +39,12 @@ class SensAna(DiffEvol):
             self._ss.append(self.model(sc))
 
     def __del__(self):
-        lout = []
-        for i in range(self._obs._n_scenarios):
-            lout.append('{:.2e};{:.2e};{:.2e};{:.2e}'.format(
-                self._p1[i], self._p2[i], self._p3[i], self._ss[i]))
+        path = '{}{sep}sens_ana_out.dat'.format(self._out_dir,sep=os.sep)
+        with open(path, 'w') as out:
+            for i in range(self._obs._n_scenarios):
+                line = '{:.2e};{:.2e};{:.2e};{:.2e}\n'.format(
+                    self._p1[i], self._p2[i], self._p3[i], self._ss[i])
+                out.write(line)
 
-        print (lout)
-        pass
+        plot_sa(self._out_dir,self._p1,self._p2,self._ss)
+        
