@@ -3,7 +3,7 @@
 from diff_evol.obs_data_handler import ObsData
 from diff_evol import DiffEvol
 from philip_optim import get_ks_s
-from tools import read_parser
+from diff_evol.read_parser import read_parser
 import os
 
 def main(pars):
