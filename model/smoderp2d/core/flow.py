@@ -66,14 +66,8 @@ class D8(object):
             bx = self.inflows[i][j][z][1]
             iax = i + ax
             jbx = j + bx
-            try:
-                insurfflow_from_cell = self.arr[iax][jbx].V_runoff
-            except:
-                insurfflow_from_cell = 0.0
-            try:
-                inrillflow_from_cell = self.arr[iax][jbx].V_runoff_rill
-            except:
-                inrillflow_from_cell = 0.0
+            insurfflow_from_cell = self.arr[iax][jbx].vol_runoff
+            inrillflow_from_cell = self.arr[iax][jbx].vol_runoff_rill
             inflow_from_cells = inflow_from_cells + \
                 insurfflow_from_cell + inrillflow_from_cell
 
@@ -110,17 +104,17 @@ class Mfda(object):
     def cell_runoff(self, i, j, sur=True):
         inflow_from_cells = \
             self.inflows[i - 1][j - 1][1] * \
-            self.arr[i - 1][j - 1].V_runoff_pre + \
+            self.arr[i - 1][j - 1].vol_runoff_pre + \
             self.inflows[i - 1][j][2] * \
-            self.arr[i - 1][j].V_runoff_pre + \
+            self.arr[i - 1][j].vol_runoff_pre + \
             self.inflows[i - 1][j + 1][3] * \
-            self.arr[i - 1][j + 1].V_runoff_pre + \
-            self.inflows[i][j - 1][0] * self.arr[i][j - 1].V_runoff_pre + \
-            self.inflows[i][j + 1][4] * self.arr[i][j + 1].V_runoff_pre + \
-            self.inflows[i + 1][j - 1][7] * self.arr[i + 1][j - 1].V_runoff_pre + \
-            self.inflows[i + 1][j][6] * self.arr[i + 1][j].V_runoff_pre + \
+            self.arr[i - 1][j + 1].vol_runoff_pre + \
+            self.inflows[i][j - 1][0] * self.arr[i][j - 1].vol_runoff_pre + \
+            self.inflows[i][j + 1][4] * self.arr[i][j + 1].vol_runoff_pre + \
+            self.inflows[i + 1][j - 1][7] * self.arr[i + 1][j - 1].vol_runoff_pre + \
+            self.inflows[i + 1][j][6] * self.arr[i + 1][j].vol_runoff_pre + \
             self.inflows[i + 1][j + 1][5] * \
-            self.arr[i + 1][j + 1].V_runoff_pre
+            self.arr[i + 1][j + 1].vol_runoff_pre
 
         if Globals.isRill and sur:
             for z in range(len(self.inflowsRill[i][j])):
@@ -131,7 +125,7 @@ class Mfda(object):
                 if self.arr[i][j].state == 1 or self.arr[i][j].state == 2: # rill
                     try:
                         inflow_from_cells += \
-                            self.V_runoff_rill_pre[iax][jbx]  # toto jeste predelat u ryh
+                            self.vol_runoff_rill_pre[iax][jbx]  # toto jeste predelat u ryh
                     except:
                         inflow_from_cells += 0.0
 

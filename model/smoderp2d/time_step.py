@@ -131,12 +131,11 @@ class TimeStep:
                 # Inflows from surroundings cells
                 #
                 surface.arr[i][j].inflow_tm = surface.cell_runoff(i, j)
-
                 #
                 # Surface BILANCE
                 #
                 surBIL = surface.arr[i][j].h_total_pre + actRain + surface.arr[i][j].inflow_tm / pixel_area - (
-                    surface.arr[i][j].v_runoff / pixel_area + surface.arr[i][j].v_runoff_rill / pixel_area)
+                    surface.arr[i][j].vol_runoff / pixel_area + surface.arr[i][j].vol_runoff_rill / pixel_area)
 
                 #
                 # surface retention
