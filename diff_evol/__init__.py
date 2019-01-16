@@ -11,7 +11,7 @@ from tools.plots import plot_de
 def sum_of_squares(obs, mod):
 
     r = obs - mod
-    r = r*r
+    r = r*2.0
 
     return sum(r)
 
@@ -51,42 +51,29 @@ class DiffEvol(object):
 
         self._mod_data_interp = self._interp_mod_data(
             mod=self._mod_data, obs=self._obs_data)
-        
+
         ss = sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
-        
+
         self._model_runs += 1
-        
+
         return sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
 
     def make_de(self):
 
         # bounds for parameters [X,Y,b]
-        bounds = [(7, 13), (0.2, 0.7), (1.6, 1.9)]
-        self.result = differential_evolution(self.model, bounds, disp=True, maxiter=30)
+        bounds = [(1, 200), (0.1, 1.), (1.5, 2.0)]
+        self.result = differential_evolution(
+            self.model, bounds, disp=True, maxiter=30, tol=1e-16)
 
         if self._plot:
-            plot_de(self._obs_data, self._mod_data_interp, result, self._out_dir)
-            
-            
+            plot_de(self._obs_data, self._mod_data_interp,
+                    self.result, self._out_dir)
+
     def __del__(self):
-        
-        print (self.result.message)
+
+        print ('\n{}'.self.result.message)
         print ('{} model runs during optimalization'.format(self._model_runs))
-        print ('final parameters: X={:.2E}, Y={:.2E}, b={:.2E}'.format(self.result.x[0], self.result.x[1], self.result.x[2]))
+        print ('final parameters: X={:.2E}, Y={:.2E}, b={:.2E}'.format(
+            self.result.x[0], self.result.x[1], self.result.x[2]))
         print ('sum of squares = {:.2E}'.format(self.result.fun))
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
-               
+        print (self.result)
