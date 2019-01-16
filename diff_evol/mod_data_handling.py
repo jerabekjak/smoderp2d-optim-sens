@@ -16,7 +16,7 @@ class RecModData(object):
         self.val = val
 
 
-def read_mod_file(path, col='Water_level_[m]', t_col='time[s]'):
+def read_mod_file(path, col='surfaceRunoff[m/s]', t_col='time[s]'):
 
     with open(path, 'r') as md:
 
