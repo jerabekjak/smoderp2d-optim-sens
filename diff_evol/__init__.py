@@ -63,15 +63,16 @@ class DiffEvol(object):
         # bounds for parameters [X,Y,b]
         bounds = [(1, 200), (0.1, 1.), (1.5, 2.0)]
         self.result = differential_evolution(
-            self.model, bounds, disp=True, maxiter=30, tol=1e-16)
+            self.model, bounds, disp=True, maxiter=1, tol=1e-10, popsize = 5)
+
+
+    def __del__(self):
 
         if self._plot:
             plot_de(self._obs_data, self._mod_data_interp,
                     self.result, self._out_dir)
-
-    def __del__(self):
-
-        print ('\n{}'.self.result.message)
+            
+        print ('\n{}'.format(self.result.message))
         print ('{} model runs during optimalization'.format(self._model_runs))
         print ('final parameters: X={:.2E}, Y={:.2E}, b={:.2E}'.format(
             self.result.x[0], self.result.x[1], self.result.x[2]))
