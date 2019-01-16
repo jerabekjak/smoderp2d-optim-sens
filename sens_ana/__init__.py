@@ -3,11 +3,12 @@ from diff_evol import DiffEvol
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
 
+
 class SensAna(DiffEvol):
 
     def __init__(self, pars,  obs):
         """ init SensAnal
-        
+
         :param pars: parser namespace
         :param obs: list of obs_data_handler.RecObsData instances  
         """
@@ -22,7 +23,24 @@ class SensAna(DiffEvol):
         self._interp_mod_data = interpolate
         self._plot = True
         self._model_runs = 0
-        
-    def __del__(sefl):
+        self._p1 = []
+        self._p2 = []
+        self._p3 = []
+        self._ss = []
+
+    def do_sa(self):
+
+        for sc in self._obs.scenario:
+            self._p1.append(sc[0])
+            self._p2.append(sc[1])
+            self._p3.append(sc[2])
+            self._ss.append(self.model(sc))
+
+    def __del__(self):
+        lout = []
+        for i in range(self._obs._n_scenarios):
+            lout.append('{:.2e};{:.2e};{:.2e};{:.2e}'.format(
+                self._p1[i], self._p2[i], self._p3[i], self._ss[i]))
+
+        print (lout)
         pass
-    
