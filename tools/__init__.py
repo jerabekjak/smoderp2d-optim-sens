@@ -28,11 +28,11 @@ def read_parser():
     )
 
     parser.add_argument(
-        '-d',
+        '-O',
         '--opt_conf',
         help='location of optimization config file',
         type=str,
-        default='obs_data/data.cfg',
+        default='optim.cfg',
         required=False
     )
 
