@@ -32,7 +32,6 @@ class ObsData(object):
     def __init__(self, config_path):
         
         self._config = ConfigParser()
-        print (config_path)
         self._config.read(config_path)
         
         self.rainfall = self._config.getfloat('Params', 'rainfall')
@@ -51,9 +50,15 @@ class ObsData(object):
                 val = (self._read_line_vals(line)[1])
                 self.data.set_vals(i=i, time=time, val=val)
                 i += 1
-
-        self.data.calc_infiltration(self.rainfall)
+        
+        # time minutes to sec
         self.data.time = self.data.time*60.
+        # rainfall intensity from mm/hour to m/sec
+        self.rainfall = self.rainfall/1000./60./60.
+        # runoff intensity from mm/minute to m/sec
+        self.data.val = self.data.val/1000./60.
+        
+        self.data.calc_infiltration(self.rainfall)
         
     def _read_line_int(self, _line):
         try:
