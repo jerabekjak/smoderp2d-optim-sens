@@ -6,6 +6,7 @@ from tools.plots import plot_sa
 
 import os
 
+
 class SensAna(DiffEvol):
 
     def __init__(self, pars,  obs):
@@ -33,18 +34,19 @@ class SensAna(DiffEvol):
     def do_sa(self):
 
         for sc in self._obs.scenario:
+            print ('model run {}/{}...'.format(self._model_runs,
+                                               self._obs._n_scenarios))
             self._p1.append(sc[0])
             self._p2.append(sc[1])
             self._p3.append(sc[2])
             self._ss.append(self.model(sc))
 
     def __del__(self):
-        path = '{}{sep}sens_ana_out.dat'.format(self._out_dir,sep=os.sep)
+        path = '{}{sep}sens_ana_out.dat'.format(self._out_dir, sep=os.sep)
         with open(path, 'w') as out:
             for i in range(self._obs._n_scenarios):
-                line = '{:.2e};{:.2e};{:.2e};{:.2e}\n'.format(
+                line = '{:.5e};{:.5e};{:.5e};{:.5e}\n'.format(
                     self._p1[i], self._p2[i], self._p3[i], self._ss[i])
                 out.write(line)
 
-        plot_sa(self._out_dir,self._p1,self._p2,self._ss)
-        
+        plot_sa(self._out_dir, self._p1, self._p2, self._ss)
