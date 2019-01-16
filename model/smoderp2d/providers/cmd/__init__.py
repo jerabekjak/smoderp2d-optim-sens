@@ -5,7 +5,7 @@ if sys.version_info > (3, 0):
 else:
     from ConfigParser import ConfigParser
 
-from model.smoderp2d.core.general import Globals
+from model.smoderp2d.core.general import Globals, GridGlobals
 from model.smoderp2d.providers.base import BaseProvider, Logger
 from argparse import Namespace
 
@@ -55,6 +55,7 @@ class CmdProvider(BaseProvider):
             self._set_rainfall_to_glob(obs.rainfall)
             self._set_slope_to_glob(obs.slope)
             self._set_optim_params_to_glob(params,obs.slope)
+            self._set_total_raster_area()
             #
             #
             #
@@ -81,7 +82,7 @@ class CmdProvider(BaseProvider):
         """ change rainfall intensity in globals.sr """
         for l in Globals.sr:
             l[0] = 3600
-            l[1] = rainfall/1000./3600.
+            l[1] = rainfall
 
     def _set_slope_to_glob(self,slope):
         """ change surface slope in globals.mat_slope """
@@ -95,4 +96,13 @@ class CmdProvider(BaseProvider):
         Globals.mat_aa = X*Globals.mat_slope**Y
         Globals.mat_b.fill(b)
 
-    
+    def _set_total_raster_area(self):
+        rr = GridGlobals.rr
+        rc = GridGlobals.rc
+        A = 0.0
+        for i in rr :
+            for j in rc[i]:
+                A += GridGlobals.pixel_area
+        GridGlobals.domain_area = A
+            
+

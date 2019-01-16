@@ -42,6 +42,8 @@ class GridGlobals(object):
     dx = None
     # size of raster cell
     dy = None
+    # domain area
+    domain_area = None
 
     def __init__(self):
         if self.r is None or self.c is None:
