@@ -7,7 +7,7 @@ def write_de(obs, mod, result, out_dir):
     path_val = '{0}{sep}obs_mod.dat'.format(out_dir, sep=os.sep)
 
     with open(path_params, 'w') as pf:
-        pf.write('X;Y;b;Ks;S\n')
+        pf.write('X;Y;b;Ks;S;SofSq\n')
         for ix in result.x:
             pf.write('{:1.3e};'.format(ix))
 
