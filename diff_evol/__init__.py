@@ -13,7 +13,7 @@ from tools.plots import plot_de
 def sum_of_squares(obs, mod):
 
     r = obs - mod
-    r = r*2.0
+    r = r**2.0
 
     return sum(r)
 
