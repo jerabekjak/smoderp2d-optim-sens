@@ -52,7 +52,7 @@ class CmdProvider(BaseProvider):
             #
             # Change vals in globs for optimalization
             self._adjust_domain_size()
-            self._set_philips_to_glob(philip)
+            self._set_philips_to_glob(params)
             self._set_rainfall_to_glob(obs.rainfall)
             self._set_slope_to_glob(obs.slope)
             self._set_optim_params_to_glob(params,obs.slope)
@@ -68,7 +68,16 @@ class CmdProvider(BaseProvider):
                 self._args.typecomp
             ))
 
-    def _set_philips_to_glob(self, philip):
+    def _set_philips_to_glob(self, params):
+        """ read philip paramaters from hidden file """
+        ks = params[3]
+        s  = params[4]
+            
+        for l in Globals.combinatIndex:
+            l[1] = ks
+            l[2] = s
+            
+    def _set_philips_to_glob_from_file(self, philip):
         """ read philip paramaters from hidden file """
         with open(philip, 'r') as pf:
             lines = pf.readlines()

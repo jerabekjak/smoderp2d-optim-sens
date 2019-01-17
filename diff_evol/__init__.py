@@ -43,7 +43,7 @@ class DiffEvol(object):
     def model(self, params):
         """ compute model and comare it with the data
 
-        :param params: smoderp parameters [X,Y,b]
+        :param params: smoderp parameters [X,Y,b,ks,s]
         """
         sm.run(self._mod_conf, params, self._obs)
 
@@ -61,9 +61,9 @@ class DiffEvol(object):
     def make_de(self):
 
         # bounds for parameters [X,Y,b]
-        bounds = [(1, 200), (0.1, 1.), (1.5, 2.0)]
+        bounds = [(1, 400), (0.001, 1.), (1.5, 2.0), (1e-8,1e-5), (1e-8,1e-5)]
         self.result = differential_evolution(
-            self.model, bounds, disp=True, maxiter=1, tol=1e-10, popsize = 5)
+            self.model, bounds, disp=True, maxiter=1, tol=1e-10)
 
 
     def __del__(self):
