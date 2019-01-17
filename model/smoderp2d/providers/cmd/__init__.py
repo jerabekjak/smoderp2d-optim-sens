@@ -57,6 +57,7 @@ class CmdProvider(BaseProvider):
             self._set_slope_to_glob(obs.slope)
             self._set_optim_params_to_glob(params,obs.slope)
             self._set_total_raster_area()
+            self._set_point_loc(1,14)
             #
             #
             #
@@ -68,6 +69,12 @@ class CmdProvider(BaseProvider):
                 self._args.typecomp
             ))
 
+    def _set_point_loc(self,ii,jj):
+        """ set location of point000.dat to the bottom of the plot """
+        Globals.array_points[0][1] = jj
+        Globals.array_points[0][2] = ii
+            
+            
     def _set_philips_to_glob(self, params):
         """ read philip paramaters from hidden file """
         ks = params[3]
