@@ -1,5 +1,6 @@
 from scipy.optimize import differential_evolution
 from scipy.optimize import minimize
+from scipy.optimize import OptimizeResult
 import time
 
 import model.smoderp2d.main as sm
@@ -42,6 +43,7 @@ class DiffEvol(object):
         self._interp_mod_data = interpolate
         self._plot = True
         self._model_runs = 0
+        self.result = OptimizeResult
 
     def model(self, params):
         """ compute model and comare it with the data
@@ -58,6 +60,10 @@ class DiffEvol(object):
             mod=self._mod_data, obs=self._obs_data)
 
         ss = sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
+        
+        self.result.x = params
+        self.result.fun = ss
+        self.result.message = 'I stopped the optimization...'
 
         self._model_runs += 1
 
@@ -74,7 +80,7 @@ class DiffEvol(object):
         bounds = [(1, 400), (0.001, 1.), (1.5, 2.0),
                   (1e-8, 1e-5), (1e-8, 1e-5)]
         x0 = [3.5822e+02,7.6509e-01,1.6578e+00,4.4133e-06,7.9349e-06]
-        self.result = minimize(self.model, x0, method='CG')
+        self.result = minimize(self.model, x0, method='Nelder-Mead')
         #self.result = differential_evolution(
             #self.model, bounds, disp=True)
 
