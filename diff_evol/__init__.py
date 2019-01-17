@@ -1,9 +1,11 @@
 from scipy.optimize import differential_evolution
+import time
 
 import model.smoderp2d.main as sm
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
 from tools.plots import plot_de
+
 
 # objective function
 
@@ -45,16 +47,20 @@ class DiffEvol(object):
 
         :param params: smoderp parameters [X,Y,b,ks,s]
         """
+        t1 = time.time()
         sm.run(self._mod_conf, params, self._obs)
-
+        t2 = time.time()
+        
         self._mod_data = self._read_mod_file(self._mod_file)
 
         self._mod_data_interp = self._interp_mod_data(
             mod=self._mod_data, obs=self._obs_data)
 
         ss = sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
-
+        
         self._model_runs += 1
+
+        print ('model run {} runs {:1.4e} secs with ss = {:1.4e} ...'.format(self._model_runs, t2-t1, ss))
 
         return sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
 
