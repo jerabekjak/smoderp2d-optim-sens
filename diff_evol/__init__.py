@@ -7,6 +7,7 @@ import model.smoderp2d.main as sm
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
 from tools.plots import plot_de
+from tools.writes import write_de
 
 
 # objective function
@@ -60,7 +61,7 @@ class DiffEvol(object):
             mod=self._mod_data, obs=self._obs_data)
 
         ss = sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
-        
+
         self.result.x = params
         self.result.fun = ss
         self.result.message = 'I stopped the optimization...'
@@ -79,16 +80,19 @@ class DiffEvol(object):
         # bounds for parameters [X,Y,b]
         bounds = [(1, 400), (0.001, 1.), (1.5, 2.0),
                   (1e-8, 1e-5), (1e-8, 1e-5)]
-        x0 = [3.5822e+02,7.6509e-01,1.6578e+00,4.4133e-06,7.9349e-06]
+        x0 = [3.5822e+02, 7.6509e-01, 1.6578e+00, 4.4133e-06, 7.9349e-06]
         self.result = minimize(self.model, x0, method='Nelder-Mead')
-        #self.result = differential_evolution(
-            #self.model, bounds, disp=True)
+        # self.result = differential_evolution(
+        # self.model, bounds, disp=True)
 
     def __del__(self):
 
         if self._plot:
             plot_de(self._obs_data, self._mod_data_interp,
                     self.result, self._out_dir)
+
+        write_de(self._obs_data, self._mod_data_interp,
+                 self.result, self._out_dir)
 
         print ('\n{}'.format(self.result.message))
         print ('{} model runs during optimalization'.format(self._model_runs))
