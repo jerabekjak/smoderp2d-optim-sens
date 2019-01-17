@@ -1,4 +1,5 @@
 from scipy.optimize import differential_evolution
+from scipy.optimize import minimize
 import time
 
 import model.smoderp2d.main as sm
@@ -50,34 +51,39 @@ class DiffEvol(object):
         t1 = time.time()
         sm.run(self._mod_conf, params, self._obs)
         t2 = time.time()
-        
+
         self._mod_data = self._read_mod_file(self._mod_file)
 
         self._mod_data_interp = self._interp_mod_data(
             mod=self._mod_data, obs=self._obs_data)
 
         ss = sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
-        
+
         self._model_runs += 1
 
-        print ('model run {} runs {:1.4e} secs with ss = {:1.4e} ...'.format(self._model_runs, t2-t1, ss))
+        print ('model run {} runs {:1.2f} secs with ss = {:1.4e} ...'.format(
+            self._model_runs, t2-t1, ss))
+        print ('\t with pars set {:1.4e},{:1.4e},{:1.4e},{:1.4e},{:1.4e} ...'.format(
+            params[0], params[1], params[2], params[3], params[4]))
 
         return sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
 
     def make_de(self):
 
         # bounds for parameters [X,Y,b]
-        bounds = [(1, 400), (0.001, 1.), (1.5, 2.0), (1e-8,1e-5), (1e-8,1e-5)]
-        self.result = differential_evolution(
-            self.model, bounds, disp=True, maxiter=1, tol=1e-10)
-
+        bounds = [(1, 400), (0.001, 1.), (1.5, 2.0),
+                  (1e-8, 1e-5), (1e-8, 1e-5)]
+        x0 = [3.5822e+02,7.6509e-01,1.6578e+00,4.4133e-06,7.9349e-06]
+        self.result = minimize(self.model, x0, method='CG')
+        #self.result = differential_evolution(
+            #self.model, bounds, disp=True)
 
     def __del__(self):
 
         if self._plot:
             plot_de(self._obs_data, self._mod_data_interp,
                     self.result, self._out_dir)
-            
+
         print ('\n{}'.format(self.result.message))
         print ('{} model runs during optimalization'.format(self._model_runs))
         print ('final parameters: X={:.2E}, Y={:.2E}, b={:.2E}'.format(
