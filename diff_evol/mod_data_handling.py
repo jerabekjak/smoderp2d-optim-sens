@@ -16,7 +16,7 @@ class RecModData(object):
         self.val = val
 
 
-def read_mod_file(path, col='surfaceRunoff[m/s]', t_col='time[s]'):
+def read_mod_file(path, col='surfaceRunoff[m/s]', t_col='time[s]', multip = 4):
 
     with open(path, 'r') as md:
 
@@ -35,7 +35,10 @@ def read_mod_file(path, col='surfaceRunoff[m/s]', t_col='time[s]'):
                 data[header[j]][i-nlineheader] = float(line[j])
 
         cdata = RecModData(nlines-nlineheader)
-
+        
+        for i in range(nlines-nlineheader):
+            data[col][i] = data[col][i]*multip
+            
         cdata.set_vals(data[t_col], data[col])
 
         return cdata
