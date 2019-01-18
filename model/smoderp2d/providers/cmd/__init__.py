@@ -57,7 +57,7 @@ class CmdProvider(BaseProvider):
             self._set_slope_to_glob(obs.slope)
             self._set_optim_params_to_glob(params,obs.slope)
             self._set_total_raster_area()
-            Globals.mat_reten.fill(0.0)
+            self._set_surface_retention(params)
             #
             #
             #
@@ -68,6 +68,9 @@ class CmdProvider(BaseProvider):
             raise ProviderError('Unsupported partial computing: {}'.format(
                 self._args.typecomp
             ))
+
+    def _set_surface_retention(self,params):
+        Globals.mat_reten.fill(params[5])
 
     def _set_point_loc(self,ii,jj):
         """ set location of point000.dat to the bottom of the plot """

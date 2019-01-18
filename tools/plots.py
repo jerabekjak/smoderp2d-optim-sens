@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+
 def plot_philip(fnc, ks, s, out_dir, obs_data):
 
     path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
@@ -23,37 +24,33 @@ def plot_de(obs, mod, de_results, out_dir):
 
     path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
         os.path.realpath(__file__)), '..', out_dir, 'de_optim.png', sep=os.sep)
-    plt.figure(1)
-    plt.plot
+    plt.figure(1, figsize=(9, 7))
     plt.plot(obs.time/60, obs.val*1000*60*60, 'ro', label='observed data')
     plt.plot(mod.time/60, mod.val*1000*60*60, 'bo', label='modeled data')
-    plt.title("final parameters: X={:1.2f}, Y={:1.2f}, b={:1.2f}, ks={:.2e}, s={:0.2e}\nsum of squares = {:.2E}".format(
-        de_results.x[0], de_results.x[1], de_results.x[2], de_results.x[3], de_results.x[4], de_results.fun),fontsize=10, loc='left')
+    plt.title("final parameters: X={:1.2f}, Y={:1.2f}, b={:1.2f}, ks={:.2e}, s={:0.2e}, ret={:0.2e}\nsum of squares = {:.2E}".format(
+        de_results.x[0], de_results.x[1], de_results.x[2], de_results.x[3], de_results.x[4], de_results.x[5], de_results.fun*(1000*60*60)**2.0), fontsize=10, loc='left')
     plt.xlabel('time [mins]')
-    plt.ylabel('runoff water [mm/hour]')
+    plt.ylabel('runoff [mm/hour]')
     plt.legend()
-    plt.savefig(path)
+    plt.savefig(path, dpi=200)
 
 
-
-def plot_sa(out_dir,p1,p2,ss):
+def plot_sa(out_dir, p1, p2, ss):
 
     path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
         os.path.realpath(__file__)), '..', out_dir, 'sa_surface.png', sep=os.sep)
-    
+
     plt.figure(1)
-    x=np.array(p1)
-    y=np.array(p2)
-    z=np.array(ss)
+    x = np.array(p1)
+    y = np.array(p2)
+    z = np.array(ss)
 
-    x=np.unique(x)
-    y=np.unique(y)
-    X,Y = np.meshgrid(x,y)
+    x = np.unique(x)
+    y = np.unique(y)
+    X, Y = np.meshgrid(x, y)
 
-    Z=z.reshape(len(y),len(x))
+    Z = z.reshape(len(y), len(x))
 
-    plt.pcolormesh(X,Y,Z)
+    plt.pcolormesh(X, Y, Z)
 
     plt.savefig(path)
-
-

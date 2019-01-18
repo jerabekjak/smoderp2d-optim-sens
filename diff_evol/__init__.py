@@ -70,20 +70,19 @@ class DiffEvol(object):
 
         print ('model run {} runs {:1.2f} secs with ss = {:1.4e} ...'.format(
             self._model_runs, t2-t1, ss))
-        print ('\t with pars set {:1.4e},{:1.4e},{:1.4e},{:1.4e},{:1.4e} ...'.format(
-            params[0], params[1], params[2], params[3], params[4]))
+        print ('\t with pars set {:1.4e},{:1.4e},{:1.4e},{:1.4e},{:1.4e},{:1.4e} ...'.format(
+            params[0], params[1], params[2], params[3], params[4], params[5]))
 
         return sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
 
     def make_de(self):
 
         # bounds for parameters [X,Y,b]
-        bounds = [(1, 400), (0.001, 1.), (1.5, 2.0),
-                  (1e-8, 1e-5), (1e-8, 1e-5)]
-        x0 = [3.5822e+02, 7.6509e-01, 1.6578e+00, 4.4133e-06, 7.9349e-06]
-        self.result = minimize(self.model, x0, method='Nelder-Mead')
-        # self.result = differential_evolution(
-        # self.model, bounds, disp=True)
+        bounds = [(1, 20), (0.01, 1.), (1.5, 2.0),
+                  (1e-8, 1e-5), (1e-8, 1e-5), (1e-8, 1e-5)]
+        #x0 = [3.5822e+02, 7.6509e-01, 1.6578e+00, 4.4133e-06, 7.9349e-06]
+        #self.result = minimize(self.model, x0, method='Nelder-Mead')
+        self.result = differential_evolution(self.model, bounds, disp=True)
 
     def __del__(self):
 
@@ -96,7 +95,7 @@ class DiffEvol(object):
 
         print ('\n{}'.format(self.result.message))
         print ('{} model runs during optimalization'.format(self._model_runs))
-        print ('final parameters: X={:.2E}, Y={:.2E}, b={:.2E}'.format(
-            self.result.x[0], self.result.x[1], self.result.x[2]))
+        print ('final parameters: X={:.2E}, Y={:.2E}, b={:.2E}\n\tKs={:.2E}, S={:.2E}, ret={:.2E}'.format(
+            self.result.x[0], self.result.x[1], self.result.x[2], self.result.x[3], self.result.x[4], self.result.x[5]))
         print ('sum of squares = {:.2E}'.format(self.result.fun))
         print (self.result)

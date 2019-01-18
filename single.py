@@ -17,7 +17,7 @@ def main(pars):
     get_ks_s(OD.data, pars.out_dir)
         
     DE = DiffEvol(pars = pars, obs = OD)
-    DE.model([4.5,0.79,1.3,4.7e-06,2.6e-05])
+    DE.model([4.5,0.79,1.3,4.7e-06,2.6e-05,-0.00025])
     
 if __name__ == '__main__':
 
