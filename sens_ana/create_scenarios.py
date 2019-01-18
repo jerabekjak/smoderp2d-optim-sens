@@ -4,8 +4,8 @@
 
 import numpy as np
 if __name__ == '__main__':
-    X = np.arange(10, 210, 10)
-    Y = np.arange(0.1, 1.1, 0.1)
+    X = np.arange(10, 410, 20)
+    Y = np.arange(0.05, 1.1, 0.15)
     b = [1.6]
     
     path = 'sens_ana/scenarios.dat'
