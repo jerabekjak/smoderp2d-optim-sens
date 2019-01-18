@@ -13,6 +13,3 @@ for (jm_dm in jm_DM){
               file = paste('obs_data',jm_dm,sep='/'),
               sep = '\t', dec = '.',col.names = FALSE, row.names = FALSE)
 }
-
-
-
