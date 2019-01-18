@@ -79,7 +79,7 @@ class DiffEvol(object):
 
         # bounds for parameters [X,Y,b]
         bounds = [(1, 20), (0.01, 1.), (1.5, 2.0),
-                  (1e-8, 1e-5), (1e-8, 1e-5), (1e-8, 1e-5)]
+                  (1e-8, 1e-5), (1e-8, 1e-5), (-0.1, 0)]
         #x0 = [3.5822e+02, 7.6509e-01, 1.6578e+00, 4.4133e-06, 7.9349e-06]
         #self.result = minimize(self.model, x0, method='Nelder-Mead')
         self.result = differential_evolution(self.model, bounds, disp=True)
