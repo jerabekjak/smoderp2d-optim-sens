@@ -8,7 +8,7 @@ from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
 from tools.plots import plot_de
 from tools.writes import write_de
-
+from tools.plots import plot_de_residuals
 
 # objective function
 
@@ -78,8 +78,8 @@ class DiffEvol(object):
     def make_de(self):
 
         # bounds for parameters [X,Y,b]
-        bounds = [(1, 20), (0.01, 1.), (1.5, 2.0),
-                  (1e-8, 1e-5), (1e-8, 1e-5), (-0.1, 0)]
+        bounds = [(1, 20), (0.01, 1.), (1., 2.0),
+                  (1e-8, 1e-5), (1e-8, 1e-3), (-0.1, 0)]
         #x0 = [3.5822e+02, 7.6509e-01, 1.6578e+00, 4.4133e-06, 7.9349e-06]
         #self.result = minimize(self.model, x0, method='Nelder-Mead')
         self.result = differential_evolution(self.model, bounds, disp=True)
@@ -89,9 +89,11 @@ class DiffEvol(object):
         if self._plot:
             plot_de(self._obs_data, self._mod_data_interp,
                     self.result, self._out_dir)
+            plot_de_residuals(self._obs_data, self._mod_data_interp, self._out_dir)
 
         write_de(self._obs_data, self._mod_data_interp,
                  self.result, self._out_dir)
+        
 
         print ('\n{}'.format(self.result.message))
         print ('{} model runs during optimalization'.format(self._model_runs))

@@ -54,3 +54,25 @@ def plot_sa(out_dir, p1, p2, ss):
     plt.pcolormesh(X, Y, Z)
 
     plt.savefig(path)
+
+
+def plot_de_residuals(obs, mod, out_dir):
+    path = '{0}{sep}obs_mod_residuals.png'.format(out_dir, sep=os.sep)
+
+    residuals = obs.val - mod.val
+
+    plt.figure(2, figsize=(9, 7))
+
+    n = len(obs.time)
+    i = 0
+    plt.plot([obs.time[i]/60, obs.time[i]/60],
+             [0, residuals[i]*1000*60*60], label='obs - mod')
+    for i in range(0, n):
+        plt.plot([obs.time[i]/60, obs.time[i]/60],
+                 [0, residuals[i]*1000*60*60])
+
+    plt.title("Resuduals of the model ")
+    plt.xlabel('time [mins]')
+    plt.ylabel('residuals [mm/hour]')
+    plt.legend()
+    plt.savefig(path, dpi=200)
