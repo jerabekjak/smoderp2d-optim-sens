@@ -2,3 +2,4 @@
 *~
 out*/
 *.png
+obs_data/*.csv
