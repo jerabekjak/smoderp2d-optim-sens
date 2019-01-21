@@ -3,3 +3,4 @@
 out*/
 *.png
 obs_data/*.csv
+model/*.ini
