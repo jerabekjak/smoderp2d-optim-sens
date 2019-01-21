@@ -12,7 +12,7 @@ def read_parser():
     parser.add_argument(
         '-o',
         '--out_dir',
-        help='directory to store the results',
+        help='directory to store the optimaze results',
         type=str,
         default='out-test',
         required=False
