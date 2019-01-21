@@ -29,7 +29,8 @@ mod_file: ',model_out_path,'/point001.dat
 }
 
 text_cmd <- function(out_dir, model_ini, optim_cgs){
-  return(paste('./optim.py -o',out_dir,'-m',model_ini,'-O',optim_cgs))
+  log = paste('logs',paste(tools::file_path_sans_ext(out_dir),'log',sep='.'),sep='/')
+  return(paste('./optim.py -o',out_dir,'-m',model_ini,'-O',optim_cgs,'>',log))
 }
 
 text_model_ini <- function(model_out_path) {
@@ -68,7 +69,7 @@ printtimes:
 '))
 }
 
-for (jm_dm in jm_DM[1:3]){
+for (jm_dm in jm_DM[1:12]){
   # generate observed data 
   cas = DM[[jm_dm]]$usek_prum_min
   val = DM[[jm_dm]]$prutok_mm_min
