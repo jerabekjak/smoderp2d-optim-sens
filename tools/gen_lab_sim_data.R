@@ -1,15 +1,103 @@
 # 1 - nacte merdata.RData
 # 2 - udela csv do adresare obs_data
 load_data = FALSE
+obs_dir = 'obs_data'
+cfg_dir = 'cfgs'
 setwd('/home/jakub/Program/smoderp2d-optim-sens/')
 if (load_data) {load('/home/hdd/data/13_smod_paper_citlivost/mer_sim_srovnani/merdata.RData')}
 
 jm_DM = names(DM)
 
-for (jm_dm in jm_DM){
+text_optim_cfg <- function(slope,rainfall,n,obs_data,model_out_path) {
+  return (paste('[Params]
+# in mm per hour
+rainfall: ',rainfall,'
+# slope [-]
+slope: ',slope,'
+
+# data area stored in data file
+# where first col is time in minutes
+# where second col is runoff in mm/min
+# where cols are separated with tab
+[Data]
+rows: ',n,'
+file: ',obs_data,'
+
+[Model]
+mod_file: ',model_out_path,'/point001.dat
+', sep = ''))
+}
+
+text_cmd <- function(out_dir, model_ini, optim_cgs){
+  return(paste('./optim.py -o',out_dir,'-m',model_ini,'-O',optim_cgs))
+}
+
+text_model_ini <- function(model_out_path) {
+  return (paste('[GIS]
+dem: -
+soil: -
+lu: -
+[shape atr]
+soil-atr: -
+lu-atr: -
+[srazka]
+file: model/indata/srazka.txt
+[time]
+# sec
+maxdt: 10
+# min
+endtime: 30
+[Infiltration]
+type: 1
+[Other]
+points: -
+outdir: ',model_out_path,'
+typecomp: 0
+mfda: False
+soilvegtab: -
+soilvegcode: -
+streamshp: -
+streamtab: -
+streamtabcode: -
+arcgis: false
+extraout: False
+indata: model/indata/mala_ds.save
+partialcomp: roff
+logging: WARNING
+printtimes:
+'))
+}
+
+for (jm_dm in jm_DM[1:3]){
+  # generate observed data 
   cas = DM[[jm_dm]]$usek_prum_min
   val = DM[[jm_dm]]$prutok_mm_min
-  write.table(x = data.frame(cas=cas, val=val), 
-              file = paste('obs_data',jm_dm,sep='/'),
-              sep = '\t', dec = '.',col.names = FALSE, row.names = FALSE)
+  cas = cas[!is.na(val)]
+  val = val[!is.na(val)]
+  n = length(val)
+  rainfall = DM[[jm_dm]]$intenzita_dest[1]
+  slope_deg = DM[[jm_dm]]$sklon_stup[1]
+  slope_prc = tan(6*pi/180) 
+  scen = tools::file_path_sans_ext(jm_dm)
+  conf_path = paste(cfg_dir,paste(scen,'cfg',sep='.'),sep='/')
+  out_pat   = paste('out',scen,sep='-')
+  model_out_path = paste('model',out_pat,sep='/')
+  model_ini_path = paste('model',paste(scen,'ini',sep='.'),sep='/')
+  data_path = paste(obs_dir,jm_dm,sep='/')
+  
+  # write cli run
+  write(text_cmd(out_pat,model_ini_path,conf_path), file = paste('runs',scen,sep='/'))
+  
+  # write optim cfg
+  write(text_optim_cfg(slope_prc, rainfall, n, data_path, model_out_path),file = conf_path)
+  
+  # write obs data
+  write.table(x = data.frame(cas=cas, val=val),
+              file = data_path,
+              sep = '\t', dec = '.',col.names = FALSE, row.names = FALSE, append = FALSE)
+  
+  # write model ini
+  write(text_model_ini(model_out_path), file = model_ini_path)
 }
+
+
