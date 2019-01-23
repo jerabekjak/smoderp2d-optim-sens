@@ -35,24 +35,30 @@ def plot_de(obs, mod, de_results, out_dir):
     plt.savefig(path, dpi=200)
 
 
-def plot_sa(out_dir, p1, p2, ss):
+def plot_sa(out_dir, mu, sigma, cfgs):
 
     path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
-        os.path.realpath(__file__)), '..', out_dir, 'sa_surface.png', sep=os.sep)
+        os.path.realpath(__file__)), '..', out_dir, 'mu_sigma_space.png', sep=os.sep)
 
-    plt.figure(1)
-    x = np.array(p1)
-    y = np.array(p2)
-    z = np.array(ss)
-
-    x = np.unique(x)
-    y = np.unique(y)
-    X, Y = np.meshgrid(x, y)
-
-    Z = z.reshape(len(y), len(x))
-
-    plt.pcolormesh(X, Y, Z)
-
+    labels = ['X','Y','b','Ks','S','ret']
+    plt.figure(0, figsize=(9, 7))
+    
+    for i in range(cfgs.k):
+        plt.plot(mu[i],sigma[i], 'o')
+    
+    """
+    for i in range(cfgs.k):
+        plt.annotate(
+            labels[i],
+            xy=(mu[i], sigma[i]), xytext=(-20, 20),
+            textcoords='offset points', ha='right', va='bottom',
+            bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.5),
+            arrowprops=dict(arrowstyle = '->', connectionstyle='arc3,rad=0'))
+    """
+    
+    plt.title('Morris 1991 screening sensitivity analyses with R = {} and p = {}'.format(cfgs.R,cfgs.p))
+    plt.xlabel('mu')
+    plt.ylabel('sigma')
     plt.savefig(path)
 
 

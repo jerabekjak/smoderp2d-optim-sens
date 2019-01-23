@@ -106,7 +106,7 @@ class SensAna(DiffEvol):
         # changed scenario
         par_d = par_0.copy()
         par_d[ipar] = par_d[ipar] + self._delta
-
+        
         ss_0 = self.model(par_0)
         ss_d = self.model(par_d)
 
@@ -143,13 +143,17 @@ class SensAna(DiffEvol):
     def do_sa(self, cfgs):
 
         for irep in range(self._cfgs.R):
+            print ('repetition {} is running...'.format(irep+1))
             for ipar in range(self._cfgs.k):
                 el_effect = self._single_el_effect(irep, ipar)
                 self._E[irep][ipar] = el_effect
-
+        print ('repetitions done')
+        
     def __del__(self):
 
         self._over_all_effect()
+        
+        plot_sa(self._out_dir, self._mu, self._sigma, self._cfgs)
 
         path = '{}{sep}base_scen_array'.format(self._out_dir, sep=os.sep)
         np.savetxt(path, self._B, fmt='%1.4e', delimiter='\t')
