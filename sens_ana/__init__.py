@@ -1,4 +1,5 @@
 from diff_evol import DiffEvol
+from diff_evol import sum_of_squares
 
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
@@ -19,7 +20,7 @@ class SensAna(DiffEvol):
 
         :param pars: parser namespace
         """
-
+        self._obs_data = cfgs.data
         self._mod_data = None
         self._mod_data_interp = None
         self._cfgs = cfgs
@@ -108,26 +109,35 @@ class SensAna(DiffEvol):
         ss_0 = self.model(par_0)
         ss_d = self.model(par_d)
 
-        print (ss_0)
-        print (ss_d)
+        el_effect = (ss_d - ss_0)/self._delta
+
+        return el_effect
 
     def model(self, params):
 
         sm.run(self._mod_conf, params, self._cfgs)
 
         mod_data = self._read_mod_file(self._mod_file)
-        mod_interp = self._interp_mod_data(mod=mod_data, obs=self._mask_data)
+        mod_interp = self._interp_mod_data(mod=mod_data, obs=self._obs_data)
+
+        ss = sum_of_squares(self._obs_data.val, mod_interp.val)
+
+        return(ss)
 
     def do_sa(self, cfgs):
 
         for irep in range(self._cfgs.R):
             for ipar in range(self._cfgs.k):
                 el_effect = self._single_el_effect(irep, ipar)
-                #self._E[irep][ipar] = el_effect
+                print (el_effect)
+                self._E[irep][ipar] = el_effect
 
     def __del__(self):
         path = '{}{sep}base_scen_array'.format(self._out_dir, sep=os.sep)
         np.savetxt(path, self._B, fmt='%1.4e', delimiter='\t')
+        path = '{}{sep}elementary_effect_array'.format(
+            self._out_dir, sep=os.sep)
+        np.savetxt(path, self._E, fmt='%1.4e', delimiter='\t')
         path = '{}{sep}sens_ana_out.log'.format(self._out_dir, sep=os.sep)
         with open(path, 'w') as out:
             out.write('{}\n'.format('Done...'))
