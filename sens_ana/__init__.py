@@ -97,23 +97,6 @@ class SensAna(DiffEvol):
 
         return (params)
 
-    def _single_el_effect(self, irep, ipar):
-        """ calculates elementary effect of a single ipar parameter in irep replication """
-
-        # base scenario
-        par_0 = self._B[irep][:]
-
-        # changed scenario
-        par_d = par_0.copy()
-        par_d[ipar] = par_d[ipar] + self._delta
-        
-        ss_0 = self.model(par_0)
-        ss_d = self.model(par_d)
-
-        el_effect = (ss_d - ss_0)/self._delta
-
-        return el_effect
-
     def _over_all_effect(self):
 
         self._mu = []
@@ -144,8 +127,13 @@ class SensAna(DiffEvol):
 
         for irep in range(self._cfgs.R):
             print ('repetition {} is running...'.format(irep+1))
+            par_0 = self._B[irep][:]
+            ss_0 = self.model(par_0)
             for ipar in range(self._cfgs.k):
-                el_effect = self._single_el_effect(irep, ipar)
+                par_d = par_0.copy()
+                par_d[ipar] = par_d[ipar] + self._delta
+                ss_d = self.model(par_d)
+                el_effect = (ss_d - ss_0)/self._delta
                 self._E[irep][ipar] = el_effect
         print ('repetitions done')
         
