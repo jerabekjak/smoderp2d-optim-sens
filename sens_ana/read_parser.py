@@ -20,6 +20,15 @@ def read_parser():
     )
 
     parser.add_argument(
+        '-m',
+        '--mod_ini',
+        help='location of model ini file',
+        type=str,
+        default='model/test.ini',
+        required=False
+    )
+
+    parser.add_argument(
         '-o',
         '--out_dir',
         help='directory to store the results',
