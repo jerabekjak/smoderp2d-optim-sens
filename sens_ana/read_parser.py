@@ -21,7 +21,7 @@ def read_parser():
 
     parser.add_argument(
         '-m',
-        '--mod_ini',
+        '--mod_conf',
         help='location of model ini file',
         type=str,
         default='model/test.ini',
