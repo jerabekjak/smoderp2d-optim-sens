@@ -37,9 +37,9 @@ class SensAna(DiffEvol):
         self._plot = False
 
         # generates p parameter sets
-        self._gen_param_sets(cfgs)
+        self._gen_param_sets()
         # base scenarios matrix
-        self._B = self._make_base_array(cfgs)
+        self._B = self._make_base_array()
         # array of elementary effects
         self._E = np.zeros_like(self._B)
         self._delta = self._set_delta()
@@ -50,7 +50,7 @@ class SensAna(DiffEvol):
         for i in range(self._cfgs.k+1):
             self._store_mod.append(RecModData(self._obs_data._n))
 
-    def _make_base_array(self, cfgs):
+    def _make_base_array(self):
         """ Creates matrix of base scenarios.
 
         ncols = number of parameters
@@ -59,7 +59,7 @@ class SensAna(DiffEvol):
 
         B = np.zeros([self._cfgs.R, self._cfgs.k], float)
         for i in range(self._cfgs.R):
-            params = self._get_param_set(cfgs)
+            params = self._get_param_set()
             B[i][:] = params
 
         return B
@@ -77,7 +77,7 @@ class SensAna(DiffEvol):
         return (delta)
         
         
-    def _gen_param_sets(self, cfgs):
+    def _gen_param_sets(self):
         """ Creates p levels of each parameter.
 
         NOTE
@@ -97,7 +97,7 @@ class SensAna(DiffEvol):
         self._S_levels = [uniform(self._cfgs.S[0], self._cfgs.S[1])
                           for p in range(0, self._cfgs.p)]
 
-    def _get_param_set(self, cfgs):
+    def _get_param_set(self):
 
         params = np.zeros([self._cfgs.k], float)
 
@@ -143,7 +143,7 @@ class SensAna(DiffEvol):
 
         return(ss)
 
-    def do_sa(self, cfgs):
+    def do_sa(self):
 
         for irep in range(self._cfgs.R):
             print ('repetition {} is running...'.format(irep+1))
@@ -158,6 +158,7 @@ class SensAna(DiffEvol):
 
                 par_d = par_0.copy()
                 par_d[ipar] = par_d[ipar] + self._delta[ipar]
+                #par_d[ipar] = par_d[ipar] * 1.1
 
                 ss_d = self.model(par_d)
 
@@ -165,6 +166,7 @@ class SensAna(DiffEvol):
                     time=self._mod_data_interp.time, val=self._mod_data_interp.val)
 
                 el_effect = (ss_d - ss_0)/self._delta[ipar]
+                #el_effect = (ss_d - ss_0)
                 self._E[irep][ipar] = el_effect
 
             if (self._plot):

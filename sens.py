@@ -14,8 +14,8 @@ def main(pars):
     if not os.path.exists(pars.out_dir):
         os.makedirs(pars.out_dir)
 
-    #SA = SensAna(pars=pars)
-    # SA.do_sa()
+    SA = SensAna(pars=pars, cfgs=cfgs)
+    SA.do_sa()
 
 
 if __name__ == '__main__':

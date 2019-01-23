@@ -46,7 +46,7 @@ def plot_sa(out_dir, mu, sigma, cfgs):
     for i in range(cfgs.k):
         plt.plot(mu[i],sigma[i], 'o')
     
-    """
+    
     for i in range(cfgs.k):
         plt.annotate(
             labels[i],
@@ -54,7 +54,7 @@ def plot_sa(out_dir, mu, sigma, cfgs):
             textcoords='offset points', ha='right', va='bottom',
             bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.5),
             arrowprops=dict(arrowstyle = '->', connectionstyle='arc3,rad=0'))
-    """
+    
     
     plt.title('Morris 1991 screening sensitivity analyses with R = {} and p = {}'.format(cfgs.R,cfgs.p))
     plt.xlabel('mu')
