@@ -5,6 +5,7 @@ from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
 from diff_evol.mod_data_handling import RecModData
 from tools.plots import plot_sa
+from tools.plots import plot_rep
 import model.smoderp2d.main as sm
 
 import os
@@ -42,6 +43,12 @@ class SensAna(DiffEvol):
         # array of elementary effects
         self._E = np.zeros_like(self._B)
         self._delta = 1.-1./(self._cfgs.p-1.)
+
+        # stores mod result for print
+        # includes the ref run therefore self._cfgs.k+1
+        self._store_mod = []
+        for i in range(self._cfgs.k+1):
+            self._store_mod.append(RecModData(self._obs_data._n))
 
     def _make_base_array(self, cfgs):
         """ Creates matrix of base scenarios.
@@ -117,9 +124,10 @@ class SensAna(DiffEvol):
         sm.run(self._mod_conf, params, self._cfgs)
 
         mod_data = self._read_mod_file(self._mod_file)
-        mod_interp = self._interp_mod_data(mod=mod_data, obs=self._obs_data)
+        self._mod_data_interp = self._interp_mod_data(
+            mod=mod_data, obs=self._obs_data)
 
-        ss = sum_of_squares(self._obs_data.val, mod_interp.val)
+        ss = sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
 
         return(ss)
 
@@ -127,20 +135,35 @@ class SensAna(DiffEvol):
 
         for irep in range(self._cfgs.R):
             print ('repetition {} is running...'.format(irep+1))
+
             par_0 = self._B[irep][:]
             ss_0 = self.model(par_0)
+
+            self._store_mod[0].set_vals(
+                time=self._mod_data_interp.time, val=self._mod_data_interp.val)
+
             for ipar in range(self._cfgs.k):
+
                 par_d = par_0.copy()
                 par_d[ipar] = par_d[ipar] + self._delta
+
                 ss_d = self.model(par_d)
+
+                self._store_mod[ipar+1].set_vals(
+                    time=self._mod_data_interp.time, val=self._mod_data_interp.val)
+
                 el_effect = (ss_d - ss_0)/self._delta
                 self._E[irep][ipar] = el_effect
+                
+            if (self._plot):
+                plot_rep(self._out_dir,irep,self._obs_data,self._store_mod)
+
         print ('repetitions done')
-        
+
     def __del__(self):
 
         self._over_all_effect()
-        
+
         plot_sa(self._out_dir, self._mu, self._sigma, self._cfgs)
 
         path = '{}{sep}base_scen_array'.format(self._out_dir, sep=os.sep)

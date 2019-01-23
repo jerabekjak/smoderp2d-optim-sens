@@ -41,7 +41,7 @@ def plot_sa(out_dir, mu, sigma, cfgs):
         os.path.realpath(__file__)), '..', out_dir, 'mu_sigma_space.png', sep=os.sep)
 
     labels = ['X','Y','b','Ks','S','ret']
-    plt.figure(0, figsize=(9, 7))
+    plt.figure(cfgs.R+1, figsize=(9, 7))
     
     for i in range(cfgs.k):
         plt.plot(mu[i],sigma[i], 'o')
@@ -60,6 +60,30 @@ def plot_sa(out_dir, mu, sigma, cfgs):
     plt.xlabel('mu')
     plt.ylabel('sigma')
     plt.savefig(path)
+    plt.close(cfgs.R+1)
+    
+    
+def plot_rep(out_dir,rep,obs,mod):
+
+    path = '{0}{sep}{1}{sep}{2}{sep}{3}{4}{5}'.format(os.path.dirname(
+        os.path.realpath(__file__)), '..', out_dir, 'repetition_',rep+1,'.png', sep=os.sep)
+    
+    plt.figure(rep-1, figsize=(9, 7))
+    
+    plt.plot(obs.time/60, obs.val*1000*60*60, 'ro', label='observed data')
+    
+    for i in range(1,len(mod)):
+        plt.plot(mod[i].time/60, mod[i].val*1000*60*60, 'go', label='delta model')
+    
+    plt.plot(mod[0].time/60, mod[0].val*1000*60*60, 'bo', label='base model')
+    
+    plt.xlabel('time [mins]')
+    plt.ylabel('runoff [mm/hour]')
+    plt.title('Repetition {}'.format(rep+1))
+    plt.legend()
+    plt.savefig(path)
+    plt.close(rep-1)
+
 
 
 def plot_de_residuals(obs, mod, out_dir):
