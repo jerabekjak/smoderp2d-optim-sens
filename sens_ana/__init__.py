@@ -34,6 +34,7 @@ class SensAna(DiffEvol):
         self._gen_param_sets(cfgs)
         # base scenarios matrix
         self._B = self._make_base_array(cfgs)
+        print (self._B)
 
     def _make_base_array(self, cfgs):
         """ Creates matrix of base scenarios.
@@ -46,6 +47,8 @@ class SensAna(DiffEvol):
         for i in range(cfgs.R):
             params = self._get_param_set(cfgs)
             B[i][:] = params
+            
+        return B
 
     def _gen_param_sets(self, cfgs):
         """ Creates p levels of each parameter.
