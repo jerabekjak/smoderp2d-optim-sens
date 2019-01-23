@@ -14,7 +14,7 @@ def main(pars):
     if not os.path.exists(pars.out_dir):
         os.makedirs(pars.out_dir)
         
-    get_ks_s(OD.data, pars.out_dir)
+    #get_ks_s(OD.data, pars.out_dir)
         
     DE = DiffEvol(pars = pars, obs = OD)
     DE.model([4.5,0.79,1.3,4.7e-06,2.6e-05,-0.00025])

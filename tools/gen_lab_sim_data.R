@@ -69,7 +69,8 @@ printtimes:
 '))
 }
 
-for (jm_dm in jm_DM[1:12]){
+# for (jm_dm in jm_DM[1:12]){
+for (jm_dm in jm_DM[45:78]){ # nucice
   # generate observed data 
   cas = DM[[jm_dm]]$usek_prum_min
   val = DM[[jm_dm]]$prutok_mm_min
