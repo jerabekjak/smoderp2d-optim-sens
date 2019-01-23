@@ -9,6 +9,7 @@ import model.smoderp2d.main as sm
 
 import os
 import numpy as np
+import math
 from random import uniform
 from random import randint
 
@@ -113,6 +114,21 @@ class SensAna(DiffEvol):
 
         return el_effect
 
+    def _over_all_effect(self):
+
+        self._mu = []
+        R = self._cfgs.R
+        for ipar in range(self._cfgs.k):
+            d_i = self._E[:, ipar]
+            mu_i = 1/R * sum(abs(d_i))
+            self._mu.append(mu_i)
+
+        self._sigma = []
+        for ipar in range(self._cfgs.k):
+            d_i = self._E[:, ipar]
+            sigma_i = math.sqrt(1./(R-1.)*sum((d_i - 1./R*sum(d_i))**2.0))
+            self._sigma.append(sigma_i)
+
     def model(self, params):
 
         sm.run(self._mod_conf, params, self._cfgs)
@@ -129,15 +145,19 @@ class SensAna(DiffEvol):
         for irep in range(self._cfgs.R):
             for ipar in range(self._cfgs.k):
                 el_effect = self._single_el_effect(irep, ipar)
-                print (el_effect)
                 self._E[irep][ipar] = el_effect
 
     def __del__(self):
+
+        self._over_all_effect()
+
         path = '{}{sep}base_scen_array'.format(self._out_dir, sep=os.sep)
         np.savetxt(path, self._B, fmt='%1.4e', delimiter='\t')
+
         path = '{}{sep}elementary_effect_array'.format(
             self._out_dir, sep=os.sep)
         np.savetxt(path, self._E, fmt='%1.4e', delimiter='\t')
+
         path = '{}{sep}sens_ana_out.log'.format(self._out_dir, sep=os.sep)
         with open(path, 'w') as out:
             out.write('{}\n'.format('Done...'))
