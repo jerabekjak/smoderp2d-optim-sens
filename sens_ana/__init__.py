@@ -34,7 +34,6 @@ class SensAna(DiffEvol):
         self._gen_param_sets(cfgs)
         # base scenarios matrix
         self._B = self._make_base_array(cfgs)
-        print (self._B)
 
     def _make_base_array(self, cfgs):
         """ Creates matrix of base scenarios.
@@ -92,6 +91,8 @@ class SensAna(DiffEvol):
         pass
 
     def __del__(self):
+        path = '{}{sep}base_scen_array'.format(self._out_dir, sep=os.sep)
+        np.savetxt(path, self._B, fmt='%1.4e', delimiter = '\t')  
         path = '{}{sep}sens_ana_out.log'.format(self._out_dir, sep=os.sep)
         with open(path, 'w') as out:
             out.write('{}\n'.format('Done...'))
