@@ -1,17 +1,14 @@
 import numpy as np
 from configparser import ConfigParser
+from diff_evol.obs_data_handler import ObsData
 
-
-class ReadConfig():
+class ReadConfig(ObsData):
     """ read cfg file """
 
     def __init__(self, config_path):
-
-        self._config = ConfigParser()
-        self._config.read(config_path)
-
-        self.rainfall = self._config.getfloat('Params', 'rainfall')
-        self.slope = self._config.getfloat('Params', 'slope')
+        
+        ObsData.__init__(self,config_path)
+        
         # number of replications
         self.R = self._config.getint('SensAna', 'R')
         # number of levels of parameter
@@ -36,4 +33,4 @@ class ReadConfig():
         self.S = [float(par) for par in self._config.get(
             'ParamsDef', 'S').split(',')]
 
-        self.model_file = self._config.get('Model', 'mod_file')
+        
