@@ -42,7 +42,7 @@ class SensAna(DiffEvol):
         self._B = self._make_base_array(cfgs)
         # array of elementary effects
         self._E = np.zeros_like(self._B)
-        self._delta = 1.-1./(self._cfgs.p-1.)
+        self._delta = self._set_delta()
 
         # stores mod result for print
         # includes the ref run therefore self._cfgs.k+1
@@ -64,6 +64,19 @@ class SensAna(DiffEvol):
 
         return B
 
+    def _set_delta(self):
+        
+        delta = np.zeros(self._cfgs.k,float)
+        delta[0] = (self._cfgs.X[1] - self._cfgs.X[0])/self._cfgs.p
+        delta[1] = (self._cfgs.Y[1] - self._cfgs.Y[0])/self._cfgs.p
+        delta[2] = (self._cfgs.b[1] - self._cfgs.b[0])/self._cfgs.p
+        delta[3] = (self._cfgs.Ks[1] - self._cfgs.Ks[0])/self._cfgs.p
+        delta[4] = (self._cfgs.S[1] - self._cfgs.S[0])/self._cfgs.p
+        delta[5] = (self._cfgs.ret[1] - self._cfgs.ret[0])/self._cfgs.p
+        
+        return (delta)
+        
+        
     def _gen_param_sets(self, cfgs):
         """ Creates p levels of each parameter.
 
@@ -144,14 +157,14 @@ class SensAna(DiffEvol):
             for ipar in range(self._cfgs.k):
 
                 par_d = par_0.copy()
-                par_d[ipar] = par_d[ipar] + self._delta
+                par_d[ipar] = par_d[ipar] + self._delta[ipar]
 
                 ss_d = self.model(par_d)
 
                 self._store_mod[ipar+1].set_vals(
                     time=self._mod_data_interp.time, val=self._mod_data_interp.val)
 
-                el_effect = (ss_d - ss_0)/self._delta
+                el_effect = (ss_d - ss_0)/self._delta[ipar]
                 self._E[irep][ipar] = el_effect
 
             if (self._plot):
