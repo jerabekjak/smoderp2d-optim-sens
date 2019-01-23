@@ -25,7 +25,7 @@ class SensAna(DiffEvol):
         self._cfgs = cfgs
         self._mod_conf = pars.mod_conf
         self._mod_file = self._cfgs.model_file
-        
+
         self._out_dir = pars.out_dir
 
         self._read_mod_file = read_mod_file
@@ -40,19 +40,7 @@ class SensAna(DiffEvol):
         # array of elementary effects
         self._E = np.zeros_like(self._B)
         self._delta = 1.-1./(self._cfgs.p-1.)
-        
-        # mask of time series
-        self._mask_data = self._make_mod_mask_data()
 
-    def _make_mod_mask_data(self):
-        """ Creates mas for model data interpolation """
-        
-        mask = RecModData(30)
-        time = np.linspace(60., 1800, num=30)
-        val  = np.zeros_like(time)
-        mask.set_vals(time=time,val=val)
-        return (mask)
-        
     def _make_base_array(self, cfgs):
         """ Creates matrix of base scenarios.
 
@@ -83,8 +71,10 @@ class SensAna(DiffEvol):
         self._ret_levels = [uniform(self._cfgs.ret[0], self._cfgs.ret[1])
                             for p in range(0, self._cfgs.p)]
 
-        self._Ks_levels = 10.**np.random.normal(self._cfgs.Ks[0], self._cfgs.Ks[1], self._cfgs.p)
-        self._S_levels = 10.**np.random.normal(self._cfgs.S[0], self._cfgs.S[1], self._cfgs.p)
+        self._Ks_levels = 10.**np.random.normal(
+            self._cfgs.Ks[0], self._cfgs.Ks[1], self._cfgs.p)
+        self._S_levels = 10.**np.random.normal(
+            self._cfgs.S[0], self._cfgs.S[1], self._cfgs.p)
 
     def _get_param_set(self, cfgs):
 
@@ -105,40 +95,35 @@ class SensAna(DiffEvol):
 
         return (params)
 
-    def _single_el_effect(self,irep,ipar):
+    def _single_el_effect(self, irep, ipar):
         """ calculates elementary effect of a single ipar parameter in irep replication """
-        
+
         # base scenario
         par_0 = self._B[irep][:]
-        
+
         # changed scenario
         par_d = par_0.copy()
         par_d[ipar] = par_d[ipar] + self._delta
-        
+
         ss_0 = self.model(par_0)
         ss_d = self.model(par_d)
-        
+
         print (ss_0)
         print (ss_d)
-        
-        
+
     def model(self, params):
-        
+
         sm.run(self._mod_conf, params, self._cfgs)
-        
+
         mod_data = self._read_mod_file(self._mod_file)
         mod_interp = self._interp_mod_data(mod=mod_data, obs=self._mask_data)
-        
-        
-        
-    
-    def do_sa(self,cfgs):
+
+    def do_sa(self, cfgs):
 
         for irep in range(self._cfgs.R):
             for ipar in range(self._cfgs.k):
-                el_effect = self._single_el_effect(irep,ipar)
+                el_effect = self._single_el_effect(irep, ipar)
                 #self._E[irep][ipar] = el_effect
-            
 
     def __del__(self):
         path = '{}{sep}base_scen_array'.format(self._out_dir, sep=os.sep)
