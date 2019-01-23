@@ -119,8 +119,8 @@ class SensAna(DiffEvol):
         ss_d = self.model(par_d)
         
         print (ss_0)
-        print (ss_1)
-            
+        print (ss_d)
+        
         
     def model(self, params):
         
@@ -128,7 +128,8 @@ class SensAna(DiffEvol):
         
         mod_data = self._read_mod_file(self._mod_file)
         mod_interp = self._interp_mod_data(mod=mod_data, obs=self._mask_data)
-        print (mod_interp.val)
+        
+        
         
     
     def do_sa(self,cfgs):
