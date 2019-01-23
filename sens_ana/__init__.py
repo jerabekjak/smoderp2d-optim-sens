@@ -34,7 +34,7 @@ class SensAna(DiffEvol):
         self._read_mod_file = read_mod_file
         self._interp_mod_data = interpolate
 
-        self._plot = True
+        self._plot = False
 
         # generates p parameter sets
         self._gen_param_sets(cfgs)
@@ -79,11 +79,10 @@ class SensAna(DiffEvol):
                           for p in range(0, self._cfgs.p)]
         self._ret_levels = [uniform(self._cfgs.ret[0], self._cfgs.ret[1])
                             for p in range(0, self._cfgs.p)]
-
-        self._Ks_levels = 10.**np.random.normal(
-            self._cfgs.Ks[0], self._cfgs.Ks[1], self._cfgs.p)
-        self._S_levels = 10.**np.random.normal(
-            self._cfgs.S[0], self._cfgs.S[1], self._cfgs.p)
+        self._Ks_levels = [uniform(self._cfgs.Ks[0], self._cfgs.Ks[1])
+                           for p in range(0, self._cfgs.p)]
+        self._S_levels = [uniform(self._cfgs.S[0], self._cfgs.S[1])
+                          for p in range(0, self._cfgs.p)]
 
     def _get_param_set(self, cfgs):
 
@@ -154,9 +153,9 @@ class SensAna(DiffEvol):
 
                 el_effect = (ss_d - ss_0)/self._delta
                 self._E[irep][ipar] = el_effect
-                
+
             if (self._plot):
-                plot_rep(self._out_dir,irep,self._obs_data,self._store_mod)
+                plot_rep(self._out_dir, irep, self._obs_data, self._store_mod)
 
         print ('repetitions done')
 
