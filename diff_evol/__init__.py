@@ -91,7 +91,7 @@ class DiffEvol(object):
                     self.result, self._out_dir)
             plot_de_residuals(self._obs_data, self._mod_data_interp, self._out_dir)
 
-        write_de(self._obs_data, self._mod_data_interp,
+        write_de(self._obs, self._mod_data_interp,
                  self.result, self._out_dir)
         
 
