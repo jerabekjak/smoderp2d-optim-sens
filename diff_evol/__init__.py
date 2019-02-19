@@ -68,10 +68,8 @@ class DiffEvol(object):
 
         self._model_runs += 1
 
-        print ('model run {} runs {:1.2f} secs with ss = {:1.4e} ...'.format(
-            self._model_runs, t2-t1, ss))
-        print ('\t with pars set {:1.4e},{:1.4e},{:1.4e},{:1.4e},{:1.4e},{:1.4e} ...'.format(
-            params[0], params[1], params[2], params[3], params[4], params[5]))
+        print ('model run ;{}; runs ;{:1.2f}; secs with ss = ;{:1.4e};with pars set ;{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e}'.format(
+            self._model_runs, t2-t1, ss, params[0], params[1], params[2], params[3], params[4], params[5]))
 
         return sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
 
@@ -82,18 +80,18 @@ class DiffEvol(object):
                   (1e-8, 1e-5), (1e-8, 1e-3), (-0.1, 0)]
         #x0 = [3.5822e+02, 7.6509e-01, 1.6578e+00, 4.4133e-06, 7.9349e-06]
         #self.result = minimize(self.model, x0, method='Nelder-Mead')
-        self.result = differential_evolution(self.model, bounds, disp=True)
+        self.result = differential_evolution(self.model, bounds, disp=False)
 
     def __del__(self):
 
         if self._plot:
             plot_de(self._obs_data, self._mod_data_interp,
                     self.result, self._out_dir)
-            plot_de_residuals(self._obs_data, self._mod_data_interp, self._out_dir)
+            plot_de_residuals(
+                self._obs_data, self._mod_data_interp, self._out_dir)
 
         write_de(self._obs, self._mod_data_interp,
                  self.result, self._out_dir)
-        
 
         print ('\n{}'.format(self.result.message))
         print ('{} model runs during optimalization'.format(self._model_runs))
