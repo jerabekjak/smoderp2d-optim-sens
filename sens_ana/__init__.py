@@ -4,14 +4,13 @@ from diff_evol import sum_of_squares
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
 from diff_evol.mod_data_handling import RecModData
-from tools.writes import write_plus_minus_sa
+from tools.writes import write_sa
 import model.smoderp2d.main as sm
 
 import os
 import numpy as np
 import math
 from random import uniform
-from random import randint
 
 
 class SensAna(DiffEvol):
@@ -27,6 +26,7 @@ class SensAna(DiffEvol):
         self._cfgs = cfgs
         self._mod_conf = pars.mod_conf
         self._mod_file = self._cfgs.model_file
+        self._mcruns = cfgs.mcruns
 
         self._out_dir = pars.out_dir
 
@@ -41,6 +41,11 @@ class SensAna(DiffEvol):
         # self._nparams+1 means + ss
         self._plus_minus_res = np.zeros(
             [2*self._nparams, self._nparams+1], float)
+
+        # stores results from the monte carlo sensitivity
+        # self._nparams+1 means + ss
+        self._monte_carlo_res = np.zeros(
+            [self._mcruns, self._nparams+1], float)
 
         self._plot = False
 
@@ -83,6 +88,18 @@ class SensAna(DiffEvol):
 
         return (params)
 
+    def _gen_monte_carlo_param_set(self):
+
+        params = np.zeros([self._nparams], float)
+        params[0] = uniform(self._cfgs.X[0], self._cfgs.X[1])
+        params[1] = uniform(self._cfgs.Y[0], self._cfgs.Y[1])
+        params[2] = uniform(self._cfgs.b[0], self._cfgs.b[1])
+        params[3] = uniform(self._cfgs.Ks[0], self._cfgs.Ks[1])
+        params[4] = uniform(self._cfgs.S[0], self._cfgs.S[1])
+        params[5] = uniform(self._cfgs.ret[0], self._cfgs.ret[1])
+
+        return params
+
     def _model(self, params):
 
         sm.run(self._mod_conf, params, self._cfgs)
@@ -95,9 +112,10 @@ class SensAna(DiffEvol):
 
         return(ss)
 
-    def plus_minus_proc(self):
+    def _plus_minus_proc(self):
 
         for i in range(self._nparams):
+            print (i)
             params = self._gen_plus_minus_param_set(i, self._proc_mv)
             self._plus_minus_res[2*i][0:self._nparams] = params
             self._plus_minus_res[2*i][self._nparams] = self._model(params)
@@ -105,13 +123,21 @@ class SensAna(DiffEvol):
             self._plus_minus_res[2*i+1][0:self._nparams] = params
             self._plus_minus_res[2*i+1][self._nparams] = self._model(params)
 
+    def _monte_carlo(self):
+
+        for i in range(self._mcruns):
+            print (i)
+            params = self._gen_monte_carlo_param_set()
+            self._monte_carlo_res[i][0:self._nparams] = params
+            self._monte_carlo_res[i][self._nparams] = self._model(params)
+
     def do_sa(self):
 
-        self.plus_minus_proc()
+        self._plus_minus_proc()
 
-        #ss_d = self.model(par_d)
+        self._monte_carlo()
 
     def __del__(self):
 
-        write_plus_minus_sa(self._plus_minus_res, self._out_dir)
-        print ('sens.py done')
+        write_sa(self._plus_minus_res, "plus_minus_sa.dat", self._out_dir)
+        write_sa(self._monte_carlo_res, "monte_carlo_sa.dat", self._out_dir)

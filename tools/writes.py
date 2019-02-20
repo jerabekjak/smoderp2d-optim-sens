@@ -25,9 +25,9 @@ def write_de(obs, mod, result, out_dir):
                 obs.data.time[i], obs.data.val[i], mod.val[i]))
 
 
-def write_plus_minus_sa(res, out_dir):
+def write_sa(res, file_ ,out_dir):
 
-    path_params = '{0}{sep}plus_minus_sa.dat'.format(out_dir, sep=os.sep)
+    path_params = '{0}{sep}{1}'.format(out_dir, file_, sep=os.sep)
 
     np.savetxt(path_params, res, fmt='%1.4e',
                header='X;Y;b;Ks;S;ret;SofSq', delimiter=';')

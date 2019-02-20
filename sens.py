@@ -9,12 +9,12 @@ import os
 def main(pars):
     """ Perform one at the time optimization based on Morris, 1991 """
 
-    cfgs = ReadConfig(pars.sens_conf)
-
+    BF_sens = ReadConfig(pars.sens_conf)
+    
     if not os.path.exists(pars.out_dir):
         os.makedirs(pars.out_dir)
 
-    SA = SensAna(pars=pars, cfgs=cfgs)
+    SA = SensAna(pars=pars, cfgs=BF_sens)
     SA.do_sa()
 
 
