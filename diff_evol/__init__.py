@@ -1,6 +1,3 @@
-from scipy.optimize import differential_evolution
-from scipy.optimize import minimize
-from scipy.optimize import OptimizeResult
 import time
 
 import model.smoderp2d.main as sm
@@ -24,6 +21,9 @@ def sum_of_squares(obs, mod):
 class DiffEvol(object):
 
     def __init__(self, pars,  obs):
+        from scipy.optimize import differential_evolution
+        from scipy.optimize import minimize
+        from scipy.optimize import OptimizeResult
         """ init diff evol 
         1 tell the model which times to store
         2 prepare the model config
@@ -37,6 +37,7 @@ class DiffEvol(object):
         self._mod_data = None
         self._mod_data_interp = None
         self._de = differential_evolution
+        self._minimize = minimize
         self._mod_conf = pars.mod_conf
         self._out_dir = pars.out_dir
         self._mod_file = obs.model_file
@@ -80,7 +81,7 @@ class DiffEvol(object):
                   (1e-8, 1e-5), (1e-8, 1e-3), (-0.1, 0)]
         #x0 = [3.5822e+02, 7.6509e-01, 1.6578e+00, 4.4133e-06, 7.9349e-06]
         #self.result = minimize(self.model, x0, method='Nelder-Mead')
-        self.result = differential_evolution(self.model, bounds, disp=False)
+        self.result = self._de(self.model, bounds, disp=False)
 
     def __del__(self):
 
