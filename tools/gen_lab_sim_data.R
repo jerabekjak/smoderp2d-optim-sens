@@ -1,9 +1,11 @@
 # 1 - nacte merdata.RData
 # 2 - udela csv do adresare obs_data
 load_data = FALSE
-
+optim_ = FALSE
+sens_  = TRUE
 obs_dir = 'obs_data'
 cfg_dir = 'cfgs'
+cfg_dir_bf = 'cfgs_sens'
 setwd('/home/jakub/Program/smoderp2d-optim-sens/')
 if (load_data) {load('/home/hdd/data/13_smod_paper_citlivost/mer_sim_srovnani/merdata.RData')}
 
@@ -64,6 +66,13 @@ text_cmd <- function(out_dir, model_ini, optim_cgs){
   return(paste('./optim.py -o',out_dir,'-m',model_ini,'-O',optim_cgs,'>',log))
 }
 
+
+text_sens_cmd <- function(out_dir, model_ini, optim_cgs){
+  log = paste('logs',paste(tools::file_path_sans_ext(out_dir),'log',sep='.'),sep='/')
+  return(paste('./sens.py -o',out_dir,'-m',model_ini,'-O',optim_cgs,'>',log))
+}
+
+
 text_model_ini <- function(model_out_path) {
   return (paste('[GIS]
 dem: -
@@ -100,37 +109,68 @@ printtimes:
 '))
 }
 
-# for (jm_dm in jm_DM[1:12]){
-for (jm_dm in jm_DM){ # nucice
-  # generate observed data 
-  cas = DM[[jm_dm]]$usek_prum_min
-  val = DM[[jm_dm]]$prutok_mm_min
-  cas = cas[!is.na(val)]
-  val = val[!is.na(val)]
-  n = length(val)
-  rainfall = DM[[jm_dm]]$intenzita_dest[1]
-  slope_deg = DM[[jm_dm]]$sklon_stup[1]
-  slope_prc = tan(6*pi/180) 
-  scen = tools::file_path_sans_ext(jm_dm)
-  conf_path = paste(cfg_dir,paste(scen,'cfg',sep='.'),sep='/')
-  out_pat   = paste('out',scen,sep='-')
-  model_out_path = paste('model',out_pat,sep='/')
-  model_ini_path = paste('model',paste(scen,'ini',sep='.'),sep='/')
-  data_path = paste(obs_dir,jm_dm,sep='/')
-  
-  # write cli run
-  write(text_cmd(out_pat,model_ini_path,conf_path), file = paste('runs',scen,sep='/'))
-  
-  # write optim cfg
-  write(text_optim_cfg(slope_prc, rainfall, n, data_path, model_out_path),file = conf_path)
-  
-  # write obs data
-  write.table(x = data.frame(cas=cas, val=val),
-              file = data_path,
-              sep = '\t', dec = '.',col.names = FALSE, row.names = FALSE, append = FALSE)
-  
-  # write model ini
-  write(text_model_ini(model_out_path), file = model_ini_path)
+if (optim_){
+  # for (jm_dm in jm_DM[1:12]){
+  for (jm_dm in jm_DM){ # nucice
+    # generate observed data 
+    cas = DM[[jm_dm]]$usek_prum_min
+    val = DM[[jm_dm]]$prutok_mm_min
+    cas = cas[!is.na(val)]
+    val = val[!is.na(val)]
+    n = length(val)
+    rainfall = DM[[jm_dm]]$intenzita_dest[1]
+    slope_deg = DM[[jm_dm]]$sklon_stup[1]
+    slope_prc = tan(6*pi/180) 
+    scen = tools::file_path_sans_ext(jm_dm)
+    conf_path = paste(cfg_dir,paste(scen,'cfg',sep='.'),sep='/')
+    out_pat   = paste('out',scen,sep='-')
+    model_out_path = paste('model',out_pat,sep='/')
+    model_ini_path = paste('model',paste(scen,'ini',sep='.'),sep='/')
+    data_path = paste(obs_dir,jm_dm,sep='/')
+    
+    # write cli run
+    write(text_cmd(out_pat,model_ini_path,conf_path), file = paste('runs',scen,sep='/'))
+    
+    # write optim cfg
+    write(text_optim_cfg(slope_prc, rainfall, n, data_path, model_out_path),file = conf_path)
+    
+    # write obs data
+    write.table(x = data.frame(cas=cas, val=val),
+                file = data_path,
+                sep = '\t', dec = '.',col.names = FALSE, row.names = FALSE, append = FALSE)
+    
+    # write model ini
+    write(text_model_ini(model_out_path), file = model_ini_path)
+  }
 }
 
 
+if (sens_){
+  # for (jm_dm in jm_DM[1:12]){
+  for (jm_dm in jm_DM){ # nucice
+    # generate observed data 
+    cas = DM[[jm_dm]]$usek_prum_min
+    val = DM[[jm_dm]]$prutok_mm_min
+    cas = cas[!is.na(val)]
+    val = val[!is.na(val)]
+    n = length(val)
+    rainfall = DM[[jm_dm]]$intenzita_dest[1]
+    slope_deg = DM[[jm_dm]]$sklon_stup[1]
+    slope_prc = tan(6*pi/180) 
+    scen = tools::file_path_sans_ext(jm_dm)
+    conf_path = paste(cfg_dir_bf,paste(scen,'cfg',sep='.'),sep='/')
+    out_pat   = paste('out-sens',scen,sep='-')
+    model_out_path = paste('model',paste('out',scen,sep='-'),sep='/')
+    model_ini_path = paste('model',paste(scen,'ini',sep='.'),sep='/')
+    data_path = paste(obs_dir,jm_dm,sep='/')
+    # write cli run
+    write(text_sens_cmd(out_pat,model_ini_path,conf_path), file = paste('runs_sens',scen,sep='/'))
+    
+    best_fit_dir = paste('best_fit',paste('out-',scen,sep=''),sep='/')
+    # print (best_fit_dir)
+    # write sens cfg
+    write(text_sens_cfg(model_out_path,best_fit_dir),file = conf_path)
+    
+
+  }
+}
