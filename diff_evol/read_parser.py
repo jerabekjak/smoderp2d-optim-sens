@@ -12,7 +12,7 @@ def read_parser():
     parser.add_argument(
         '-o',
         '--out_dir',
-        help='directory to store the optimaze results',
+        help='directory to store the optimaze results [default: out-test]',
         type=str,
         default='out-test',
         required=False
@@ -21,7 +21,7 @@ def read_parser():
     parser.add_argument(
         '-m',
         '--mod_conf',
-        help='location of model config file',
+        help='location of model config file [default: model/test.ini]',
         type=str,
         default='model/test.ini',
         required=False
@@ -30,7 +30,7 @@ def read_parser():
     parser.add_argument(
         '-O',
         '--opt_conf',
-        help='location of optimization config file',
+        help='location of optimization config file [default: optim.cfg]',
         type=str,
         default='optim.cfg',
         required=False
