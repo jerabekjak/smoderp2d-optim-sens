@@ -1,6 +1,7 @@
 # 1 - nacte merdata.RData
 # 2 - udela csv do adresare obs_data
 load_data = FALSE
+
 obs_dir = 'obs_data'
 cfg_dir = 'cfgs'
 setwd('/home/jakub/Program/smoderp2d-optim-sens/')
@@ -70,7 +71,7 @@ printtimes:
 }
 
 # for (jm_dm in jm_DM[1:12]){
-for (jm_dm in jm_DM[45:78]){ # nucice
+for (jm_dm in jm_DM){ # nucice
   # generate observed data 
   cas = DM[[jm_dm]]$usek_prum_min
   val = DM[[jm_dm]]$prutok_mm_min
