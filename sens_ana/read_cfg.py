@@ -64,6 +64,7 @@ class ReadConfig(object):
         self.bfret = bfparams[5]
         self.slope = bfparams[6]
         self.rainfall = bfparams[7]
+        self.bfss = bfparams[8]
 
     def _read_obs_fit_mod(self, dir_):
         """ make RecFitData instance
@@ -119,4 +120,4 @@ class ReadConfig(object):
                 ss = float(l[8])
             first_ = False
 
-        return X, Y, b, Ks, S, ret, slope, rainfall
+        return X, Y, b, Ks, S, ret, slope, rainfall, ss
