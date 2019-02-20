@@ -1,4 +1,3 @@
-from diff_evol import DiffEvol
 from diff_evol import sum_of_squares
 
 from diff_evol.mod_data_handling import read_mod_file
@@ -13,7 +12,7 @@ import math
 from random import uniform
 import time
 
-class SensAna(DiffEvol):
+class SensAna(object):
 
     def __init__(self, pars, cfgs):
         """ init SensAnal
