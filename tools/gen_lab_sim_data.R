@@ -29,6 +29,36 @@ mod_file: ',model_out_path,'/point001.dat
 ', sep = ''))
 }
 
+
+
+text_sens_cfg <- function(model_out_path, best_fit_dir) {
+  return (paste('[SensParams]
+# monte carlo runs
+mcruns: 10000
+
+[ParamsMargins]
+# X,Y,b and ret are evenly distributed within margins 
+X: 1,10
+Y: 0.1,1
+b: 1,2
+Ks: 5.578442e-07, 7.727984e-06
+S: 0.0000839344, 0.0003146327
+
+# X,Y,b and ret are evenly distributed within margins 
+ret: -0.01,0
+
+[Model]
+mod_file: ',model_out_path,'/point001.dat
+
+# results folder of ./optim.py
+# in this folder are obs data and model best fit (obs_mod.dat)
+# and best with params with used rainfall and slope (params.dat)
+[BestFit]
+dir: ',best_fit_dir,'
+
+', sep = ''))
+}
+
 text_cmd <- function(out_dir, model_ini, optim_cgs){
   log = paste('logs',paste(tools::file_path_sans_ext(out_dir),'log',sep='.'),sep='/')
   return(paste('./optim.py -o',out_dir,'-m',model_ini,'-O',optim_cgs,'>',log))
