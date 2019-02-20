@@ -66,8 +66,13 @@ class SensAna(DiffEvol):
         ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
 
         return(ss)
+    
+    def plus_minus_proc(self):
+        print ('jsem tu')
 
     def do_sa(self):
+        
+        self.plus_minus_proc()
 
         #ss_d = self.model(par_d)
 
