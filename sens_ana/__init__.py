@@ -4,8 +4,7 @@ from diff_evol import sum_of_squares
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
 from diff_evol.mod_data_handling import RecModData
-from tools.plots import plot_sa
-from tools.plots import plot_rep
+from tools.writes import write_plus_minus_sa
 import model.smoderp2d.main as sm
 
 import os
@@ -33,11 +32,15 @@ class SensAna(DiffEvol):
 
         self._read_mod_file = read_mod_file
         self._interp_mod_data = interpolate
-        
+
         self._nparams = 6
         # how much is the parameter changed
         self._proc_mv = 0.1
-        
+
+        # stores results from the +- proc sensitivity
+        # self._nparams+1 means + ss
+        self._plus_minus_res = np.zeros(
+            [2*self._nparams, self._nparams+1], float)
 
         self._plot = False
 
@@ -59,16 +62,15 @@ class SensAna(DiffEvol):
         params[5] = self._ret_levels[i]
 
         return (params)
-    
-    
+
     def _gen_plus_minus_param_set(self, i, proc_mv):
         """ generates parameter where one parameter is proc_mv
         from the best fit
-        
+
         :param i: which parameter changes
         :param proc_mv: how much (sigh gives direction)
         """
-        
+
         params = np.zeros([self._nparams], float)
         params[0] = self._cfgs.bfX
         params[1] = self._cfgs.bfY
@@ -76,9 +78,9 @@ class SensAna(DiffEvol):
         params[3] = self._cfgs.bfKs
         params[4] = self._cfgs.bfS
         params[5] = self._cfgs.bfret
-        
+
         params[i] += params[i]*proc_mv
-        
+
         return (params)
 
     def _model(self, params):
@@ -92,25 +94,24 @@ class SensAna(DiffEvol):
         ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
 
         return(ss)
-    
+
     def plus_minus_proc(self):
-        
+
         for i in range(self._nparams):
-            params = self._gen_plus_minus_param_set(i,self._proc_mv)
-            print (self._model(params))
-            params = self._gen_plus_minus_param_set(i,-self._proc_mv)
-            print (self._model(params))
-            
-            
-            
+            params = self._gen_plus_minus_param_set(i, self._proc_mv)
+            self._plus_minus_res[2*i][0:self._nparams] = params
+            self._plus_minus_res[2*i][self._nparams] = self._model(params)
+            params = self._gen_plus_minus_param_set(i, -self._proc_mv)
+            self._plus_minus_res[2*i+1][0:self._nparams] = params
+            self._plus_minus_res[2*i+1][self._nparams] = self._model(params)
 
     def do_sa(self):
-        
+
         self.plus_minus_proc()
 
         #ss_d = self.model(par_d)
 
-
     def __del__(self):
-        
+
+        write_plus_minus_sa(self._plus_minus_res, self._out_dir)
         print ('sens.py done')

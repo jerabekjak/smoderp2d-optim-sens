@@ -1,4 +1,5 @@
 import os
+import numpy as np
 
 
 def write_de(obs, mod, result, out_dir):
@@ -12,7 +13,7 @@ def write_de(obs, mod, result, out_dir):
             pf.write('{:1.3e};'.format(ix))
         pf.write('{:1.3e};'.format(obs.slope))
         pf.write('{:1.3e};'.format(obs.rainfall))
-        
+
     with open(path_params, 'a') as pf:
         pf.write('{:1.3e}'.format(result.fun))
 
@@ -22,3 +23,11 @@ def write_de(obs, mod, result, out_dir):
         for i in range(n):
             vf.write('{:1.3e};{:1.5e};{:1.5e}\n'.format(
                 obs.data.time[i], obs.data.val[i], mod.val[i]))
+
+
+def write_plus_minus_sa(res, out_dir):
+
+    path_params = '{0}{sep}plus_minus_sa.dat'.format(out_dir, sep=os.sep)
+
+    np.savetxt(path_params, res, fmt='%1.4e',
+               header='X;Y;b;Ks;S;ret;SofSq', delimiter=';')
