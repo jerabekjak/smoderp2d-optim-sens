@@ -11,7 +11,7 @@ import os
 import numpy as np
 import math
 from random import uniform
-
+import time
 
 class SensAna(DiffEvol):
 
@@ -48,6 +48,7 @@ class SensAna(DiffEvol):
             [self._mcruns, self._nparams+1], float)
 
         self._plot = False
+        self._total_time = time.time()
 
     def _get_param_set(self):
 
@@ -114,22 +115,30 @@ class SensAna(DiffEvol):
 
     def _plus_minus_proc(self):
 
+        print ('# plus minus sensitivity...')
         for i in range(self._nparams):
-            print (i)
+            print ('run {}/{}'.format((i+1)*2,self._nparams*2), end='', flush=True)
+            t1 = time.time()
             params = self._gen_plus_minus_param_set(i, self._proc_mv)
             self._plus_minus_res[2*i][0:self._nparams] = params
             self._plus_minus_res[2*i][self._nparams] = self._model(params)
             params = self._gen_plus_minus_param_set(i, -self._proc_mv)
             self._plus_minus_res[2*i+1][0:self._nparams] = params
             self._plus_minus_res[2*i+1][self._nparams] = self._model(params)
+            t2 = time.time()
+            print (' done in {:1.2f} secs'.format(t2-t1))
 
     def _monte_carlo(self):
 
+        print ('# monte carlo sensitivity...')
         for i in range(self._mcruns):
-            print (i)
+            print ('run {}/{}'.format((i+1),self._mcruns), end='', flush=True)
+            t1 = time.time()
             params = self._gen_monte_carlo_param_set()
             self._monte_carlo_res[i][0:self._nparams] = params
             self._monte_carlo_res[i][self._nparams] = self._model(params)
+            t2 = time.time()
+            print (' done in {:1.2f} secs'.format(t2-t1))
 
     def do_sa(self):
 
@@ -141,3 +150,4 @@ class SensAna(DiffEvol):
 
         write_sa(self._plus_minus_res, "plus_minus_sa.dat", self._out_dir)
         write_sa(self._monte_carlo_res, "monte_carlo_sa.dat", self._out_dir)
+        print ('done in {:1.1e} secs'.format(time.time()-self._total_time))
