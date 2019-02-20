@@ -33,6 +33,11 @@ class SensAna(DiffEvol):
 
         self._read_mod_file = read_mod_file
         self._interp_mod_data = interpolate
+        
+        self._nparams = 6
+        # how much is the parameter changed
+        self._proc_mv = 0.1
+        
 
         self._plot = False
 
@@ -54,8 +59,29 @@ class SensAna(DiffEvol):
         params[5] = self._ret_levels[i]
 
         return (params)
+    
+    
+    def _gen_plus_minus_param_set(self, i, proc_mv):
+        """ generates parameter where one parameter is proc_mv
+        from the best fit
+        
+        :param i: which parameter changes
+        :param proc_mv: how much (sigh gives direction)
+        """
+        
+        params = np.zeros([self._nparams], float)
+        params[0] = self._cfgs.bfX
+        params[1] = self._cfgs.bfY
+        params[2] = self._cfgs.bfb
+        params[3] = self._cfgs.bfKs
+        params[4] = self._cfgs.bfS
+        params[5] = self._cfgs.bfret
+        
+        params[i] += params[i]*proc_mv
+        
+        return (params)
 
-    def model(self, params):
+    def _model(self, params):
 
         sm.run(self._mod_conf, params, self._cfgs)
 
@@ -68,7 +94,12 @@ class SensAna(DiffEvol):
         return(ss)
     
     def plus_minus_proc(self):
-        print ('jsem tu')
+        
+        for i in range(self._nparams):
+            params = self._gen_plus_minus_param_set(i,self._proc_mv)
+            print (self._model(params))
+            params = self._gen_plus_minus_param_set(i,-self._proc_mv)
+            print (self._model(params))
 
     def do_sa(self):
         
