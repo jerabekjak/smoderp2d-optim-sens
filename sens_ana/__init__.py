@@ -11,6 +11,18 @@ import numpy as np
 import math
 from random import uniform
 import time
+import statistics as stat
+
+
+def nash_sutcliffe(obs, mod):
+
+    mean_obs = stat.mean(obs)
+    r = obs - mod
+    r = r**2.0
+    m = obs - mean_obs
+    m = m**2.0
+
+    return 1-sum(r)/sum(m)
 
 class SensAna(object):
 
