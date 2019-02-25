@@ -1,8 +1,8 @@
 # 1 - nacte merdata.RData
 # 2 - udela csv do adresare obs_data
 load_data = FALSE
-optim_ = FALSE
-sens_  = TRUE
+optim_ = TRUE
+sens_  = FALSE
 obs_dir = 'obs_data'
 cfg_dir = 'cfgs'
 cfg_dir_bf = 'cfgs_sens'
@@ -120,7 +120,7 @@ if (optim_){
     n = length(val)
     rainfall = DM[[jm_dm]]$intenzita_dest[1]
     slope_deg = DM[[jm_dm]]$sklon_stup[1]
-    slope_prc = tan(6*pi/180) 
+    slope_prc = tan(slope_deg*pi/180) 
     scen = tools::file_path_sans_ext(jm_dm)
     conf_path = paste(cfg_dir,paste(scen,'cfg',sep='.'),sep='/')
     out_pat   = paste('out',scen,sep='-')
