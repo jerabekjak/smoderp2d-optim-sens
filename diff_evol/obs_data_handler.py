@@ -1,6 +1,12 @@
-from exceptions import IncorrectDataInObsFile
+#from exceptions import IncorrectDataInObsFile
+#import exceptions
 import numpy as np
-from configparser import ConfigParser
+import sys
+
+if sys.version_info[0] < 3:
+    from ConfigParser import ConfigParser
+else:    
+    from configparser import ConfigParser
 
 class RecObsData(object):
     """ RecObsData contains data of one observed record """

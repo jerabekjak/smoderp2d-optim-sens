@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
 
 from sens_ana.read_parser import read_parser
 from sens_ana.read_cfg import ReadConfig

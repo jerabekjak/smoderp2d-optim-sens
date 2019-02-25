@@ -1,7 +1,10 @@
 import os
 import numpy as np
-from configparser import ConfigParser
-
+import sys
+if sys.version_info[0] < 3:
+    from ConfigParser import ConfigParser
+else:    
+    from configparser import ConfigParser
 
 class RecFitData(object):
     """ RecFitData contains data of best fit  """

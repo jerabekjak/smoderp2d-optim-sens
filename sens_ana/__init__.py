@@ -12,6 +12,7 @@ import math
 from random import uniform
 import time
 import statistics as stat
+import sys
 
 
 def nash_sutcliffe(obs, mod):
@@ -129,7 +130,8 @@ class SensAna(object):
         print ('# plus minus sensitivity...')
         for i in range(self._nparams):
             
-            print ('run {}/{}'.format((i+1)*2,self._nparams*2), end='', flush=True)
+            sys.stdout.write('run {}/{}'.format((i+1)*2,self._nparams*2))
+            #print ('run {}/{}'.format((i+1)*2,self._nparams*2), end='', flush=True)
             t1 = time.time()
             
             params = self._gen_plus_minus_param_set(i, self._proc_mv)
@@ -147,7 +149,8 @@ class SensAna(object):
 
         print ('# monte carlo sensitivity...')
         for i in range(self._mcruns):
-            print ('run {}/{}'.format((i+1),self._mcruns), end='', flush=True)
+            sys.stdout.write('run {}/{}'.format((i+1),self._mcruns))
+            #print ('run {}/{}'.format((i+1),self._mcruns), end='', flush=True)
             t1 = time.time()
             params = self._gen_monte_carlo_param_set()
             self._monte_carlo_res[i][0:self._nparams] = params
