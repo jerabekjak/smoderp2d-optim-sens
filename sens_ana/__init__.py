@@ -50,12 +50,12 @@ class SensAna(object):
         # stores results from the +- proc sensitivity
         # self._nparams+1 means + ss
         self._plus_minus_res = np.zeros(
-            [2*self._nparams, self._nparams+1], float)
+            [2*self._nparams, self._nparams+2], float)
 
         # stores results from the monte carlo sensitivity
         # self._nparams+1 means + ss
         self._monte_carlo_res = np.zeros(
-            [self._mcruns, self._nparams+1], float)
+            [self._mcruns, self._nparams+2], float)
 
         self._plot = False
         self._total_time = time.time()
@@ -120,22 +120,26 @@ class SensAna(object):
             mod=mod_data, obs=self._bf_data)
 
         ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
-        nr = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
+        ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
 
-        return(ss)
+        return ss, ns
 
     def _plus_minus_proc(self):
 
         print ('# plus minus sensitivity...')
         for i in range(self._nparams):
+            
             print ('run {}/{}'.format((i+1)*2,self._nparams*2), end='', flush=True)
             t1 = time.time()
+            
             params = self._gen_plus_minus_param_set(i, self._proc_mv)
             self._plus_minus_res[2*i][0:self._nparams] = params
-            self._plus_minus_res[2*i][self._nparams] = self._model(params)
+            self._plus_minus_res[2*i][self._nparams:(self._nparams+2)] = self._model(params)
+            
             params = self._gen_plus_minus_param_set(i, -self._proc_mv)
             self._plus_minus_res[2*i+1][0:self._nparams] = params
-            self._plus_minus_res[2*i+1][self._nparams] = self._model(params)
+            self._plus_minus_res[2*i+1][self._nparams:(self._nparams+2)] = self._model(params)
+            
             t2 = time.time()
             print (' done in {:1.2f} secs'.format(t2-t1))
 
@@ -147,7 +151,7 @@ class SensAna(object):
             t1 = time.time()
             params = self._gen_monte_carlo_param_set()
             self._monte_carlo_res[i][0:self._nparams] = params
-            self._monte_carlo_res[i][self._nparams] = self._model(params)
+            self._monte_carlo_res[i][self._nparams:(self._nparams+2)] = self._model(params)
             t2 = time.time()
             print (' done in {:1.2f} secs'.format(t2-t1))
 
