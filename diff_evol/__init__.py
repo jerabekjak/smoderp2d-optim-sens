@@ -6,16 +6,10 @@ from diff_evol.mod_data_handling import interpolate
 from tools.plots import plot_de
 from tools.writes import write_de
 from tools.plots import plot_de_residuals
+from tools.optim_fnc import sum_of_squares
 
 # objective function
 
-
-def sum_of_squares(obs, mod):
-
-    r = obs - mod
-    r = r**2.0
-
-    return sum(r)
 
 
 class DiffEvol(object):

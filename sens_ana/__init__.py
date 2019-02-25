@@ -1,28 +1,20 @@
-from diff_evol import sum_of_squares
-
-from diff_evol.mod_data_handling import read_mod_file
-from diff_evol.mod_data_handling import interpolate
-from diff_evol.mod_data_handling import RecModData
-from tools.writes import write_sa
-import model.smoderp2d.main as sm
-
 import os
 import numpy as np
 import math
 from random import uniform
 import time
-import statistics as stat
 import sys
 
+from diff_evol.mod_data_handling import read_mod_file
+from diff_evol.mod_data_handling import interpolate
+from diff_evol.mod_data_handling import RecModData
+import model.smoderp2d.main as sm
+from tools.writes import write_sa
+from tools.optim_fnc import sum_of_squares
+from tools.optim_fnc import nash_sutcliffe
 
-def nash_sutcliffe(obs, mod):
 
-    mean_obs = stat.mean(obs)
-    r = obs - mod
-    r = r**2.0
-    m = [iob - mean_obs for iob in obs]
-    m[:] = [im**2.0 for im in m]
-    return 1-sum(r)/sum(m)
+
 
 class SensAna(object):
 

@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from tools.optim_fnc import nash_sutcliffe
 
 
 def write_de(obs, mod, result, out_dir):
@@ -8,14 +9,15 @@ def write_de(obs, mod, result, out_dir):
     path_val = '{0}{sep}obs_mod.dat'.format(out_dir, sep=os.sep)
 
     with open(path_params, 'w') as pf:
-        pf.write('X;Y;b;Ks;S;ret;slope;rainfall;SofSq\n')
+        pf.write('X;Y;b;Ks;S;ret;slope;rainfall;SofSq;NashSutcliffe\n')
         for ix in result.x:
             pf.write('{:1.3e};'.format(ix))
         pf.write('{:1.3e};'.format(obs.slope))
         pf.write('{:1.3e};'.format(obs.rainfall))
 
     with open(path_params, 'a') as pf:
-        pf.write('{:1.3e}'.format(result.fun))
+        pf.write('{:1.3e};'.format(result.fun))
+        pf.write('{:1.3e}'.format(nash_sutcliffe(obs.data.val, mod.val)))
 
     n = len(obs.data.time)
     with open(path_val, 'w') as vf:
