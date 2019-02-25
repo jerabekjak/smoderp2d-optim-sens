@@ -22,7 +22,7 @@ slope: ',slope,'
 # where first col is time in minutes
 # where second col is runoff in mm/min
 # where cols are separated with tab
-[Data]
+[ObsData]
 rows: ',n,'
 file: ',obs_data,'
 
