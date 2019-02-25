@@ -19,7 +19,11 @@ def nash_sutcliffe(obs, mod):
     mean_obs = stat.mean(obs)
     r = obs - mod
     r = r**2.0
-    m = obs - mean_obs
+    print (obs)
+    print (mean_obs)
+    #m = obs - mean_obs
+    m = [iob - mean_obs for iob in obs]
+    print (m)
     m = m**2.0
 
     return 1-sum(r)/sum(m)
@@ -121,6 +125,7 @@ class SensAna(object):
             mod=mod_data, obs=self._bf_data)
 
         ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
+        nr = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
 
         return(ss)
 
