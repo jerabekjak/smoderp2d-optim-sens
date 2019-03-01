@@ -163,7 +163,7 @@ class SensAna(object):
             self._monte_carlo_res[i][:] = results
 
             ns = results[self._nparams+2-1]
-            if (ns>0) :
+            if (ns > 0):
                 self._store_good_run(results)
 
             t2 = time.time()
@@ -176,6 +176,7 @@ class SensAna(object):
         self._monte_carlo()
 
     def _store_good_run(self, results):
+
         int_ = self._good_run_dir_int
         dir_ = '{0}{sep}{1}'.format(
             self._out_dir, str(int_).zfill(5), sep=os.sep)
@@ -201,6 +202,9 @@ class SensAna(object):
 
         np.savetxt(path_run, print_arr, fmt='%1.4e',
                    header='time;obs;mod', delimiter=';')
+
+        # updata dir name
+        self._good_run_dir_int += 1
 
     def __del__(self):
 
