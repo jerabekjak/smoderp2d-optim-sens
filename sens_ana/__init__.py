@@ -161,9 +161,10 @@ class SensAna(object):
             # recond results
             self._monte_carlo_res[i][:] = results
             
-                    
-            if (mc and (ns>0)) :
-                self._store_good_run(results,self._mod_data_interp)
+            ns = results[self._nparams+2]
+            print (ns)
+            #if (mc and (ns>0)) :
+            self._store_good_run(results,self._mod_data_interp)
         
         
             t2 = time.time()
