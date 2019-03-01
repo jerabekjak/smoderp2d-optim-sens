@@ -161,8 +161,7 @@ class SensAna(object):
             # recond results
             self._monte_carlo_res[i][:] = results
             
-            ns = results[self._nparams+2]
-            print (ns)
+            ns = results[self._nparams+2-1]
             #if (mc and (ns>0)) :
             self._store_good_run(results,self._mod_data_interp)
         
@@ -181,6 +180,14 @@ class SensAna(object):
         dir_ = '{0}{sep}{1}'.format(self._out_dir,str(int_).zfill(5),sep=os.sep)
         if not os.path.exists(dir_):
             os.makedirs(dir_)
+            
+        path_run = '{0}{sep}{1}'.format(dir_, 'params.dat', sep=os.sep)
+        with open(path_run, 'w') as pf:
+            pf.write('X;Y;b;Ks;S;ret;SofSq;NashSutcliffe\n')
+            for ix in results[0:(self._nparams+1)]:
+                pf.write('{:1.3e};'.format(ix))
+            pf.write('{:1.3e}'.format(results[self._nparams+2-1]))
+        
 
     def __del__(self):
 
