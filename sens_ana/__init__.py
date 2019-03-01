@@ -118,7 +118,7 @@ class SensAna(object):
         ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
         
         if (mc and (ns>0)) :
-            pass
+            self._store_good_run(ss,ns,params,self._mod_data_interp)
 
         return ss, ns
 
@@ -168,6 +168,9 @@ class SensAna(object):
         # self._plus_minus_proc()
 
         self._monte_carlo()
+        
+    def _store_good_run(self,ss,ns,params,mod_data) :
+        pass
 
     def __del__(self):
 
