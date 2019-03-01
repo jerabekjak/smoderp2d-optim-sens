@@ -1,8 +1,8 @@
 # 1 - nacte merdata.RData
 # 2 - udela csv do adresare obs_data
 load_data = FALSE
-optim_ = TRUE
-sens_  = FALSE
+optim_ = FALSE
+sens_  = TRUE
 obs_dir = 'obs_data'
 cfg_dir = 'cfgs'
 cfg_dir_bf = 'cfgs_sens'
@@ -40,14 +40,14 @@ mcruns: 10000
 
 [ParamsMargins]
 # X,Y,b and ret are evenly distributed within margins 
-X: 1,10
+X: 1,20
 Y: 0.1,1
 b: 1,2
-Ks: 5.578442e-07, 7.727984e-06
-S: 0.0000839344, 0.0003146327
+Ks: 1e-8, 1e-5
+S: 1e-8, 1e-3
 
 # X,Y,b and ret are evenly distributed within margins 
-ret: -0.01,0
+ret: -0.1,0
 
 [Model]
 mod_file: ',model_out_path,'/point001.dat
