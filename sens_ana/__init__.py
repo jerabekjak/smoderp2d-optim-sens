@@ -102,7 +102,11 @@ class SensAna(object):
 
         return params
 
-    def _model(self, params):
+    def _model(self, params, mc = False):
+        """ Run the model
+        
+        :param mc: allows to record good results during monte carlo runs
+        """
 
         sm.run(self._mod_conf, params, self._cfgs)
 
@@ -112,6 +116,9 @@ class SensAna(object):
 
         ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
         ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
+        
+        if (mc and (ns>0)) :
+            pass
 
         return ss, ns
 
@@ -149,7 +156,7 @@ class SensAna(object):
             # store parameter set
             results = np.zeros(self._nparams+2)
             results[0:self._nparams] = params
-            results[self._nparams:(self._nparams+2)] = self._model(params)
+            results[self._nparams:(self._nparams+2)] = self._model(params,mc=True)
 
             # recond results
             self._monte_carlo_res[i][:] = results
