@@ -50,7 +50,7 @@ class SensAna(object):
 
         self._plot = False
         self._total_time = time.time()
-        
+
         # folders to store good run
         self._good_run_dir_int = 0
 
@@ -105,9 +105,9 @@ class SensAna(object):
 
         return params
 
-    def _model(self, params, mc = False):
+    def _model(self, params, mc=False):
         """ Run the model
-        
+
         :param mc: allows to record good results during monte carlo runs
         """
 
@@ -156,16 +156,16 @@ class SensAna(object):
             # store parameter set
             results = np.zeros(self._nparams+2)
             results[0:self._nparams] = params
-            results[self._nparams:(self._nparams+2)] = self._model(params,mc=True)
+            results[self._nparams:(self._nparams+2)
+                    ] = self._model(params, mc=True)
 
             # recond results
             self._monte_carlo_res[i][:] = results
-            
+
             ns = results[self._nparams+2-1]
-            #if (mc and (ns>0)) :
-            self._store_good_run(results,self._mod_data_interp)
-        
-        
+            if (ns>0) :
+                self._store_good_run(results)
+
             t2 = time.time()
             print (' done in {:1.2f} secs'.format(t2-t1))
 
@@ -174,20 +174,33 @@ class SensAna(object):
         # self._plus_minus_proc()
 
         self._monte_carlo()
-        
-    def _store_good_run(self,results,mod_data):
+
+    def _store_good_run(self, results):
         int_ = self._good_run_dir_int
-        dir_ = '{0}{sep}{1}'.format(self._out_dir,str(int_).zfill(5),sep=os.sep)
+        dir_ = '{0}{sep}{1}'.format(
+            self._out_dir, str(int_).zfill(5), sep=os.sep)
         if not os.path.exists(dir_):
             os.makedirs(dir_)
-            
+
         path_run = '{0}{sep}{1}'.format(dir_, 'params.dat', sep=os.sep)
         with open(path_run, 'w') as pf:
             pf.write('X;Y;b;Ks;S;ret;SofSq;NashSutcliffe\n')
             for ix in results[0:(self._nparams+1)]:
                 pf.write('{:1.3e};'.format(ix))
             pf.write('{:1.3e}'.format(results[self._nparams+2-1]))
-        
+
+        n = len(self._bf_data.time)
+
+        path_run = '{0}{sep}{1}'.format(dir_, 'mod_obs.dat', sep=os.sep)
+
+        print_arr = np.zeros([3, n], float)
+        print_arr[0] = self._bf_data.time
+        print_arr[1] = self._bf_data.val
+        print_arr[2] = self._mod_data_interp.val
+        print_arr = np.transpose(print_arr)
+
+        np.savetxt(path_run, print_arr, fmt='%1.4e',
+                   header='time;obs;mod', delimiter=';')
 
     def __del__(self):
 
