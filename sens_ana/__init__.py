@@ -50,6 +50,9 @@ class SensAna(object):
 
         self._plot = False
         self._total_time = time.time()
+        
+        # folders to store good run
+        self._good_run_dir_int = 0
 
     def _get_param_set(self):
 
@@ -116,9 +119,6 @@ class SensAna(object):
 
         ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
         ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
-        
-        if (mc and (ns>0)) :
-            self._store_good_run(ss,ns,params,self._mod_data_interp)
 
         return ss, ns
 
@@ -160,6 +160,12 @@ class SensAna(object):
 
             # recond results
             self._monte_carlo_res[i][:] = results
+            
+                    
+            if (mc and (ns>0)) :
+                self._store_good_run(results,self._mod_data_interp)
+        
+        
             t2 = time.time()
             print (' done in {:1.2f} secs'.format(t2-t1))
 
@@ -169,8 +175,11 @@ class SensAna(object):
 
         self._monte_carlo()
         
-    def _store_good_run(self,ss,ns,params,mod_data) :
-        pass
+    def _store_good_run(self,results,mod_data):
+        int_ = self._good_run_dir_int
+        dir_ = '{0}{sep}{1}'.format(self._out_dir,str(int_).zfill(5),sep=os.sep)
+        if not os.path.exists(dir_):
+            os.makedirs(dir_)
 
     def __del__(self):
 
