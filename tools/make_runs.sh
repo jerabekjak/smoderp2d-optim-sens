@@ -13,5 +13,6 @@ worse=`ls blby_fit`
 
 for i in $worse;
 do 
-cat runs/"${i:4}" >> runs/runs;
+  echo $i
+  cat runs/"${i:4}" >> runs/runs;
 done
