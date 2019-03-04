@@ -8,9 +8,6 @@ from tools.writes import write_de
 from tools.plots import plot_de_residuals
 from tools.optim_fnc import sum_of_squares
 
-# objective function
-
-
 class DiffEvol(object):
 
     def __init__(self, pars,  obs):
