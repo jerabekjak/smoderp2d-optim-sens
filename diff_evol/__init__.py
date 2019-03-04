@@ -11,7 +11,6 @@ from tools.optim_fnc import sum_of_squares
 # objective function
 
 
-
 class DiffEvol(object):
 
     def __init__(self, pars,  obs):
@@ -29,7 +28,9 @@ class DiffEvol(object):
         self._obs = obs
         self._obs_data = obs.data
         self._mod_data = None
-        self._mod_data_interp = None
+        # prepare for repeating run
+        self._mod_data_interp = obs.data
+        self._mod_data_interp.val.fill(0.0)
         self._de = differential_evolution
         self._minimize = minimize
         self._mod_conf = pars.mod_conf
@@ -39,7 +40,12 @@ class DiffEvol(object):
         self._interp_mod_data = interpolate
         self._plot = True
         self._model_runs = 0
+        # count iterations
+        self.iter_ = 0
         self.result = OptimizeResult
+
+        # repeat optimalization id best fit is zero vector
+        self._maxIter = 5
 
     def model(self, params):
         """ compute model and comare it with the data
@@ -63,8 +69,8 @@ class DiffEvol(object):
 
         self._model_runs += 1
 
-        print ('model run ;{}; runs ;{:1.2f}; secs with ss = ;{:1.4e};with pars set ;{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e}'.format(
-            self._model_runs, t2-t1, ss, params[0], params[1], params[2], params[3], params[4], params[5]))
+        print ('In interation ;{}; model run ;{}; runs ;{:1.2f}; secs with ss = ;{:1.4e};with pars set ;{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e}'.format(self.iter_,
+                                                                                                                                                                self._model_runs, t2-t1, ss, params[0], params[1], params[2], params[3], params[4], params[5]))
 
         return sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
 
@@ -75,7 +81,16 @@ class DiffEvol(object):
                   (1e-8, 1e-5), (1e-8, 1e-3), (-0.1, 0)]
         #x0 = [3.5822e+02, 7.6509e-01, 1.6578e+00, 4.4133e-06, 7.9349e-06]
         #self.result = minimize(self.model, x0, method='Nelder-Mead')
-        self.result = self._de(self.model, bounds, disp=False)
+
+        self._mod_data_interp.val.fill(0.0)
+        while self._mod_data_interp.val.sum() == 0.0:
+            self.iter_ = + 1
+            if (self._max_iter()):
+                break
+            self.result = self._de(self.model, bounds, disp=False)
+
+    def _max_iter(self):
+        return self.iter_ > self._maxIter
 
     def __del__(self):
 
