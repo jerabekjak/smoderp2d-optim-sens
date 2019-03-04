@@ -3,6 +3,7 @@ import time
 import model.smoderp2d.main as sm
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
+from diff_evol.mod_data_handling import RecModData
 from tools.plots import plot_de
 from tools.writes import write_de
 from tools.plots import plot_de_residuals
@@ -26,8 +27,7 @@ class DiffEvol(object):
         self._obs_data = obs.data
         self._mod_data = None
         # prepare for repeating run
-        self._mod_data_interp = obs.data
-        self._mod_data_interp.val.fill(0.0)
+        self._mod_data_interp = RecModData(len(self._obs_data.time))
         self._de = differential_evolution
         self._minimize = minimize
         self._mod_conf = pars.mod_conf
@@ -74,14 +74,16 @@ class DiffEvol(object):
     def make_de(self):
 
         # bounds for parameters [X,Y,b]
-        bounds = [(1, 20), (0.01, 1.), (1., 2.0),
-                  (1e-8, 1e-5), (1e-8, 1e-3), (-0.1, 0)]
+        #bounds = [(1, 20), (0.01, 1.), (1., 2.0),
+                  #(1e-8, 1e-5), (1e-8, 1e-3), (-0.1, 0)]
+        bounds = [(1, 30), (0.01, 5.), (1., 4.0),
+                  (1e-8, 1e-5), (1e-8, 1e-3), (-0.5, 0)]
         #x0 = [3.5822e+02, 7.6509e-01, 1.6578e+00, 4.4133e-06, 7.9349e-06]
         #self.result = minimize(self.model, x0, method='Nelder-Mead')
 
         self._mod_data_interp.val.fill(0.0)
         while self._mod_data_interp.val.sum() == 0.0:
-            self.iter_ = + 1
+            self.iter_ += 1
             if (self._max_iter()):
                 break
             self.result = self._de(self.model, bounds, disp=False)
