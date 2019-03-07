@@ -200,7 +200,7 @@ class SensAna(object):
         print_arr[2] = self._mod_data_interp.val
         print_arr = np.transpose(print_arr)
 
-        np.savetxt(path_run, print_arr, fmt='%1.4e',
+        np.savetxt(path_run, print_arr, fmt='%1.4e',comments='',
                    header='time;obs;mod', delimiter=';')
 
         # updata dir name
