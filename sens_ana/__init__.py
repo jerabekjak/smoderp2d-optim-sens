@@ -92,20 +92,28 @@ class SensAna(object):
         params[i] += params[i]*proc_mv
 
         return (params)
+    
+    def _gen_plus_minus_param_set_bak(self, i, proc_mv):
+        """ generates parameter where one parameter is proc_mv
+        from the best fit
 
-    def _gen_monte_carlo_param_set(self):
+        :param i: which parameter changes
+        :param proc_mv: how much (sigh gives direction)
+        """
 
         params = np.zeros([self._nparams], float)
-        params[0] = uniform(self._cfgs.X[0], self._cfgs.X[1])
-        params[1] = uniform(self._cfgs.Y[0], self._cfgs.Y[1])
-        params[2] = uniform(self._cfgs.b[0], self._cfgs.b[1])
-        params[3] = uniform(self._cfgs.Ks[0], self._cfgs.Ks[1])
-        params[4] = uniform(self._cfgs.S[0], self._cfgs.S[1])
-        params[5] = uniform(self._cfgs.ret[0], self._cfgs.ret[1])
+        params[0] = self._cfgs.bfX
+        params[1] = self._cfgs.bfY
+        params[2] = self._cfgs.bfb
+        params[3] = self._cfgs.bfKs
+        params[4] = self._cfgs.bfS
+        params[5] = self._cfgs.bfret
 
-        return params
+        params[i] += params[i]*proc_mv
 
-    def _gen_monte_carlo_param_set_bak(self):
+        return (params)
+
+    def _gen_monte_carlo_param_set(self):
 
         params = np.zeros([self._nparams], float)
         params[0] = uniform(self._cfgs.X[0], self._cfgs.X[1])
