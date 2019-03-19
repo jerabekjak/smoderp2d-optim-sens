@@ -73,13 +73,23 @@ class SensAna(object):
 
         return (params)
 
-    def _gen_plus_minus_param_set(self, i, proc_mv):
+    def _gen_plus_minus_param_set(self, i, plus = True):
         """ generates parameter where one parameter is proc_mv
         from the best fit
 
         :param i: which parameter changes
         :param proc_mv: how much (sigh gives direction)
         """
+        
+        # sub orders of magniture multiplicator 
+        mult = 1.1
+        # orders of magniture multiplicator 
+        order_mlt = 1.1
+        
+        # change sighn
+        if not(plus) : mult = 1/mult
+        if not(plus) : order_mlt = 1/order_mlt
+        
 
         params = np.zeros([self._nparams], float)
         params[0] = self._cfgs.bfX
@@ -88,8 +98,22 @@ class SensAna(object):
         params[3] = self._cfgs.bfKs
         params[4] = self._cfgs.bfS
         params[5] = self._cfgs.bfret
+        
+        # X
+        if i == 0 : params[i] = params[i]*mult
+        # Y
+        if i == 1 : params[i] = params[i]*mult
+        # b
+        if i == 2 : params[i] = params[i]*mult
+        # Ks
+        if i == 3 : params[i] = params[i]*order_mlt
+        # S
+        if i == 4 : params[i] = params[i]*order_mlt
+        # ret
+        if i == 5 : params[i] = params[i]*mult
+            
 
-        params[i] += params[i]*proc_mv
+        
 
         return (params)
     
@@ -150,12 +174,12 @@ class SensAna(object):
             sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
             t1 = time.time()
 
-            params = self._gen_plus_minus_param_set(i, self._proc_mv)
+            params = self._gen_plus_minus_param_set(i)
             self._plus_minus_res[2*i][0:self._nparams] = params
             self._plus_minus_res[2 *
                                  i][self._nparams:(self._nparams+2)] = self._model(params)
 
-            params = self._gen_plus_minus_param_set(i, -self._proc_mv)
+            params = self._gen_plus_minus_param_set(i, plus=False)
             self._plus_minus_res[2*i+1][0:self._nparams] = params
             self._plus_minus_res[2*i +
                                  1][self._nparams:(self._nparams+2)] = self._model(params)
