@@ -229,5 +229,5 @@ class SensAna(object):
     def __del__(self):
 
         write_sa(self._plus_minus_res, "plus_minus_sa.dat", self._out_dir)
-        write_sa(self._monte_carlo_res, "monte_carlo_sa.dat", self._out_dir)
+        #write_sa(self._monte_carlo_res, "monte_carlo_sa.dat", self._out_dir)
         print ('done in {:1.1e} secs'.format(time.time()-self._total_time))
