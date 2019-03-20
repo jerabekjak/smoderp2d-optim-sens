@@ -73,23 +73,8 @@ class SensAna(object):
 
         return (params)
 
-    def _gen_plus_minus_param_set(self, i, plus = True):
-        """ generates parameter where one parameter is proc_mv
-        from the best fit
-
-        :param i: which parameter changes
-        :param proc_mv: how much (sigh gives direction)
-        """
-        
-        # sub orders of magniture multiplicator 
-        mult = 1.1
-        # orders of magniture multiplicator 
-        order_mlt = 1.1
-        
-        # change sighn
-        if not(plus) : mult = 1/mult
-        if not(plus) : order_mlt = 1/order_mlt
-        
+    def _get_best_param_set(self):
+        """ returns parameters of best fit """
 
         params = np.zeros([self._nparams], float)
         params[0] = self._cfgs.bfX
@@ -98,25 +83,57 @@ class SensAna(object):
         params[3] = self._cfgs.bfKs
         params[4] = self._cfgs.bfS
         params[5] = self._cfgs.bfret
-        
-        # X
-        if i == 0 : params[i] = params[i]*mult
-        # Y
-        if i == 1 : params[i] = params[i]*mult
-        # b
-        if i == 2 : params[i] = params[i]*mult
-        # Ks
-        if i == 3 : params[i] = params[i]*order_mlt
-        # S
-        if i == 4 : params[i] = params[i]*order_mlt
-        # ret
-        if i == 5 : params[i] = params[i]*mult
-            
-
-        
 
         return (params)
-    
+
+    def _gen_plus_minus_param_set(self, i, plus=True):
+        """ generates parameter where one parameter is proc_mv
+        from the best fit
+
+        :param i: which parameter changes
+        :param proc_mv: how much (sigh gives direction)
+        """
+
+        # sub orders of magniture multiplicator
+        mult = 1.1
+        # orders of magniture multiplicator
+        order_mlt = 1.1
+
+        # change sighn
+        if not(plus):
+            mult = 1/mult
+        if not(plus):
+            order_mlt = 1/order_mlt
+
+        params = np.zeros([self._nparams], float)
+        params[0] = self._cfgs.bfX
+        params[1] = self._cfgs.bfY
+        params[2] = self._cfgs.bfb
+        params[3] = self._cfgs.bfKs
+        params[4] = self._cfgs.bfS
+        params[5] = self._cfgs.bfret
+
+        # X
+        if i == 0:
+            params[i] = params[i]*mult
+        # Y
+        if i == 1:
+            params[i] = params[i]*mult
+        # b
+        if i == 2:
+            params[i] = params[i]*mult
+        # Ks
+        if i == 3:
+            params[i] = params[i]*order_mlt
+        # S
+        if i == 4:
+            params[i] = params[i]*order_mlt
+        # ret
+        if i == 5:
+            params[i] = params[i]*mult
+
+        return (params)
+
     def _gen_plus_minus_param_set_bak(self, i, proc_mv):
         """ generates parameter where one parameter is proc_mv
         from the best fit
@@ -169,6 +186,13 @@ class SensAna(object):
     def _plus_minus_proc(self):
 
         print ('# plus minus sensitivity...')
+
+        # first row in _plus_minus_res is the best fir run
+        i = 0
+        params = self._get_best_param_set()
+        self._plus_minus_res[2*i][0:self._nparams] = params
+        self._plus_minus_res[2 *
+                             i][self._nparams:(self._nparams+2)] = self._model(params)
         for i in range(self._nparams):
 
             sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
@@ -217,7 +241,7 @@ class SensAna(object):
 
         self._plus_minus_proc()
 
-        #self._monte_carlo()
+        # self._monte_carlo()
 
     def _store_good_run(self, results):
 
@@ -244,7 +268,7 @@ class SensAna(object):
         print_arr[2] = self._mod_data_interp.val
         print_arr = np.transpose(print_arr)
 
-        np.savetxt(path_run, print_arr, fmt='%1.4e',comments='',
+        np.savetxt(path_run, print_arr, fmt='%1.4e', comments='',
                    header='time;obs;mod', delimiter=';')
 
         # updata dir name
