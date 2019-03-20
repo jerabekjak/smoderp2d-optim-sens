@@ -40,50 +40,82 @@ def plot_sa(out_dir, mu, sigma, cfgs):
     path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
         os.path.realpath(__file__)), '..', out_dir, 'mu_sigma_space.png', sep=os.sep)
 
-    labels = ['X','Y','b','Ks','S','ret']
+    labels = ['X', 'Y', 'b', 'Ks', 'S', 'ret']
     plt.figure(cfgs.R+1, figsize=(9, 7))
-    
+
     for i in range(cfgs.k):
-        plt.plot(mu[i],sigma[i], 'o')
-    
-    
+        plt.plot(mu[i], sigma[i], 'o')
+
     for i in range(cfgs.k):
         plt.annotate(
             labels[i],
             xy=(mu[i], sigma[i]), xytext=(-20, 20),
             textcoords='offset points', ha='right', va='bottom',
             bbox=dict(boxstyle='round,pad=0.5', fc='yellow', alpha=0.5),
-            arrowprops=dict(arrowstyle = '->', connectionstyle='arc3,rad=0'))
-    
-    
-    plt.title('Morris 1991 screening sensitivity analyses with R = {} and p = {}'.format(cfgs.R,cfgs.p))
+            arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=0'))
+
+    plt.title('Morris 1991 screening sensitivity analyses with R = {} and p = {}'.format(
+        cfgs.R, cfgs.p))
     plt.xlabel('mu')
     plt.ylabel('sigma')
     plt.savefig(path)
     plt.close(cfgs.R+1)
-    
-    
-def plot_rep(out_dir,rep,obs,mod):
+
+
+def barplot_sa(out_dir, plus_minus_res):
+
+    path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
+        os.path.realpath(__file__)), '..', out_dir, 'plus_minus_bar.png', sep=os.sep)
+
+    res = plus_minus_res
+
+    ind = np.arange(len(res[:])/2)  # the x locations for the groups
+    width = 0.35  # the width of the bars
+    labels = ['X', 'Y', 'b', 'Ks', 'S', 'ret']
+
+    plus = [1, 3, 5, 7, 9, 11]
+    minus = [x+1 for x in plus]
+
+    plus_res = np.array(res[plus])
+    minus_res = np.array(res[minus])
+
+    plt.figure(0, figsize=(9, 7))
+
+    fig, ax = plt.subplots()
+    rects1 = ax.bar(ind - width/2, plus_res[:, 6], width,
+                    color='SkyBlue', label='plus')
+    rects2 = ax.bar(ind + width/2, minus_res[:, 6], width,
+                    color='IndianRed', label='minus')
+    plt.hlines(res[0, 6], -1, 6, label='best fit ss')
+    ax.set_ylabel('ss')
+    ax.set_title('sensitivity analyses')
+    ax.set_xticks(ind)
+    ax.set_xticklabels(labels)
+    ax.legend()
+    plt.savefig(path)
+
+
+def plot_rep(out_dir, rep, obs, mod):
 
     path = '{0}{sep}{1}{sep}{2}{sep}{3}{4}{5}'.format(os.path.dirname(
-        os.path.realpath(__file__)), '..', out_dir, 'repetition_',rep+1,'.png', sep=os.sep)
-    
+        os.path.realpath(__file__)), '..', out_dir, 'repetition_', rep+1, '.png', sep=os.sep)
+
     plt.figure(rep-1, figsize=(9, 7))
-    
+
     plt.plot(obs.time/60, obs.val*1000*60*60, 'ro', label='observed data')
-    
-    for i in range(1,len(mod)):
-        plt.plot(mod[i].time/60, mod[i].val*1000*60*60, 'go', label='delta model')
-    
+
+    for i in range(1, len(mod)):
+        plt.plot(mod[i].time/60, mod[i].val*1000 *
+                 60*60, 'go', label='delta model')
+
     plt.plot(mod[0].time/60, mod[0].val*1000*60*60, 'bo', label='base model')
-    
+
     plt.xlabel('time [mins]')
     plt.ylabel('runoff [mm/hour]')
     plt.title('Repetition {}'.format(rep+1))
     plt.legend()
     plt.savefig(path)
     plt.close(rep-1)
-
 
 
 def plot_de_residuals(obs, mod, out_dir):

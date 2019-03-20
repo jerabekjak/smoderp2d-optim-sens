@@ -10,6 +10,7 @@ from diff_evol.mod_data_handling import interpolate
 from diff_evol.mod_data_handling import RecModData
 import model.smoderp2d.main as sm
 from tools.writes import write_sa
+from tools.plots import barplot_sa
 from tools.optim_fnc import sum_of_squares
 from tools.optim_fnc import nash_sutcliffe
 
@@ -277,5 +278,6 @@ class SensAna(object):
     def __del__(self):
 
         write_sa(self._plus_minus_res, "plus_minus_sa.dat", self._out_dir)
+        barplot_sa(self._out_dir, self._plus_minus_res)
         #write_sa(self._monte_carlo_res, "monte_carlo_sa.dat", self._out_dir)
         print ('done in {:1.1e} secs'.format(time.time()-self._total_time))
