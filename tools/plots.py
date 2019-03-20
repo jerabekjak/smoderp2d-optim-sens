@@ -61,7 +61,6 @@ def plot_sa(out_dir, mu, sigma, cfgs):
     plt.savefig(path)
     plt.close(cfgs.R+1)
 
-
 def barplot_sa(out_dir, plus_minus_res):
 
     path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
