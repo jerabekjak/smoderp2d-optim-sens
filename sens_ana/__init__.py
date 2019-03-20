@@ -41,7 +41,7 @@ class SensAna(object):
         # stores results from the +- proc sensitivity
         # self._nparams+1 means + ss
         self._plus_minus_res = np.zeros(
-            [2*self._nparams, self._nparams+2], float)
+            [2*self._nparams+1, self._nparams+2], float)
 
         # stores results from the monte carlo sensitivity
         # self._nparams+1 means + ss
