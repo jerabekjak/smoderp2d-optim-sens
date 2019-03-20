@@ -175,14 +175,14 @@ class SensAna(object):
             t1 = time.time()
 
             params = self._gen_plus_minus_param_set(i)
-            self._plus_minus_res[2*i][0:self._nparams] = params
+            self._plus_minus_res[2*i+1][0:self._nparams] = params
             self._plus_minus_res[2 *
-                                 i][self._nparams:(self._nparams+2)] = self._model(params)
+                                 i+1][self._nparams:(self._nparams+2)] = self._model(params)
 
             params = self._gen_plus_minus_param_set(i, plus=False)
-            self._plus_minus_res[2*i+1][0:self._nparams] = params
+            self._plus_minus_res[2*i+2][0:self._nparams] = params
             self._plus_minus_res[2*i +
-                                 1][self._nparams:(self._nparams+2)] = self._model(params)
+                                 2][self._nparams:(self._nparams+2)] = self._model(params)
 
             t2 = time.time()
             print (' done in {:1.2f} secs'.format(t2-t1))
