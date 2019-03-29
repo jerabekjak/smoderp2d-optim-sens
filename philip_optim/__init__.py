@@ -46,10 +46,6 @@ def get_ks_s(data, out_dir, plot=True):
     t_time = transform_time(time)
     infilt = data.infilt[data.val!=0.0]
     
-    #time = data.time
-    #t_time = transform_time(time)
-    #infilt = data.infilt
-
     # slope = s
     # intercept = ks
     slope, intercept, r_value, p_value, std_err = stats.linregress(
