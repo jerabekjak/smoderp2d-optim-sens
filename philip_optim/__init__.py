@@ -3,6 +3,11 @@ from scipy import stats
 import os
 from tools.plots import plot_philip
 
+class PhilipVals(object):
+    
+    Ks = None
+    S = None
+    
 
 def philip(ks, s, t):
     return 0.5*s*t**(-0.5) + ks
@@ -24,11 +29,18 @@ def get_ks_s(data, out_dir, plot=True):
     time = data.time[data.val!=0.0]
     t_time = transform_time(time)
     infilt = data.infilt[data.val!=0.0]
+    
+    #time = data.time
+    #t_time = transform_time(time)
+    #infilt = data.infilt
 
     # slope = s
     # intercept = ks
     slope, intercept, r_value, p_value, std_err = stats.linregress(
         t_time, infilt)
+    
+    PhilipVals.Ks = intercept
+    PhilipVals.S = slope 
 
     path = '{0}{sep}{1}'.format(out_dir, '.philip', sep=os.sep)
 
