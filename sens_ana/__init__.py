@@ -96,16 +96,28 @@ class SensAna(object):
         """
 
         # sub orders of magniture multiplicator
-        mult = 1.1
-        # orders of magniture multiplicator
-        order_mlt = 1.1
-
-        # change sighn
-        if not(plus):
-            mult = 1/mult
-        if not(plus):
-            order_mlt = 1/order_mlt
-
+        mult = np.zeros(6, float)
+        
+        # multiplicator for each parameter
+        # X
+        mult[0] = 1.1
+        # Y
+        mult[1] = 1.1
+        # b
+        mult[2] = 1.1
+        # Ks
+        mult[3] = 1.1
+        # S
+        mult[4] = 1.1
+        # ret
+        mult[5] = 1.1
+        
+        for j in range(6) :
+            # change sighn
+            if not(plus):
+                mult[j] = 1./mult[j]
+            
+        print (mult)
         params = np.zeros([self._nparams], float)
         params[0] = self._cfgs.bfX
         params[1] = self._cfgs.bfY
@@ -114,24 +126,9 @@ class SensAna(object):
         params[4] = self._cfgs.bfS
         params[5] = self._cfgs.bfret
 
-        # X
-        if i == 0:
-            params[i] = params[i]*mult
-        # Y
-        if i == 1:
-            params[i] = params[i]*mult
-        # b
-        if i == 2:
-            params[i] = params[i]*mult
-        # Ks
-        if i == 3:
-            params[i] = params[i]*order_mlt
-        # S
-        if i == 4:
-            params[i] = params[i]*order_mlt
-        # ret
-        if i == 5:
-            params[i] = params[i]*mult
+
+        #for i in range(6) :
+        params[i] = params[i]*mult[i]
 
         return (params)
 
