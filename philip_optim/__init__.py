@@ -30,8 +30,7 @@ def get_ks_s(data, out_dir, plot=True):
     slope, intercept, r_value, p_value, std_err = stats.linregress(
         t_time, infilt)
 
-    path = '{0}{sep}{1}'.format(os.path.dirname(
-        os.path.realpath(__file__)), '.philip', sep=os.sep)
+    path = '{0}{sep}{1}'.format(out_dir, '.philip', sep=os.sep)
 
     with open(path, 'w') as outfile:
         outfile.write('Do not edit!!!\n')
