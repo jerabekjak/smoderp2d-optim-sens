@@ -19,9 +19,11 @@ def get_ks_s(data, out_dir, plot=True):
 
     :param data: list of obs_data_handler.RecObsData instances  
     """
-
-    t_time = transform_time(data.time)
-    infilt = data.infilt
+    
+    # remove zeros runoff records from philips fit 
+    time = data.time[data.val!=0.0]
+    t_time = transform_time(time)
+    infilt = data.infilt[data.val!=0.0]
 
     # slope = s
     # intercept = ks
