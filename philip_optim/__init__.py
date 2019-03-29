@@ -3,6 +3,22 @@ from scipy import stats
 import os
 from tools.plots import plot_philip
 
+
+class Error(Exception):
+    """Base class for exceptions in this module."""
+    pass
+
+class NegativeValueHydraulicConduct(Error):
+    """Exception raised for negative value of hydraulic conductivity"""
+
+    def __init__(self, out_dir, val):
+        path = '{0}{sep}{1}'.format(out_dir, '.philipError', sep=os.sep)
+        with open(path, 'w') as outfile:
+            outfile.write('Negative Ks\n')
+            outfile.write('{:.5E}\n'.format(val))
+        
+        
+
 class PhilipVals(object):
     
     Ks = None
@@ -38,6 +54,9 @@ def get_ks_s(data, out_dir, plot=True):
     # intercept = ks
     slope, intercept, r_value, p_value, std_err = stats.linregress(
         t_time, infilt)
+    
+    if intercept<0.0 :
+        raise NegativeValueHydraulicConduct(out_dir, intercept)
     
     PhilipVals.Ks = intercept
     PhilipVals.S = slope 
