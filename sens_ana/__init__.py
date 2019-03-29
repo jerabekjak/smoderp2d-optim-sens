@@ -100,24 +100,33 @@ class SensAna(object):
         
         # multiplicator for each parameter
         # X
-        mult[0] = 1.1
+        mult[0] = 80
         # Y
-        mult[1] = 1.1
+        mult[1] = 1.3
         # b
-        mult[2] = 1.1
+        mult[2] = 1.125
         # Ks
-        mult[3] = 1.1
+        mult[3] = 2.0
         # S
-        mult[4] = 1.1
+        mult[4] = 2.0
         # ret
-        mult[5] = 1.1
+        mult[5] = 1.5
         
         for j in range(6) :
             # change sighn
             if not(plus):
-                mult[j] = 1./mult[j]
+                mult[0] = 1./3.5
+                # Y
+                mult[1] = 1.0/1.6
+                # b
+                mult[2] = 1.0/1.5
+                # Ks
+                mult[3] = 1.0/5.0
+                # S
+                mult[4] = 1.0/5.0
+                # ret
+                mult[5] = 1.0/5
             
-        print (mult)
         params = np.zeros([self._nparams], float)
         params[0] = self._cfgs.bfX
         params[1] = self._cfgs.bfY
@@ -178,7 +187,7 @@ class SensAna(object):
 
         ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
         ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
-
+        
         return ss, ns
 
     def _plus_minus_proc(self):
