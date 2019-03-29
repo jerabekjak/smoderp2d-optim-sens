@@ -16,7 +16,7 @@ def main(pars):
 
     # optimaze philips infiltratoin
     # stores ks and s into .philip file
-    #get_ks_s(OD.data, pars.out_dir)
+    get_ks_s(OD.data, pars.out_dir)
 
     DE = DiffEvol(pars = pars, obs = OD)
     DE.make_de()
