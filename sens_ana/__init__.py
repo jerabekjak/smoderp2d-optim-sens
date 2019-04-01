@@ -172,6 +172,18 @@ class SensAna(object):
         params[5] = uniform(self._cfgs.ret[0], self._cfgs.ret[1])
 
         return params
+    
+    def _gen_monte_carlo_param_set_bak(self):
+
+        params = np.zeros([self._nparams], float)
+        params[0] = uniform(self._cfgs.X[0], self._cfgs.X[1])
+        params[1] = uniform(self._cfgs.Y[0], self._cfgs.Y[1])
+        params[2] = uniform(self._cfgs.b[0], self._cfgs.b[1])
+        params[3] = uniform(self._cfgs.Ks[0], self._cfgs.Ks[1])
+        params[4] = uniform(self._cfgs.S[0], self._cfgs.S[1])
+        params[5] = uniform(self._cfgs.ret[0], self._cfgs.ret[1])
+
+        return params
 
     def _model(self, params, mc=False):
         """ Run the model
@@ -246,9 +258,9 @@ class SensAna(object):
 
     def do_sa(self):
 
-        self._plus_minus_proc()
+        #self._plus_minus_proc()
 
-        # self._monte_carlo()
+        self._monte_carlo()
 
     def _store_good_run(self, results):
 
