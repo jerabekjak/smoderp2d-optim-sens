@@ -162,13 +162,13 @@ class SensAna(object):
         return (params)
 
     def _gen_monte_carlo_param_set(self):
-
+        
         params = np.zeros([self._nparams], float)
         params[0] = uniform(self._cfgs.X[0], self._cfgs.X[1])
         params[1] = uniform(self._cfgs.Y[0], self._cfgs.Y[1])
         params[2] = uniform(self._cfgs.b[0], self._cfgs.b[1])
-        params[3] = uniform(self._cfgs.Ks[0], self._cfgs.Ks[1])
-        params[4] = uniform(self._cfgs.S[0], self._cfgs.S[1])
+        params[3] = self._cfgs.bfKs
+        params[4] = self._cfgs.bfS
         params[5] = uniform(self._cfgs.ret[0], self._cfgs.ret[1])
 
         return params
