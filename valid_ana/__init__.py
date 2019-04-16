@@ -25,9 +25,9 @@ loc_textures["risuty"] = ["loam"]
 
 # params for given texture
 texture_pars = {}
-texture_pars["silty loam"] = [10.1, 0.561, 1.74]
-texture_pars["sandy loam"] = [9.2, 0.462, 1.79 ]
-texture_pars["silty clay loam"] = [10.7, 0.603, 1.7]
+#texture_pars["silty loam"] = [10.1, 0.561, 1.74]
+#texture_pars["sandy loam"] = [9.2, 0.462, 1.79 ]
+#texture_pars["silty clay sloam"] = [10.7, 0.603, 1.7]
 texture_pars["loam"] = [10.1, 0.561, 1.74]
 
 
@@ -54,15 +54,16 @@ class ValidAna(object):
         # name of location
         self._loc_name = self._get_location_name(self._cfgs._best_fit_dir)
         
-        print (self._loc_name)
+        print (self._get_params_for_textures(self._loc_name))
 
     
     def do_va(self):
         pass
     
-    def get_params_for_textures(self, loc):
+    def _get_params_for_textures(self, loc):
         texture = loc_textures[loc]
-        return texture_pars[texture]
+        return (texture_pars[texture[0]])
+        #return texture_pars[texture]
         
     
     def _get_location_name(self,path):
