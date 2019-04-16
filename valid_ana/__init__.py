@@ -13,7 +13,22 @@ from tools.optim_fnc import sum_of_squares
 from tools.optim_fnc import nash_sutcliffe
 
 
-loc_pars = {}
+loc_textures = {}
+loc_textures["trebsin"] = ["silty loam"]  
+loc_textures["neustupov"] = ["sandy loam"]  
+loc_textures["klapy"] = ["silty clay loam"]  
+loc_textures["trebesice"] = ["sandy loam"]  
+loc_textures["nucice"] = ["silty loam"]  
+loc_textures["vsetaty"] = ["loam"]  
+loc_textures["nove_straseci"] = ["loam"]  
+loc_textures["risuty"] = ["loam"]  
+
+# params for given texture
+texture_pars = {}
+texture_pars["silty loam"] = [10.1, 0.561, 1.74]
+texture_pars["sandy loam"] = [9.2, 0.462, 1.79 ]
+texture_pars["silty clay loam"] = [10.7, 0.603, 1.7]
+texture_pars["loam"] = [10.1, 0.561, 1.74]
 
 
 class ValidAna(object):
@@ -46,7 +61,8 @@ class ValidAna(object):
         pass
     
     def get_params_for_textures(self, loc):
-        
+        texture = loc_textures[loc]
+        return texture_pars[texture]
         
     
     def _get_location_name(self,path):
