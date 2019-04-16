@@ -69,15 +69,20 @@ class ValidAna(object):
 
         mod_data = self._read_mod_file(self._mod_file)
         self._mod_data_interp = self._interp_mod_data(
-            mod=mod_data, obs=self._bf_data)
-
-        ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
-        ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
+            mod=mod_data, obs=self._data)
         
+        print ('ok')
+
+        #ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
+        #ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
+        
+        #return ss, ns
     
     def do_va(self):
         
-        pars = self._texture_pars
+        params = self._get_param_set()
+
+        self._model(params)
         
         
     
@@ -98,7 +103,7 @@ class ValidAna(object):
         
         return loc_name
         
-    def _get_best_param_set(self):
+    def _get_param_set(self):
         """ returns parameters of best fit """
 
         params = np.zeros([self._nparams], float)
