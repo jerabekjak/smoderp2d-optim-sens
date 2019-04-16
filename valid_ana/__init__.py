@@ -13,6 +13,9 @@ from tools.optim_fnc import sum_of_squares
 from tools.optim_fnc import nash_sutcliffe
 
 
+loc_pars = {}
+
+
 class ValidAna(object):
 
     def __init__(self, pars, cfgs):
@@ -43,7 +46,6 @@ class ValidAna(object):
         pass
     
     def get_params_for_textures(self, loc):
-        pass
         
         
     
