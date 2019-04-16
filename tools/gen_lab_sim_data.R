@@ -40,9 +40,9 @@ mcruns: 10000
 
 [ParamsMargins]
 # X,Y,b and ret are evenly distributed within margins 
-X: 1,20
-Y: 0.1,1
-b: 1,2
+X: 1,1000
+Y: 0.5,0.5
+b: 1.5,1.5
 Ks: 1e-8, 1e-5
 S: 1e-8, 1e-3
 
