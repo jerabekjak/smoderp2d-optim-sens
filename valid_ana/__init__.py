@@ -33,8 +33,36 @@ class ValidAna(object):
         self._plot = False
         self._total_time = time.time()
         
-        print (self._cfgs._best_fit_dir)
+        # name of location
+        self._loc_name = self._get_location_name(self._cfgs._best_fit_dir)
+        
+        print (self._loc_name)
 
     
     def do_va(self):
         pass
+    
+    def get_params_for_textures(self, loc):
+        pass
+        
+        
+    
+    def _get_location_name(self,path):
+        """ get location name from path to bf records """
+        
+        loc_name = path.split('/')
+        loc_name = loc_name[len(loc_name)-1]
+        loc_name = loc_name.replace('out-','')
+        
+        i = loc_name.find('_')
+        
+        loc_name = (loc_name[0:i])
+        
+        return loc_name
+        
+        
+        
+        
+        
+        
+        
