@@ -11,6 +11,7 @@ from diff_evol.mod_data_handling import interpolate
 import model.smoderp2d.main as sm
 from tools.optim_fnc import sum_of_squares
 from tools.optim_fnc import nash_sutcliffe
+from tools.plots import plot_va
 
 
 loc_textures = {}
@@ -48,7 +49,7 @@ class ValidAna(object):
         self._read_mod_file = read_mod_file
         self._interp_mod_data = interpolate
 
-        self._plot = False
+        self._plot = True
         self._total_time = time.time()
         
         self._nparams = 6
@@ -64,25 +65,24 @@ class ValidAna(object):
 
         :param mc: allows to record good results during monte carlo runs
         """
-
         sm.run(self._mod_conf, params, self._cfgs)
 
         mod_data = self._read_mod_file(self._mod_file)
         self._mod_data_interp = self._interp_mod_data(
             mod=mod_data, obs=self._data)
         
-        print ('ok')
-
-        #ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
-        #ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
+        ss = sum_of_squares(self._data.val, self._mod_data_interp.val)
+        ns = nash_sutcliffe(self._data.val, self._mod_data_interp.val)
         
-        #return ss, ns
+        return ss, ns
     
     def do_va(self):
         
         params = self._get_param_set()
 
-        self._model(params)
+        ss, ns = self._model(params)
+        
+        print (ss, ns)
         
         
     
@@ -115,6 +115,12 @@ class ValidAna(object):
         params[5] = self._cfgs.bfret
 
         return (params)
+    
+    
+    def __del__(self):
+        if self._plot:
+            plot_va(self._data, self._mod_data_interp, self._out_dir)
+
         
         
         
