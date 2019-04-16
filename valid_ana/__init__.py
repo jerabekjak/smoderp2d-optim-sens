@@ -25,9 +25,9 @@ loc_textures["risuty"] = ["loam"]
 
 # params for given texture
 texture_pars = {}
-#texture_pars["silty loam"] = [10.1, 0.561, 1.74]
-#texture_pars["sandy loam"] = [9.2, 0.462, 1.79 ]
-#texture_pars["silty clay sloam"] = [10.7, 0.603, 1.7]
+texture_pars["silty loam"] = [10.1, 0.561, 1.74]
+texture_pars["sandy loam"] = [9.2, 0.462, 1.79 ]
+texture_pars["silty clay sloam"] = [10.7, 0.603, 1.7]
 texture_pars["loam"] = [10.1, 0.561, 1.74]
 
 
@@ -51,20 +51,39 @@ class ValidAna(object):
         self._plot = False
         self._total_time = time.time()
         
+        self._nparams = 6
+        
         # name of location
         self._loc_name = self._get_location_name(self._cfgs._best_fit_dir)
         
-        print (self._get_params_for_textures(self._loc_name))
+        self._texture_pars = self._get_params_for_textures(self._loc_name)
 
+
+    def _model(self, params, mc=False):
+        """ Run the model
+
+        :param mc: allows to record good results during monte carlo runs
+        """
+
+        sm.run(self._mod_conf, params, self._cfgs)
+
+        mod_data = self._read_mod_file(self._mod_file)
+        self._mod_data_interp = self._interp_mod_data(
+            mod=mod_data, obs=self._bf_data)
+
+        ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
+        ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
+        
     
     def do_va(self):
-        pass
+        
+        pars = self._texture_pars
+        
+        
     
     def _get_params_for_textures(self, loc):
         texture = loc_textures[loc]
         return (texture_pars[texture[0]])
-        #return texture_pars[texture]
-        
     
     def _get_location_name(self,path):
         """ get location name from path to bf records """
@@ -79,6 +98,18 @@ class ValidAna(object):
         
         return loc_name
         
+    def _get_best_param_set(self):
+        """ returns parameters of best fit """
+
+        params = np.zeros([self._nparams], float)
+        params[0] = self._texture_pars[0]
+        params[1] = self._texture_pars[1]
+        params[2] = self._texture_pars[2]
+        params[3] = self._cfgs.bfKs
+        params[4] = self._cfgs.bfS
+        params[5] = self._cfgs.bfret
+
+        return (params)
         
         
         
