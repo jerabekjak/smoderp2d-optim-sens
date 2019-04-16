@@ -55,6 +55,7 @@ class ReadConfig(object):
 
         # set instance of RecFitData with filled data from obs_mod.dat
         best_fit_dir = self._config.get('BestFit', 'dir')
+        self._best_fit_dir = best_fit_dir
         self.data = self._read_obs_fit_mod(best_fit_dir)
 
         # set read best fit params from params.dat
