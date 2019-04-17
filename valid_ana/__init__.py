@@ -28,7 +28,7 @@ loc_textures["risuty"] = ["loam"]
 texture_pars = {}
 texture_pars["silty loam"] = [10.1, 0.561, 1.74]
 texture_pars["sandy loam"] = [9.2, 0.462, 1.79 ]
-texture_pars["silty clay sloam"] = [10.7, 0.603, 1.7]
+texture_pars["silty clay loam"] = [10.7, 0.603, 1.7]
 texture_pars["loam"] = [10.1, 0.561, 1.74]
 
 
