@@ -1,10 +1,10 @@
 import statistics as stat
-
+import numpy as np
 
 def nash_sutcliffe(obs, mod):
 
     mean_obs = stat.mean(obs)
-    r = obs - mod
+    r = np.array(obs) - np.array(mod)
     r = r**2.0
     m = [iob - mean_obs for iob in obs]
     m[:] = [im**2.0 for im in m]
@@ -12,8 +12,8 @@ def nash_sutcliffe(obs, mod):
 
 
 def sum_of_squares(obs, mod):
-
-    r = obs - mod
+    
+    r = np.array(obs) - np.array(mod)
     r = r**2.0
 
     return sum(r)

@@ -11,6 +11,7 @@ from diff_evol.mod_data_handling import interpolate
 import model.smoderp2d.main as sm
 from tools.optim_fnc import sum_of_squares
 from tools.optim_fnc import nash_sutcliffe
+from tools.writes import write_va
 from tools.plots import plot_va
 
 
@@ -71,19 +72,16 @@ class ValidAna(object):
         self._mod_data_interp = self._interp_mod_data(
             mod=mod_data, obs=self._data)
         
-        ss = sum_of_squares(self._data.val, self._mod_data_interp.val)
-        ns = nash_sutcliffe(self._data.val, self._mod_data_interp.val)
+        self._ss_val = sum_of_squares(self._data.val, self._mod_data_interp.val)
+        self._ns_val = nash_sutcliffe(self._data.val, self._mod_data_interp.val)
+        self._ss_opt = sum_of_squares(self._data.val, self._data.fit_vals)
+        self._ns_opt = nash_sutcliffe(self._data.val, self._data.fit_vals)
         
-        return ss, ns
-    
     def do_va(self):
         
         params = self._get_param_set()
 
-        ss, ns = self._model(params)
-        
-        print (ss, ns)
-        
+        self._model(params)
         
     
     def _get_params_for_textures(self, loc):
@@ -113,14 +111,40 @@ class ValidAna(object):
         params[3] = self._cfgs.bfKs
         params[4] = self._cfgs.bfS
         params[5] = self._cfgs.bfret
+        
+        self._params = params
 
         return (params)
     
-    
+    def _store_pars(self):
+        """ store optim and valid parameters for write """
+        
+        tmp = np.zeros([2,8], float)
+        tmp[0][0:6] = self._params
+        tmp[0][6] = self._ss_val
+        tmp[0][7] = self._ns_val
+        
+        tmp[1][0] = self._cfgs.bfX
+        tmp[1][1] = self._cfgs.bfY
+        tmp[1][2] = self._cfgs.bfb
+        tmp[1][3] = self._cfgs.bfKs
+        tmp[1][4] = self._cfgs.bfS
+        tmp[1][5] = self._cfgs.bfret
+        tmp[1][6] = self._ss_opt
+        tmp[1][7] = self._ns_opt
+        
+        
+        return (tmp)
+        
+        
+        
     def __del__(self):
         if self._plot:
             plot_va(self._data, self._mod_data_interp, self._out_dir)
+            
+        res = self._store_pars()
 
+        write_va(res, self._data, self._mod_data_interp, self._out_dir)
         
         
         
