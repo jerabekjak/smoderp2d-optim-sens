@@ -39,11 +39,9 @@ def plot_va(obs, mod, out_dir):
     path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
         os.path.realpath(__file__)), '..', out_dir, 'validation.png', sep=os.sep)
     plt.figure(1, figsize=(9, 7))
-    #print (obs.time/60.0)
     plt.plot(obs.time, obs.val, 'ro', label='observed data')
-    plt.plot(mod.time, mod.val, 'bo', label='previous params data')
-    #plt.title("final parameters: X={:1.2f}, Y={:1.2f}, b={:1.2f}, ks={:.2e}, s={:0.2e}, ret={:0.2e}\nsum of squares = {:.2E}".format(
-        #de_results.x[0], de_results.x[1], de_results.x[2], de_results.x[3], de_results.x[4], de_results.x[5], de_results.fun*(1000*60*60)**2.0), fontsize=10, loc='left')
+    plt.plot(mod.time, mod.val, 'bo', label='previous params')
+    plt.plot(obs.time, obs.fit_vals, 'go', label='optimized parameter set')
     plt.xlabel('time ')
     plt.ylabel('runoff')
     plt.legend()
