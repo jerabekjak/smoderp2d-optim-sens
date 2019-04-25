@@ -118,6 +118,7 @@ class ValidAna(object):
         return (params)
     
 
+
     def _get_param_set_manning(self):
         """ returns parameters of best fit """
 
