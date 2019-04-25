@@ -34,13 +34,14 @@ def plot_de(obs, mod, de_results, out_dir):
     plt.legend()
     plt.savefig(path, dpi=200)
 
-def plot_va(obs, mod, out_dir):
+def plot_va(obs, mod_orig, mod_manning, out_dir):
 
     path = '{0}{sep}{1}{sep}{2}{sep}{3}'.format(os.path.dirname(
         os.path.realpath(__file__)), '..', out_dir, 'validation.png', sep=os.sep)
     plt.figure(1, figsize=(9, 7))
     plt.plot(obs.time, obs.val, 'ro', label='observed data')
-    plt.plot(mod.time, mod.val, 'bo', label='previous params')
+    plt.plot(mod_orig.time, mod_orig.val, 'bo', label='previous params')
+    plt.plot(mod_manning.time, mod_manning.val, 'yo', label='mannings parameters')
     plt.plot(obs.time, obs.fit_vals, 'go', label='optimized parameter set')
     plt.xlabel('time ')
     plt.ylabel('runoff')

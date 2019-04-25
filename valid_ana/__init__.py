@@ -159,7 +159,8 @@ class ValidAna(object):
 
     def __del__(self):
         if self._plot:
-            plot_va(self._data, self._mod_data_interp, self._out_dir)
+            plot_va(self._data, self._mod_data_interp_orig,
+                 self._mod_data_interp_manning, self._out_dir)
 
         res = self._pars
 
