@@ -101,13 +101,30 @@ class ValidAna(object):
         
         return loc_name
         
-    def _get_param_set(self):
+
+    def _get_param_set_orig(self):
         """ returns parameters of best fit """
 
         params = np.zeros([self._nparams], float)
         params[0] = self._texture_pars[0]
         params[1] = self._texture_pars[1]
         params[2] = self._texture_pars[2]
+        params[3] = self._cfgs.bfKs
+        params[4] = self._cfgs.bfS
+        params[5] = self._cfgs.bfret
+        
+        self._params = params
+
+        return (params)
+    
+
+    def _get_param_set_manning(self):
+        """ returns parameters of best fit """
+
+        params = np.zeros([self._nparams], float)
+        params[0] = self._cfgs.bfX
+        params[1] = 0.5
+        params[2] = 1.5
         params[3] = self._cfgs.bfKs
         params[4] = self._cfgs.bfS
         params[5] = self._cfgs.bfret
