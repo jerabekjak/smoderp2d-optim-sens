@@ -59,6 +59,8 @@ class ValidAna(object):
         self._loc_name = self._get_location_name(self._cfgs._best_fit_dir)
         
         self._texture_pars = self._get_params_for_textures(self._loc_name)
+        
+        self._pars = np.zeros([3,8], float)
 
 
     def _model(self, params, mc=False):
@@ -79,9 +81,12 @@ class ValidAna(object):
         
     def do_va(self):
         
-        params = self._get_param_set()
-
+        params = self._get_param_set_orig()
         self._model(params)
+        self._store_pars(0)
+        params = self._get_param_set_manning()
+        self._model(params)
+        self._store_pars(1)
         
     
     def _get_params_for_textures(self, loc):
@@ -118,7 +123,6 @@ class ValidAna(object):
         return (params)
     
 
-
     def _get_param_set_manning(self):
         """ returns parameters of best fit """
 
@@ -134,33 +138,32 @@ class ValidAna(object):
 
         return (params)
     
-    def _store_pars(self):
-        """ store optim and valid parameters for write """
+    def _store_pars(self, i):
+        """ store optim and valid parameters for write 
         
-        tmp = np.zeros([2,8], float)
-        tmp[0][0:6] = self._params
-        tmp[0][6] = self._ss_val
-        tmp[0][7] = self._ns_val
+        :param i: where to store the data
+        """
         
-        tmp[1][0] = self._cfgs.bfX
-        tmp[1][1] = self._cfgs.bfY
-        tmp[1][2] = self._cfgs.bfb
-        tmp[1][3] = self._cfgs.bfKs
-        tmp[1][4] = self._cfgs.bfS
-        tmp[1][5] = self._cfgs.bfret
-        tmp[1][6] = self._ss_opt
-        tmp[1][7] = self._ns_opt
+        self._pars[i][0:6] = self._params
+        self._pars[i][6] = self._ss_val
+        self._pars[i][7] = self._ns_val
         
-        
-        return (tmp)
-        
+        self._pars[2][0] = self._cfgs.bfX
+        self._pars[2][1] = self._cfgs.bfY
+        self._pars[2][2] = self._cfgs.bfb
+        self._pars[2][3] = self._cfgs.bfKs
+        self._pars[2][4] = self._cfgs.bfS
+        self._pars[2][5] = self._cfgs.bfret
+        self._pars[2][6] = self._ss_opt
+        self._pars[2][7] = self._ns_opt
         
         
     def __del__(self):
         if self._plot:
             plot_va(self._data, self._mod_data_interp, self._out_dir)
             
-        res = self._store_pars()
+        res = self._pars
+        print (res)
 
         write_va(res, self._data, self._mod_data_interp, self._out_dir)
         
