@@ -16,19 +16,19 @@ from tools.plots import plot_va
 
 
 loc_textures = {}
-loc_textures["trebsin"] = ["silty loam"]  
-loc_textures["neustupov"] = ["sandy loam"]  
-loc_textures["klapy"] = ["silty clay loam"]  
-loc_textures["trebesice"] = ["sandy loam"]  
-loc_textures["nucice"] = ["silty loam"]  
-loc_textures["vsetaty"] = ["loam"]  
-loc_textures["nove_straseci"] = ["loam"]  
-loc_textures["risuty"] = ["loam"]  
+loc_textures["trebsin"] = ["silty loam"]
+loc_textures["neustupov"] = ["sandy loam"]
+loc_textures["klapy"] = ["silty clay loam"]
+loc_textures["trebesice"] = ["sandy loam"]
+loc_textures["nucice"] = ["silty loam"]
+loc_textures["vsetaty"] = ["loam"]
+loc_textures["nove_straseci"] = ["loam"]
+loc_textures["risuty"] = ["loam"]
 
 # params for given texture
 texture_pars = {}
 texture_pars["silty loam"] = [10.1, 0.561, 1.74]
-texture_pars["sandy loam"] = [9.2, 0.462, 1.79 ]
+texture_pars["sandy loam"] = [9.2, 0.462, 1.79]
 texture_pars["silty clay loam"] = [10.7, 0.603, 1.7]
 texture_pars["loam"] = [10.1, 0.561, 1.74]
 
@@ -36,7 +36,7 @@ texture_pars["loam"] = [10.1, 0.561, 1.74]
 class ValidAna(object):
 
     def __init__(self, pars, cfgs):
-        
+
         # data contains observed data and fitted data
         self._data = cfgs.data
         self._mod_data = None
@@ -52,16 +52,15 @@ class ValidAna(object):
 
         self._plot = True
         self._total_time = time.time()
-        
+
         self._nparams = 6
-        
+
         # name of location
         self._loc_name = self._get_location_name(self._cfgs._best_fit_dir)
-        
-        self._texture_pars = self._get_params_for_textures(self._loc_name)
-        
-        self._pars = np.zeros([3,8], float)
 
+        self._texture_pars = self._get_params_for_textures(self._loc_name)
+
+        self._pars = np.zeros([3, 8], float)
 
     def _model(self, params, mc=False):
         """ Run the model
@@ -73,39 +72,41 @@ class ValidAna(object):
         mod_data = self._read_mod_file(self._mod_file)
         self._mod_data_interp = self._interp_mod_data(
             mod=mod_data, obs=self._data)
-        
-        self._ss_val = sum_of_squares(self._data.val, self._mod_data_interp.val)
-        self._ns_val = nash_sutcliffe(self._data.val, self._mod_data_interp.val)
+
+        self._ss_val = sum_of_squares(
+            self._data.val, self._mod_data_interp.val)
+        self._ns_val = nash_sutcliffe(
+            self._data.val, self._mod_data_interp.val)
         self._ss_opt = sum_of_squares(self._data.val, self._data.fit_vals)
         self._ns_opt = nash_sutcliffe(self._data.val, self._data.fit_vals)
-        
+
     def do_va(self):
-        
+
         params = self._get_param_set_orig()
         self._model(params)
         self._store_pars(0)
+        self._mod_data_interp_orig = self._mod_data_interp
         params = self._get_param_set_manning()
         self._model(params)
         self._store_pars(1)
-        
-    
+        self._mod_data_interp_manning = self._mod_data_interp
+
     def _get_params_for_textures(self, loc):
         texture = loc_textures[loc]
         return (texture_pars[texture[0]])
-    
-    def _get_location_name(self,path):
+
+    def _get_location_name(self, path):
         """ get location name from path to bf records """
-        
+
         loc_name = path.split('/')
         loc_name = loc_name[len(loc_name)-1]
-        loc_name = loc_name.replace('out-','')
-        
+        loc_name = loc_name.replace('out-', '')
+
         i = loc_name.find('_')
-        
+
         loc_name = (loc_name[0:i])
-        
+
         return loc_name
-        
 
     def _get_param_set_orig(self):
         """ returns parameters of best fit """
@@ -117,11 +118,10 @@ class ValidAna(object):
         params[3] = self._cfgs.bfKs
         params[4] = self._cfgs.bfS
         params[5] = self._cfgs.bfret
-        
+
         self._params = params
 
         return (params)
-    
 
     def _get_param_set_manning(self):
         """ returns parameters of best fit """
@@ -133,21 +133,21 @@ class ValidAna(object):
         params[3] = self._cfgs.bfKs
         params[4] = self._cfgs.bfS
         params[5] = self._cfgs.bfret
-        
+
         self._params = params
 
         return (params)
-    
+
     def _store_pars(self, i):
         """ store optim and valid parameters for write 
-        
+
         :param i: where to store the data
         """
-        
+
         self._pars[i][0:6] = self._params
         self._pars[i][6] = self._ss_val
         self._pars[i][7] = self._ns_val
-        
+
         self._pars[2][0] = self._cfgs.bfX
         self._pars[2][1] = self._cfgs.bfY
         self._pars[2][2] = self._cfgs.bfb
@@ -156,19 +156,12 @@ class ValidAna(object):
         self._pars[2][5] = self._cfgs.bfret
         self._pars[2][6] = self._ss_opt
         self._pars[2][7] = self._ns_opt
-        
-        
+
     def __del__(self):
         if self._plot:
             plot_va(self._data, self._mod_data_interp, self._out_dir)
-            
-        res = self._pars
-        print (res)
 
-        write_va(res, self._data, self._mod_data_interp, self._out_dir)
-        
-        
-        
-        
-        
-        
+        res = self._pars
+
+        write_va(res, self._data, self._mod_data_interp_orig,
+                 self._mod_data_interp_manning, self._out_dir)

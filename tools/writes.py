@@ -34,7 +34,7 @@ def write_sa(res, file_ ,out_dir):
     np.savetxt(path_params, res, fmt='%1.4e',comments='',
                header='X;Y;b;Ks;S;ret;SofSq;NashSutcliffe', delimiter=';')
     
-def write_va(res, obs, mod, out_dir):
+def write_va(res, obs, mod_orig, mod_manning, out_dir):
 
     path_params = '{0}{sep}params.dat'.format(out_dir, sep=os.sep)
 
@@ -44,7 +44,7 @@ def write_va(res, obs, mod, out_dir):
     path_val = '{0}{sep}obs_mod_val.dat'.format(out_dir, sep=os.sep)
     n = len(obs.time)
     with open(path_val, 'w') as vf:
-        vf.write('time_sec;obs_m_s_1;opt_m_s_1;val_m_s_1\n')
+        vf.write('time_sec;obs_m_s_1;opt_m_s_1;val_m_s_1;manning_m_s_1\n')
         for i in range(n):
-            vf.write('{:1.3e};{:1.5e};{:1.5e};{:1.5e}\n'.format(
-                obs.time[i], obs.val[i], obs.fit_vals[i], mod.val[i]))
+            vf.write('{:1.3e};{:1.5e};{:1.5e};{:1.5e};{:1.5e}\n'.format(
+                obs.time[i], obs.val[i], obs.fit_vals[i], mod_orig.val[i], mod_manning.val[i]))
