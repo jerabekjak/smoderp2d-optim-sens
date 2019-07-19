@@ -25,6 +25,7 @@ class SensAna(object):
         self._bf_data = cfgs.data
         self._mod_data = None
         self._mod_data_interp = None
+        self._mod_data_interp_wl = None # wl stands for water level
         self._cfgs = cfgs
         self._mod_conf = pars.mod_conf
         self._mod_file = self._cfgs.model_file
@@ -182,8 +183,12 @@ class SensAna(object):
         sm.run(self._mod_conf, params, self._cfgs)
 
         mod_data = self._read_mod_file(self._mod_file)
+        mod_data_wl = self._read_mod_file(self._mod_file, col = 'totalWaterLevel[m]')
+        
         self._mod_data_interp = self._interp_mod_data(
             mod=mod_data, obs=self._bf_data)
+        self._mod_data_interp_wl = self._interp_mod_data(
+            mod=mod_data_wl, obs=self._bf_data)
 
         ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
         ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
@@ -246,9 +251,9 @@ class SensAna(object):
 
     def do_sa(self):
 
-        self._plus_minus_proc()
+        #self._plus_minus_proc()
 
-        # self._monte_carlo()
+        self._monte_carlo()
 
     def _store_good_run(self, results):
 
@@ -269,14 +274,15 @@ class SensAna(object):
 
         path_run = '{0}{sep}{1}'.format(dir_, 'mod_obs.dat', sep=os.sep)
 
-        print_arr = np.zeros([3, n], float)
+        print_arr = np.zeros([4, n], float)
         print_arr[0] = self._bf_data.time
         print_arr[1] = self._bf_data.val
         print_arr[2] = self._mod_data_interp.val
+        print_arr[3] = self._mod_data_interp_wl.val
         print_arr = np.transpose(print_arr)
 
         np.savetxt(path_run, print_arr, fmt='%1.4e', comments='',
-                   header='time;obs;mod', delimiter=';')
+                   header='time;obs;mod;mod_wl', delimiter=';')
 
         # updata dir name
         self._good_run_dir_int += 1
