@@ -1,6 +1,6 @@
 # 1 - nacte merdata.RData
 # 2 - udela csv do adresare obs_data
-load_data = FALSE
+load_data = TRUE
 optim_ = FALSE
 sens_  = TRUE
 obs_dir = 'obs_data'
@@ -36,7 +36,7 @@ mod_file: ',model_out_path,'/point001.dat
 text_sens_cfg <- function(model_out_path, best_fit_dir) {
   return (paste('[SensParams]
 # monte carlo runs
-mcruns: 10000
+mcruns: 1000
 
 [ParamsMargins]
 # X,Y,b and ret are evenly distributed within margins 

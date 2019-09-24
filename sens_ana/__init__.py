@@ -25,6 +25,8 @@ class SensAna(object):
         self._bf_data = cfgs.data
         self._mod_data = None
         self._mod_data_interp = None
+        self._mod_data_interp_wl = None # wl stands for water level
+
         self._cfgs = cfgs
         self._mod_conf = pars.mod_conf
         self._mod_file = self._cfgs.model_file
@@ -165,11 +167,14 @@ class SensAna(object):
         
         params = np.zeros([self._nparams], float)
         params[0] = uniform(self._cfgs.X[0], self._cfgs.X[1])
-        params[1] = uniform(self._cfgs.Y[0], self._cfgs.Y[1])
-        params[2] = uniform(self._cfgs.b[0], self._cfgs.b[1])
+        # params[1] = uniform(self._cfgs.Y[0], self._cfgs.Y[1])
+        # params[2] = uniform(self._cfgs.b[0], self._cfgs.b[1])
+        params[1] = self._cfgs.bfY
+        params[2] = self._cfgs.bfb
         params[3] = self._cfgs.bfKs
         params[4] = self._cfgs.bfS
-        params[5] = uniform(self._cfgs.ret[0], self._cfgs.ret[1])
+        params[5] = self._cfgs.bfret
+        # params[5] = uniform(self._cfgs.ret[0], self._cfgs.ret[1])
 
         return params
     
@@ -190,12 +195,15 @@ class SensAna(object):
 
         :param mc: allows to record good results during monte carlo runs
         """
-
         sm.run(self._mod_conf, params, self._cfgs)
-
+        
         mod_data = self._read_mod_file(self._mod_file)
+        mod_data_wl = self._read_mod_file(self._mod_file, col = 'totalWaterLevel[m]')
+        
         self._mod_data_interp = self._interp_mod_data(
             mod=mod_data, obs=self._bf_data)
+        self._mod_data_interp_wl = self._interp_mod_data(
+            mod=mod_data_wl, obs=self._bf_data)
 
         ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
         ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
@@ -258,7 +266,7 @@ class SensAna(object):
 
     def do_sa(self):
 
-        self._plus_minus_proc()
+        # self._plus_minus_proc()
 
         self._monte_carlo()
 
@@ -281,14 +289,26 @@ class SensAna(object):
 
         path_run = '{0}{sep}{1}'.format(dir_, 'mod_obs.dat', sep=os.sep)
 
-        print_arr = np.zeros([3, n], float)
+
+        print_arr = np.zeros([4, n], float)
         print_arr[0] = self._bf_data.time
         print_arr[1] = self._bf_data.val
         print_arr[2] = self._mod_data_interp.val
+        print_arr[3] = self._mod_data_interp_wl.val
         print_arr = np.transpose(print_arr)
 
         np.savetxt(path_run, print_arr, fmt='%1.4e', comments='',
-                   header='time;obs;mod', delimiter=';')
+                   header='time;obs;mod;mod_wl', delimiter=';')
+
+
+        # print_arr = np.zeros([3, n], float)
+        # print_arr[0] = self._bf_data.time
+        # print_arr[1] = self._bf_data.val
+        # print_arr[2] = self._mod_data_interp.val
+        # print_arr = np.transpose(print_arr)
+
+        # np.savetxt(path_run, print_arr, fmt='%1.4e', comments='',
+                   # header='time;obs;mod', delimiter=';')
 
         # updata dir name
         self._good_run_dir_int += 1
