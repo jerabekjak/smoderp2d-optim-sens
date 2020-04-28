@@ -1,10 +1,10 @@
-# @package model.smoderp2d.core.flow
+# @package smoderp2d.core.flow
 #
 #  Contains Classes and methods resolve
 #  the flow type according the D8 or Mfda algorithm.
 #
 #  Flow algorithms itself  are stores in the package
-#  model.smoderp2d.flow_algorithm.
+#  smoderp2d.flow_algorithm.
 #
 #  Classes defined here assemble the
 #  the algorithms and defines methods to
@@ -13,22 +13,22 @@
 #
 #  Both classes can inherited by the
 #  classes Kinematic or Diffuse in the
-#  package model.smoderp2d.core.kinematic_diffuse
+#  package smoderp2d.core.kinematic_diffuse
 #
 
 
-from model.smoderp2d.core.general import Globals
+from smoderp2d.core.general import Globals
 
-import model.smoderp2d.flow_algorithm.mfd as mfd
-import model.smoderp2d.flow_algorithm.D8 as D8_
-from model.smoderp2d.providers import Logger
+import smoderp2d.flow_algorithm.mfd as mfd
+import smoderp2d.flow_algorithm.D8 as D8_
+from smoderp2d.providers import Logger
 
 # Defines methods for executing the one direction flow algorithm D8.
 #
 #  Can be inherited by the Classes:
 #
-#  - model.smoderp2d.core.kinematic_diffuse.Kinematic
-#  - model.smoderp2d.core.kinematic_diffuse.Diffuse
+#  - smoderp2d.core.kinematic_diffuse.Kinematic
+#  - smoderp2d.core.kinematic_diffuse.Diffuse
 #
 class D8(object):
 
@@ -53,7 +53,7 @@ class D8(object):
     # returns the water volume water flows into cell i , j from the previous time step based on the
     # inflows list, \n
     #
-    # inflows list definition is shown in the method  new_inflows() in the package model.smoderp2d.flow_algorithm.D8
+    # inflows list definition is shown in the method  new_inflows() in the package smoderp2d.flow_algorithm.D8
     #
     #  The total inflow is sum of sheet and rill runoff volume.
     #
@@ -66,8 +66,14 @@ class D8(object):
             bx = self.inflows[i][j][z][1]
             iax = i + ax
             jbx = j + bx
-            insurfflow_from_cell = self.arr[iax][jbx].vol_runoff
-            inrillflow_from_cell = self.arr[iax][jbx].vol_runoff_rill
+            try:
+                insurfflow_from_cell = self.arr[iax][jbx].vol_runoff
+            except:
+                insurfflow_from_cell = 0.0
+            try:
+                inrillflow_from_cell = self.arr[iax][jbx].vol_runoff_rill
+            except:
+                inrillflow_from_cell = 0.0
             inflow_from_cells = inflow_from_cells + \
                 insurfflow_from_cell + inrillflow_from_cell
 
@@ -78,8 +84,8 @@ class D8(object):
 #
 #  Can be inherited by the Classes:
 #
-#  - model.smoderp2d.core.kinematic_diffuse.Kinematic
-#  - model.smoderp2d.core.kinematic_diffuse.Diffuse
+#  - smoderp2d.core.kinematic_diffuse.Kinematic
+#  - smoderp2d.core.kinematic_diffuse.Diffuse
 #
 #  note: The rill flow, if computed, is always defined in terms
 #  of one directions algorithm. In the class Mfda are therefore
@@ -92,7 +98,7 @@ class Mfda(object):
 
         Logger.info("Multiflow direction algorithm")
         self.inflows, fd_rill = mfd.new_mfda(
-            mat_dmt, mat_nan, mat_fd, vpix, spix, rows, cols
+            mat_dem, mat_nan, mat_fd, vpix, spix, rows, cols
         )
         self.inflowsRill = D8_.new_inflows(fd_rill)
 

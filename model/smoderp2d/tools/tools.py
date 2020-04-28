@@ -2,7 +2,6 @@ import os
 import sys
 import numpy as np
 
-
 # Make a asc raster output from a numpy array
 #
 #  only water level in rills and surface are considered
@@ -56,4 +55,3 @@ def make_sub_raster(subArr, G, t, output):
     outName = output + os.sep + 'prubeh' + \
         os.sep + str(int(t)).zfill(10) + 'hsub' + ".asc"
     make_ASC_raster(outName, arr, G)
-

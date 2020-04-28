@@ -1,38 +1,46 @@
-"""The computing area is determined  as well as the boundary cells.
+""" A computation part of the model SMODERP2D is performer in runoff.py
 
-Vypocet probiha v zadanem casovem kroku, pripade je cas kracen podle
-"Couranotva kriteria":
- - vystupy jsou rozdelieny do \b zakladnich a \b doplnkovych, podle zvoleneh typu vypoctu
- - zakladni
- - maximalni vyska haladiny plosneho odtoku
+All date which used by this module was prepared by the provider 
+before this module is loaded. The data are stored in classes Globals 
+GridGlobals.
+
+Classes:
+    FlowControl - class controls the computation flow, e.g. controls the
+    iterations 
+    Runoff - class contains methods which perform the computation
+
 """
 
 import time
 import os
+import numpy as np
 
-from model.smoderp2d.core.general import Globals, GridGlobals
-from model.smoderp2d.core.vegetation import Vegetation
-from model.smoderp2d.core.surface import Surface
-from model.smoderp2d.core.subsurface import Subsurface
-from model.smoderp2d.core.cumulative_max import Cumulative
+from smoderp2d.core.general import Globals, GridGlobals
+from smoderp2d.core.vegetation import Vegetation
+from smoderp2d.core.surface import Surface
+from smoderp2d.core.subsurface import Subsurface
+from smoderp2d.core.cumulative_max import Cumulative
 
-from model.smoderp2d.time_step import TimeStep
-from model.smoderp2d.courant import Courant
+from smoderp2d.time_step import TimeStep
+from smoderp2d.courant import Courant
 
-from model.smoderp2d.tools.times_prt import TimesPrt
-from model.smoderp2d.io_functions import post_proc
-from model.smoderp2d.io_functions import hydrographs as wf
+from smoderp2d.tools.times_prt import TimesPrt
+from smoderp2d.io_functions import post_proc
+from smoderp2d.io_functions import hydrographs as wf
 
-from model.smoderp2d.providers import Logger
+from smoderp2d.providers import Logger
 
-from model.smoderp2d.exceptions import MaxIterationExceeded
-from model.smoderp2d.exceptions import SmoderpError
-from model.smoderp2d.exceptions import IncorrectInfiltrationType
+from smoderp2d.exceptions import MaxIterationExceeded
 
 class FlowControl(object):
-    """FlowControl manage variables contains variables related to main
-    computational loop."""
+    """ Manage variables related to main computational loop. """
+
     def __init__(self):
+        """ Set iteration criteria variables. """
+
+        # number of rows and columns in numpy array
+        r, c = GridGlobals.get_dim()
+
         # type of infiltration
         #  - 0 for philip infiltration is the only
         #    one in current version
@@ -42,35 +50,42 @@ class FlowControl(object):
         # actual time in calculation
         self.total_time = 0.0
 
-        # keep order of a curent rainfall interval
+        # keep order of a current rainfall interval
         self.tz = 0
 
         # stores cumulative interception
-        self.sum_interception = 0
+        self.sum_interception = np.zeros((r, c), float)
 
         # factor deviding the time step for rill calculation
         # currently inactive
         self.ratio = 1
 
-        # naximum amount of iterations
+        # maximum amount of iterations
         self.max_iter = 40
 
-        # current number of wihtin time step iterations
+        # current number of within time step iterations
         self.iter_ = 0
 
+        # defined by save_vars()
+        self.tz_tmp = None
+        self.sum_interception_tmp = np.copy(self.sum_interception)
+
+        # defined by save_ratio()
+        self.ratio_tmp = None
+        
     def save_vars(self):
         """Store tz and sum of interception
         in case of repeating time time stem iteration.
         """
         self.tz_tmp = self.tz
-        self.sum_interception_tmp = self.sum_interception
+        self.sum_interception_tmp = np.copy(self.sum_interception)
 
     def restore_vars(self):
         """Restore tz and sum of interception
         in case of repeating time time stem iteration.
         """
         self.tz = self.tz_tmp
-        self.sum_interception = self.sum_interception_tmp
+        self.sum_interception = np.copy(self.sum_interception_tmp)
 
     def refresh_iter(self):
         """Set current number of iteration to
@@ -78,7 +93,7 @@ class FlowControl(object):
         """
         self.iter_ = 0
 
-    def upload_iter(self):
+    def update_iter(self):
         """Rises iteration count by one
         in case of iteration within a timestep calculation.
         """
@@ -90,7 +105,7 @@ class FlowControl(object):
         return self.iter_ < self.max_iter
 
     def save_ratio(self):
-        """Saves ration in case of interation within time step.
+        """Saves ratio in case of iteration within time step.
         """
         self.ratio_tmp = self.ratio
 
@@ -111,6 +126,8 @@ class FlowControl(object):
 
 class Runoff(object):
     """Performs the calculation.
+
+    run() - this function performs the water level computation
     """
     def __init__(self, provider):
         """Initialize main classes.
@@ -131,23 +148,6 @@ class Runoff(object):
 
         # handling the surface processes
         self.surface = Surface()
-        
-        # instance of infiltration calc
-        # TODO currently only philips infiltation is implemented 
-        if Globals.get_infiltration_type() == 1 :
-            from model.smoderp2d.processes.infiltration import BaseInfiltration
-            self.infiltration = BaseInfiltration(Globals.get_combinatIndex())
-        elif Globals.get_infiltration_type() == 2 :
-            from model.smoderp2d.processes.infiltration.greenampt import GreenAmptInfiltration
-            self.infiltration = GreenAmptInfiltration(Globals.get_combinatIndex())
-        elif Globals.get_infiltration_type() == 3 : 
-            from model.smoderp2d.processes.infiltration.richards import RichardsInfiltration
-            self.infiltration = RichardsInfiltration(Globals.get_combinatIndex())
-        elif Globals.get_infiltration_type() == 4 : 
-            from model.smoderp2d.processes.infiltration.greenamptunsteadyrain import GreenAmptInfiltrationUnsteadyRain
-            self.infiltration = GreenAmptInfiltrationUnsteadyRain(Globals.get_combinatIndex())
-        else :
-            raise IncorrectInfiltrationType(Globals.get_infiltration_type())
 
         # class handling the subsurface processes if desir
         # TODO: include in data preprocessing
@@ -218,12 +218,32 @@ class Runoff(object):
         Logger.info('-' * 80)
 
     def run(self):
+        """ The computation of the water level development 
+        is performed here. 
+        
+        The *main loop* which goes through time steps
+        has *nested loop* for iterations (in case the 
+        computation does not converge).
+
+        The computation has been divided in two parts
+        First, in iteration (*nested*) loop is calculated 
+        the surface runoff (to which is the time step 
+        sensitive) in a function time_step.do_flow()
+
+        Next water balance is performed at each cell of the 
+        raster. Water level in next time step is calculated by 
+        a function time_step.do_next_h().
+
+        Selected values are stored in at the end of each loop.
+        """
+
+
         # saves time before the main loop
-        start = time.time()
         Logger.info('Start of computing...')
+        Logger.start_time = time.time()
 
         # main loop: until the end time
-        i = j = 0
+        i = j = 0 # TODO: rename vars (variable overlap)
         while self.flow_control.compare_time(Globals.end_time):
 
             self.flow_control.save_vars()
@@ -232,7 +252,7 @@ class Runoff(object):
             # iteration loop
             while self.flow_control.max_iter_reached():
 
-                self.flow_control.upload_iter()
+                self.flow_control.update_iter()
                 self.flow_control.restore_vars()
 
                 # reset of the courant condition
@@ -269,7 +289,6 @@ class Runoff(object):
                 self.subsurface,
                 self.rain_arr,
                 self.cumulative,
-                self.infiltration,
                 self.hydrographs,
                 self.flow_control,
                 self.courant,
@@ -362,16 +381,20 @@ class Runoff(object):
 
                     self.surface.arr[i][j].h_total_pre = self.surface.arr[i][j].h_total_new
 
-        Logger.info('Saving data...')
 
-        Logger.info('')
-        Logger.info('-' * 80)
-        Logger.info('Total computing time: {}'.format(time.time() - start))
+        # perform postprocessing - store results
+        Logger.info('Saving output data...')
+        self.provider.postprocessing(self.cumulative, self.surface.arr,
+                self.surface.reach)
 
         # TODO
-        # post_proc.do(self.cumulative, Globals.mat_slope, Gl, self.surface.arr)
+        # post_proc.stream_table(Globals.outdir + os.sep, self.surface,
+        #                        Globals.streams_loc)
 
-        post_proc.stream_table(Globals.outdir + os.sep, self.surface, Globals.toky_loc)
+        Logger.info('-' * 80)
+        Logger.info('Total computing time: {}'.format(
+            time.time() - Logger.start_time)
+        )
 
         # TODO: print stats in better way
         # import platform

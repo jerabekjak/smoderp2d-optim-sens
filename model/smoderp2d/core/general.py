@@ -1,6 +1,6 @@
 import numpy as np
 
-from model.smoderp2d.exceptions import SmoderpError
+from smoderp2d.exceptions import SmoderpError
 
 class Size(object):
     @staticmethod
@@ -42,8 +42,6 @@ class GridGlobals(object):
     dx = None
     # size of raster cell
     dy = None
-    # domain area
-    domain_area = None
 
     def __init__(self):
         if self.r is None or self.c is None:
@@ -60,6 +58,10 @@ class GridGlobals(object):
         return cls.pixel_area
 
     @classmethod
+    def set_pixel_area(cls, pa):
+        cls.pixel_area = pa
+
+    @classmethod
     def get_region_dim(cls):
         return (cls.rr, cls.rc)
 
@@ -72,8 +74,18 @@ class GridGlobals(object):
         return (cls.xllcorner, cls.yllcorner)
 
     @classmethod
+    def set_llcorner(cls, xy):
+        cls.xllcorner = xy[0]
+        cls.yllcorner = xy[1]
+
+    @classmethod
     def get_size(cls):
         return (cls.dx, cls.dy)
+
+    @classmethod
+    def set_size(cls, dxdy):
+        cls.dx = dxdy[0]
+        cls.dy = dxdy[1]
 
     @classmethod
     def get_no_data(cls):
@@ -124,9 +136,9 @@ class Globals:
     # raster contains flow direction datas
     mat_fd = None
     # raster contains digital elevation model
-    mat_dmt = None
+    mat_dem = None
     # raster contains efective couterline data
-    mat_efect_vrst = None
+    mat_efect_cont = None
     # raster contains surface slopes data
     mat_slope = None
     # raster labels not a number cells
@@ -157,22 +169,19 @@ class Globals:
     # counter of precipitation intervals
     itera = None
     # ???
-    toky = None
+    streams = None
     # ???
     cell_stream = None
     # raster contains the reach id data
-    mat_tok_reach = None
+    mat_stream_reach = None
     # ???
     STREAM_RATIO = None
     # ???
-    toky_loc = None
-    # ???
+    streams_loc = None
+    # maximum allowed time step during compuation
     maxdt = None
-    # ???
+    # if true extra data are stores in the point*.dat files
     extraOut = None
-    # infiltration_type
-    infiltration_type = None
-    
 
     @classmethod
     def get_type_of_computing(cls):
@@ -236,12 +245,12 @@ class Globals:
         return cls.mat_fd
 
     @classmethod
-    def get_mat_dmt(cls):
-        return cls.mat_dmt
+    def get_mat_dem(cls):
+        return cls.mat_dem
 
     @classmethod
-    def get_mat_efect_vrst(cls):
-        return cls.mat_efect_vrst
+    def get_mat_efect_cont(cls):
+        return cls.mat_efect_cont
 
     @classmethod
     def get_mat_slope(cls, i, j):
@@ -300,27 +309,21 @@ class Globals:
         return cls.itera
 
     @classmethod
-    def get_toky(cls):
-        return cls.toky
+    def get_streams(cls):
+        return cls.streams
 
     @classmethod
     def get_cell_stream(cls):
         return cls.cell_stream
 
     @classmethod
-    def get_mat_tok_reach(cls, i, j):
-        return cls.mat_tok_reach[i][j]
+    def get_mat_stream_reach(cls, i, j):
+        return cls.mat_stream_reach[i][j]
 
     @classmethod
     def get_STREAM_RATIO(cls):
         return cls.STREAM_RATIO
 
     @classmethod
-    def get_toky_loc(cls):
-        return cls.toky_loc
-    
-    @classmethod
-    def get_infiltration_type(cls):
-        #TODO 1 stands for philips infiltration
-        #     the philips infiltration is the only implemented now
-        return cls.infiltration_type
+    def get_streams_loc(cls):
+        return cls.streams_loc

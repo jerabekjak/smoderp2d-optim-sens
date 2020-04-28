@@ -2,12 +2,12 @@ import numpy as np
 import math
 
 
-from model.smoderp2d.core.general import GridGlobals, Globals, Size
-from model.smoderp2d.core.kinematic_diffuse import Kinematic
-from model.smoderp2d.exceptions import SmoderpError
-from model.smoderp2d.providers import Logger
+from smoderp2d.core.general import GridGlobals, Globals, Size
+from smoderp2d.core.kinematic_diffuse import Kinematic
+from smoderp2d.exceptions import SmoderpError
+from smoderp2d.providers import Logger
 
-import model.smoderp2d.processes.subsurface as darcy
+import smoderp2d.processes.subsurface as darcy
 
 class SubArrs:
     def __init__(self, L_sub, Ks, vg_n, vg_l, z, ele):
@@ -55,8 +55,8 @@ class SubsurfaceC(GridGlobals, Diffuse if Globals.diffuse else Kinematic, Size):
                     Ks,
                     vg_n,
                     vg_l,
-                    mat_dmt[i][j] - L_sub,
-                    mat_dmt[i][j])
+                    mat_dem[i][j] - L_sub,
+                    mat_dem[i][j])
 
         for i in self.rr:
             for j in self.rc[i]:

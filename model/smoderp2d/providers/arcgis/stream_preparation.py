@@ -1,185 +1,192 @@
-#!/usr/bin/python
-# -*- coding: latin-1 -*-
 # SMODERP 2D
 # Created by Tomas Edlman, CTU Prague, 2015-2016
 
-# posledni uprava
-__author__ = "edlman"
-__date__ = "$29.12.2015 18:20:20$"
-
-from model.smoderp2d.providers.arcgis.dmtfce import dmtfce
-
-
-# importing system moduls
-import arcpy
-import arcgisscripting
-import shutil
 import os
 import sys
-import numpy as np
+import arcpy
 from arcpy.sa import *
-import math
 
-from model.smoderp2d.providers.base import Logger
+from smoderp2d.providers.base import Logger
+from smoderp2d.providers.base.stream_preparation import StreamPreparationBase
+from smoderp2d.providers.base.stream_preparation import StreamPreparationError, ZeroSlopeError
+from smoderp2d.providers.arcgis.manage_fields import ManageFields
 
-from model.smoderp2d.providers.base.stream_preparation import StreamPreparationBase, Error, ZeroSlopeError
+class StreamPreparation(StreamPreparationBase, ManageFields):
+    def __init__(self, args, writter):
+        super(StreamPreparation, self).__init__(args, writter)
 
-class StreamPreparation(StreamPreparationBase):
-
-    def __init__(self, input):
-        super(StreamPreparation, self).__init__(input)
-        
-        # Overwriting output
-        arcpy.env.overwriteOutput = 1
-        
         # Check extensions
         arcpy.CheckOutExtension("3D")
         arcpy.CheckOutExtension("Spatial")
 
-        arcpy.env.snapRaster = self.dmt
-
-
-    def _set_output(self):
-        """
-        Define output temporary folder and geodatabase.
-        """
-        # Set output
-        self.temp = os.path.join(self.output, "stream_prep")
-        if not os.path.exists(self.temp):
-            os.makedirs(self.temp)
-        self.tempgdb = arcpy.CreateFileGDB_management(
-            self.temp, "stream_prep.gdb"
-        )
+        arcpy.env.snapRaster = self.dem
 
     def _setnull(self):
+        """Define mask.
         """
-        Setnull calculation.
-        """
-
-        # WATER FLOWS ACCORDING DMT:
-        dmt_fill, flow_direction, flow_accumulation, slope = \
-            dmtfce(self.dmt_clip, self.temp, None)
 
         try:
             setnull = arcpy.sa.SetNull(
-                flow_accumulation, 1, "VALUE < 300")  # hodnota value??
-            setnull.save(os.path.join(self.temp, "setnull"))
+                self.flow_accumulation_clip, 1, "VALUE < 300"
+            )
+            setnull.save(self.storage.output_filepath('setnull'))
         except:
-            Logger.critical(
-                "Unexpected error during setnull calculation: " + sys.exc_info()[0])
-            raise Exception("Unexpected error during setnull calculation: " + sys.exc_info()[0])
+            raise StreamPreparationError(
+                "Unexpected error during setnull calculation: {}".format(
+                    sys.exc_info()[0]
+                ))
 
-    def _clip_streams(self):
+    def _clip_stream(self):
         """
-        Clip streams with intersect of input data (from data_preparation).
-        :return toky:
-        :return toky_loc:
+        Clip stream with intersect of input data (from data_preparation).
+
+        :return stream:
+        :return stream_loc:
         """
 
-        # WATER FLOWS ACCORDING DIBAVOD:
-        # Clip
-        toky = os.path.join(self.temp, "toky.shp")
-        toky_loc = os.path.join(self.temp, "toky.shp")
-        hranice = os.path.join(self.temp, "hranice.shp")
-        hranice = arcpy.Clip_analysis(
-            self.null, self.intersect, hranice
-        )
-        hranice_buffer = arcpy.Buffer_analysis(
-            hranice,
-            os.path.join(self.temp, "hranice_buffer.shp"),
-            -self.spix / 3, "FULL", "ROUND", "NONE")
+#        stream = os.path.join(
+#            self.temp, "{}.shp".format(self._data['stream'])
+#        )
+#        stream_loc = os.path.join(
+#            self.temp, "{}.shp".format(self._data['stream_loc'])
+#        )
+#        aoi = os.path.join(
+#            self.temp, "{}.shp".format(self._data['aoi'])
+#        )
 
-        toky = arcpy.Clip_analysis(
-            self.stream, hranice_buffer, toky
+#        aoi_buffer = arcpy.Buffer_analysis(
+#            aoi,
+#            os.path.join(self.temp, "{}.shp".format(self._data['aoi_buffer'])),
+#            -self.spix / 3, "FULL", "ROUND", "NONE"
+#        )
+
+        stream = self.storage.output_filepath('stream', item='')
+        stream_loc = self.storage.output_filepath('stream_loc')
+        aoi = self.storage.output_filepath('aoi')
+
+        aoi = arcpy.Clip_analysis(
+            self.null, self.intersect, aoi
         )
 
-        # MK - nevim proc se maze neco, co v atributove tabulce vubec neni
+        aoi_buffer = arcpy.Buffer_analysis(
+            aoi,
+            self.storage.output_filepath('aoi_buffer'),
+            -self.spix / 3, "FULL", "ROUND", "NONE"
+        )
+
+        stream = arcpy.Clip_analysis(
+            self.stream, aoi_buffer, stream
+        )
+
+        # TODO: MK - nevim proc se maze neco, co v atributove tabulce vubec neni
         self._delete_fields(
-            toky, ["EX_JH", "POZN", "PRPROP_Z", "IDVT", "UTOKJ_ID", "UTOKJN_ID", "UTOKJN_F"]
+            stream,
+            ["EX_JH", "POZN", "PRPROP_Z", "IDVT", "UTOKJ_ID", "UTOKJN_ID", "UTOKJN_F"]
         )
 
-        return toky, toky_loc
+        return stream, stream_loc # TODO: where defined ?
 
-    def _delete_fields(self, table, fields):
-        arcpy.DeleteField_management(table, fields)
-
-    def _stream_direction(self, toky):
+    def _stream_direction(self, stream):
         """
         Compute elevation of start/end point of stream parts.
         Add code of ascending stream part into attribute table.
-        :param toky:
-        :return:
+        
+        :param stream: vector stream features
         """
         # TODO: vyresit mazani atributu v atributove tabulce (jestli je to potreba)
         # TODO: vyresit nasledujici:
-        # Nasledujici blok je redundantni, nicmene do "toky" pridava nekolik sloupecku, u kterych jsem nemohl dohledat,
+        #
+        # Nasledujici blok je redundantni, nicmene do "stream"
+        # pridava nekolik sloupecku, u kterych jsem nemohl dohledat,
         # jestli se s nimi neco dela. Proto to tu zatim nechavam.
-        #--------------------------------------------------------------------------------------------------------------
+
+#        start = arcpy.FeatureVerticesToPoints_management(
+#            stream, os.path.join(self.temp, self._data["start"]), "START"
+#        )
+
+#        end = arcpy.FeatureVerticesToPoints_management(
+#            stream, os.path.join(self.temp, self._data["end"]), "END"
+#        )
+
         start = arcpy.FeatureVerticesToPoints_management(
-            toky, os.path.join(self.temp, "start"), "START"
+            stream, self.storage.output_filepath("start"), "START"
         )
+
         end = arcpy.FeatureVerticesToPoints_management(
-            toky, os.path.join(self.temp, "end"), "END"
+            stream, self.storage.output_filepath("end"), "END"
         )
         arcpy.sa.ExtractMultiValuesToPoints(
-            start, [[self.dmt_clip, "start_elev"]], "NONE"
+            start, [[self.dem_clip, self._data["start_elev"]]], "NONE"
         )
         arcpy.sa.ExtractMultiValuesToPoints(
-            end, [[self.dmt_clip, "end_elev"]], "NONE"
+            end, [[self.dem_clip, self._data["end_elev"]]], "NONE"
         )
 
         # Join
-        self._join_table(toky, "FID", start, "ORIG_FID")
-        self._join_table(toky, "FID", end, "ORIG_FID")
+        self._join_table(stream, self._primary_key, start, "ORIG_FID")
+        self._join_table(stream, self._primary_key, end, "ORIG_FID")
 
-        self._delete_fields(toky,
-                            ["SHAPE_LEN", "SHAPE_LENG", "SHAPE_LE_1", "NAZ_TOK_1", "TOK_ID_1", "SHAPE_LE_2",
-                             "SHAPE_LE_3", "NAZ_TOK_12", "TOK_ID_12", "SHAPE_LE_4", "ORIG_FID_1"]
+        self._delete_fields(
+            stream,
+            ["SHAPE_LEN", "SHAPE_LENG", "SHAPE_LE_1", "NAZ_TOK_1", "TOK_ID_1", "SHAPE_LE_2",
+             "SHAPE_LE_3", "NAZ_TOK_12", "TOK_ID_12", "SHAPE_LE_4", "ORIG_FID_1"]
         )
-        self._delete_fields(toky,
-                            ["start_elev", "end_elev", "ORIG_FID", "ORIG_FID_1"]
+        self._delete_fields(
+            stream,
+            ["start_elev", "end_elev", "ORIG_FID", "ORIG_FID_1"]
         )
-        #--------------------------------------------------------------------------------------------------------------
 
         start = arcpy.FeatureVerticesToPoints_management(
-            toky, self.temp + os.sep + "start", "START")
+            stream, self.storage.output_filepath("start"), "START")
+
         end = arcpy.FeatureVerticesToPoints_management(
-            toky, self.temp + os.sep + "end", "END")
+            stream, self.storage.output_filepath("end"), "END")
+
         arcpy.sa.ExtractMultiValuesToPoints(
             start,
-            [[self.dmt_clip, "start_elev"]], "NONE"
+            [[self.dem_clip, "start_elev"]], "NONE"
         )
         arcpy.sa.ExtractMultiValuesToPoints(
-            end, [[self.dmt_clip, "end_elev"]], "NONE"
+            end, [[self.dem_clip, "end_elev"]], "NONE"
         )
         arcpy.AddXY_management(start)
         arcpy.AddXY_management(end)
 
         # Join
-        self._join_table(toky, "FID", start, "ORIG_FID")
-        self._join_table(toky, "FID", end, "ORIG_FID")
+        self._join_table(stream, self._primary_key, start, "ORIG_FID")
+        self._join_table(stream, self._primary_key, end, "ORIG_FID")
 
-        self._delete_fields(toky,
-                            ["NAZ_TOK_1", "NAZ_TOK_12", "TOK_ID_1", "TOK_ID_12"]
+        self._delete_fields(
+            stream,
+            ["NAZ_TOK_1", "NAZ_TOK_12", "TOK_ID_1", "TOK_ID_12"]
         )
 
-        field = ["FID", "start_elev", "POINT_X", "end_elev", "POINT_X_1"]
-
-        with arcpy.da.SearchCursor(toky, field) as cursor:
+        field = [self._primary_key, "start_elev", "POINT_X", "end_elev", "POINT_X_1"]
+        with arcpy.da.SearchCursor(stream, field) as cursor:
             for row in cursor:
                 if row[1] > row[3]:
                     continue
-                else:
-                    arcpy.FlipLine_edit(toky)
-        self._add_field(toky, "to_node", "DOUBLE", -9999)
+                arcpy.FlipLine_edit(stream) ### TODO: ? all
+        self._add_field(stream, "to_node", "DOUBLE", -9999)
 
-        field_start = ["FID", "POINT_X", "POINT_Y", "POINT_X_1", "POINT_Y_1", "to_node"]
-        field_end = ["FID", "POINT_X", "POINT_Y", "POINT_X_1", "POINT_Y_1", "to_node"]
-        with arcpy.da.SearchCursor(toky, field_start) as cursor_start:
+        fields = [self._primary_key, "POINT_X", "POINT_Y", "POINT_X_1", "POINT_Y_1", "to_node"]
+
+        # if stream is saved in gdb, it's id field begins with 1
+        # in further computation (stream.py) it would exceed array length
+        # MK 4.4.19
+        fid_offset_flag = True
+        fid_offset = 0
+        with arcpy.da.SearchCursor(stream, fields) as cursor_start:
             for row in cursor_start:
+
+                if fid_offset_flag:
+                    fid_offset = row[0]
+                    fid_offset_flag = False
+
                 a = (row[1], row[2])
-                d = row[0]
-                with arcpy.da.UpdateCursor(toky, field_end) as cursor_end:
+                d = row[0] - fid_offset
+
+                with arcpy.da.UpdateCursor(stream, fields) as cursor_end:
                     for row in cursor_end:
                         b = (row[3], row[4])
                         if a == b:
@@ -189,125 +196,118 @@ class StreamPreparation(StreamPreparationBase):
                             row[5] = "-9999"
 
         self._delete_fields(
-            toky,
+            stream,
             ["SHAPE_LEN", "SHAPE_LE_1", "SHAPE_LE_2", "SHAPE_LE_3", "SHAPE_LE_4", "SHAPE_LE_5",
              "SHAPE_LE_6", "SHAPE_LE_7", "SHAPE_LE_8", "SHAPE_LE_9", "SHAPE_L_10", "SHAPE_L_11",
              "SHAPE_L_12", "SHAPE_L_13", "SHAPE_L_14"]
         )
         
         self._delete_fields(
-            toky, ["ORIG_FID", "ORIG_FID_1", "SHAPE_L_14"]
+            stream, ["ORIG_FID", "ORIG_FID_1", "SHAPE_L_14"]
         )
 
-    def _get_mat_tok_usek(self, toky):
+    def _get_mat_stream_seg(self, stream):
+        """Get numpy array of integers detecting whether there is a stream on
+        corresponding pixel of raster (number equal or greater than
+        1000 in return numpy array) or not (number 0 in return numpy
+        array).
+
+        :param stream: Polyline with stream in the area.
+        :return mat_stream_seg: Numpy array
         """
-        Get numpy array of integers detecting whether there is a stream on corresponding pixel of raster (number equal
-        or greater than 1000 in return numpy array) or not (number 0 in return numpy array).
-
-        :param toky: Polyline with streams in the area.
-        :return mat_tok_usek: Numpy array
-        """
-
-        stream_rst1 = os.path.join(self.temp, "stream_rst")
-        stream_rst = arcpy.PolylineToRaster_conversion(
-            toky, "FID", stream_rst1, "MAXIMUM_LENGTH", "NONE", self.spix
+        stream_seg = self.storage.output_filepath('stream_seg')
+        arcpy.PolylineToRaster_conversion(
+            stream, self._primary_key, stream_seg,
+            "MAXIMUM_LENGTH", "NONE", self.spix
         )
-        tok_usek = os.path.join(self.temp, "tok_usek")
 
-        arcpy.gp.Reclassify_sa(
-            stream_rst, "VALUE", "NoDataValue 1000", tok_usek, "DATA"
-        )
-        mat_tok_usek = arcpy.RasterToNumPyArray(
-            tok_usek, self.ll_corner, self.cols, self.rows
-        )
-        mat_tok_usek = mat_tok_usek.astype('int16')
+        # TODO: reclassification rule is invalid, stream_seg is the same as stream_rst
+        # stream_seg = self.storage.output_filepath('stream_seg')
+        # arcpy.gp.Reclassify_sa(
+        #     stream_rst, "VALUE",
+        #     "NoDataValue 1000", stream_seg, "DATA"
+        # )
 
-        count = arcpy.GetCount_management(tok_usek)
+        ll_corner = arcpy.Point(
+            self.ll_corner[0], self.ll_corner[1]
+        )
+        mat_stream_seg = arcpy.RasterToNumPyArray(
+            stream_seg, ll_corner, self.cols, self.rows
+        )
+        mat_stream_seg = mat_stream_seg.astype('int16')
+
+        # TODO: is no_of_streams needed (-> mat_stream_seg.max())
+        count = arcpy.GetCount_management(stream_seg)
         no_of_streams = int(count.getOutput(0))
-
-        # each element of stream has a number assigned from 0 to no. of stream parts
-        for i in range(self.rows):
-            for j in range(self.cols):
-                if mat_tok_usek[i][j] > no_of_streams - 1:
-                    mat_tok_usek[i][j] = 0
-                else:
-                    mat_tok_usek[i][j] += 1000
+        self._get_mat_stream_seg_(mat_stream_seg, no_of_streams)
         
-        return mat_tok_usek
+        return mat_stream_seg
 
+    def _stream_slope(self, stream):
+        """
+        :param stream:
+        """
+        fields = [self._primary_key, "start_elev", "end_elev", "slope", "SHAPE@LENGTH", "length"]
 
-    def _stream_slope(self, toky):
-        """
-        :param toky:
-        """
-        # sklon
-        field = ["FID", "start_elev", "end_elev", "sklon", "SHAPE@LENGTH", "length"]
-        with arcpy.da.UpdateCursor(toky, field) as cursor:
+        with arcpy.da.UpdateCursor(stream, fields) as cursor:
             for row in cursor:
-                sklon_koryta = (row[1] - row[2]) / row[4]
-                if sklon_koryta == 0:
+                slope = (row[1] - row[2]) / row[4]
+                if slope == 0:
                     raise ZeroSlopeError(row[0])
-                row[3] = sklon_koryta
-                cursor.updateRow(row)
+                row[3] = slope
+                cursor.updateRow(row) # needed?
                 row[5] = row[4]
                 cursor.updateRow(row)
 
-    def _get_tokylist(self, toky):
-        """
-        Compute shape of streams.
-        :param toky:
-        """
+    def _get_streamlist(self, stream):
+        """Compute shape of stream.
 
-        # tvar koryt
-        stream_tvar_dbf = os.path.join(self.temp, "stream_tvar.dbf")
-        arcpy.CopyRows_management(self.tab_stream_tvar, stream_tvar_dbf)
-        sfield = ["cislo", "smoderp", "tvar", "b", "m", "drsnost", "Q365"]
+        :param stream:
+        """
+        stream_shape_dbf = self.storage.output_filepath('stream_shape')
+        arcpy.CopyRows_management(self.tab_stream_shape, stream_shape_dbf)
 
         try:
+            # TODO: hardcoded columns
             self._join_table(
-                toky, self.tab_stream_tvar_code, stream_tvar_dbf,
-                self.tab_stream_tvar_code,
-                "cislo;tvar;b;m;drsnost;Q365"
+                stream, self.tab_stream_shape_code, stream_shape_dbf,
+                self.tab_stream_shape_code,
+                "number;shapetype;b;m;roughness;Q365"
             )
         except:
-            self._add_field(toky, "smoderp", "TEXT", "0")
-            self._join_table(toky, self.tab_stream_tvar_code,
-                             stream_tvar_dbf, self.tab_stream_tvar_code,
-                             "cislo;tvar;b;m;drsnost;Q365")
+            self._add_field(stream, "smoderp", "TEXT", "0")
+            self._join_table(stream, self.tab_stream_shape_code,
+                             stream_shape_dbf, self.tab_stream_shape_code,
+                             "number;shapetype;b;m;roughness;Q365")
 
-        with arcpy.da.SearchCursor(toky, sfield) as cursor:
-            for row in cursor:
-                for i in range(len(row)):
-                    if row[i] == " ":
-                        Logger.info(
-                            "Value in tab_stream_tvar are no correct - STOP, check shp file toky in output")
-                        # sys.exit() -> raise
+        sfields = ["number", "smoderp", "shapetype", "b", "m", "roughness", "Q365"]
+        with arcpy.da.SearchCursor(stream, sfields) as cursor:
+            try:
+                for row in cursor:
+                    for i in range(len(row)):
+                        if row[i] == " ":
+                            raise StreamPreparationError(
+                                "Empty value in tab_stream_shape found."
+                            )
+            except RuntimeError: 
+                raise StreamPreparationError(
+                        "Check if fields code in tab_stream_shape are correct. Columns are hardcoded. Proper columns codes are: {}".format(sfields)
+                )
 
-        fields = arcpy.ListFields(toky)
+        fields = arcpy.ListFields(stream)
         self.field_names = [field.name for field in fields]
-        self.toky_tmp = [[] for field in fields]
+        self.stream_tmp = [[] for field in fields]
 
-        for row in arcpy.SearchCursor(toky):
+        for row in arcpy.SearchCursor(stream):
             field_vals = [row.getValue(field) for field in self.field_names]
-            # field_vals
             for i in range(len(field_vals)):
-                self.toky_tmp[i].append(field_vals[i])
+                self.stream_tmp[i].append(field_vals[i])
 
-        self.tokylist = []
-        self._append_value('FID')
-        self._append_value('POINT_X')
-        self._append_value('POINT_Y')
-        self._append_value('POINT_X_1')
-        self._append_value('POINT_Y_1')
-        self._append_value('to_node')
-        self._append_value('length')
-        self._append_value('sklon')
+        # check if ID field starts from 1, if so, make it start from 0
+        # it could not be done in stream feature class, bcs it's id field is locked
+        # MK 4.4.19
+        if self.stream_tmp[0][0] == 1:
+            for i in range(len(self.stream_tmp[0])):
+                self.stream_tmp[0][i] -= 1
 
-        self._append_value('smoderp', 'SMODERP')
-        self._append_value('cislo', 'CISLO')
-        self._append_value('tvar','TVAR')
-        self._append_value('b', 'B')
-        self._append_value('m', 'M')
-        self._append_value('drsnost', 'DRSNOST')
-        self._append_value('q365', 'Q365')
-
+        self._streamlist()
