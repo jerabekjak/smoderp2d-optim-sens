@@ -1,5 +1,5 @@
 # TODO: cyclic import...
-from smoderp2d.providers import Logger
+from model.smoderp2d.providers import Logger
 
 class SmoderpError(Exception):
     def __init__(self, msg):

@@ -1,5 +1,5 @@
-from model.smoderp2d.core.general import GridGlobals
-from model.smoderp2d.processes.infiltration import BaseInfiltration
+from model.model.smoderp2d.core.general import GridGlobals
+from model.model.smoderp2d.processes.infiltration import BaseInfiltration
 from scipy.optimize import newton
 
 import math
@@ -94,7 +94,7 @@ class GreenAmptInfiltration(BaseInfiltration):
     def __init__(self, soils_data):
         """ make instance of SingleSoilGA for each soil type 
 
-        :param soils_data: combinat_index in the smoderp2d code
+        :param soils_data: combinat_index in the model.smoderp2d.code
         """
 
         self._n = len(soils_data)

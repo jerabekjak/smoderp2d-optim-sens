@@ -1,8 +1,8 @@
 import sys
 import time
 import os
-import model.smoderp2d.constants as constants
-from model.smoderp2d.tools.tools import get_argv
+import model.model.smoderp2d.constants as constants
+from model.model.smoderp2d.tools.tools import get_argv
 
 arcgis = get_argv(constants.PARAMETER_ARCGIS)
 debugInfo = get_argv(constants.PARAMETER_DEBUG_PRT)

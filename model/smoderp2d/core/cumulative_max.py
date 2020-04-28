@@ -1,4 +1,4 @@
-# @package smoderp2d.core.cumulative_max
+# @package model.smoderp2d.core.cumulative_max
 #
 #  package contains classes save the cumulative or maximum
 #  values of the results in each time step.
@@ -7,8 +7,8 @@
 
 import numpy as np
 
-from smoderp2d.providers import Logger
-from smoderp2d.core.general import GridGlobals, Globals
+from model.smoderp2d.providers import Logger
+from model.smoderp2d.core.general import GridGlobals, Globals
 
 class CumulativeData:
     def __init__(self, data_type, file_name):

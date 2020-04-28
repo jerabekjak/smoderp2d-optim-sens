@@ -8,10 +8,10 @@ import pickle
 import logging
 import numpy as np
 
-from smoderp2d.providers import Logger
-from smoderp2d.providers.base.exceptions import DataPreparationError
-from smoderp2d.core.general import GridGlobals, DataGlobals, Globals
-from smoderp2d.exceptions import ProviderError
+from model.smoderp2d.providers import Logger
+from model.smoderp2d.providers.base.exceptions import DataPreparationError
+from model.smoderp2d.core.general import GridGlobals, DataGlobals, Globals
+from model.smoderp2d.exceptions import ProviderError
 
 class Args:
     # type of computation (CompType)
@@ -24,7 +24,7 @@ class Args:
 class CompType:
     # type of computation
     dpre = 0
-    roff = 1
+    roff = 'roff' # fix just for smoderp optimalization
     full = 2
 
     @classmethod
@@ -114,7 +114,7 @@ class BaseProvider(object):
 
         :return dict: loaded data
         """
-        from smoderp2d.processes import rainfall
+        from model.smoderp2d.processes import rainfall
 
         # the data are loared from a pickle file
         try:

@@ -2,7 +2,7 @@ import arcpy
 import sys
 import os
 
-from smoderp2d.exceptions import ProviderError
+from model.smoderp2d.exceptions import ProviderError
 
 def compute_products(elev, save_dir, fldir=None):
     """

@@ -1,10 +1,10 @@
-# @package smoderp2d.stream_functions.stream_f Module to calculate the stream reaches runoff.
+# @package model.smoderp2d.stream_functions.stream_f Module to calculate the stream reaches runoff.
 
 import math
 import sys
 from inspect import currentframe, getframeinfo
 
-from smoderp2d.providers import Logger
+from model.smoderp2d.providers import Logger
 
 # Jen na debug, umi to zjistit nazev souboru a radek odkud se\n
 #  <em>print frameinfo.filename, frameinfo.lineno</em>\n

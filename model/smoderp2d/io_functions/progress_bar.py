@@ -1,6 +1,6 @@
-import model.smoderp2d.constants as constants
-from model.smoderp2d.tools.tools import get_argv
-import model.smoderp2d.io_functions.prt as prt
+import model.model.smoderp2d.constants as constants
+from model.model.smoderp2d.tools.tools import get_argv
+import model.model.smoderp2d.io_functions.prt as prt
 import time
 
 

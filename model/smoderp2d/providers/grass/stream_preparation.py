@@ -6,9 +6,9 @@ from grass.pygrass.modules import Module
 from grass.pygrass.raster import raster2numpy
 from grass.pygrass.vector import Vector, VectorTopo
 
-from smoderp2d.providers.base.stream_preparation import StreamPreparationBase
-from smoderp2d.providers.base.stream_preparation import StreamPreparationError, ZeroSlopeError
-from smoderp2d.providers.grass.manage_fields import ManageFields
+from model.smoderp2d.providers.base.stream_preparation import StreamPreparationBase
+from model.smoderp2d.providers.base.stream_preparation import StreamPreparationError, ZeroSlopeError
+from model.smoderp2d.providers.grass.manage_fields import ManageFields
 
 class StreamPreparation(StreamPreparationBase, ManageFields):
     def __init__(self, args, writter):

@@ -1,4 +1,4 @@
-# @package smoderp2d.post_proc Contain a function for the post-processing
+# @package model.smoderp2d.post_proc Contain a function for the post-processing
 
 import numpy as np
 import os
@@ -6,9 +6,9 @@ import sys
 import shutil
 
 
-import smoderp2d.tools.tools as tools
-from smoderp2d.core.general import Globals as Gl
-from smoderp2d.core.general import GridGlobals as GG
+import model.smoderp2d.tools.tools as tools
+from model.smoderp2d.core.general import Globals as Gl
+from model.smoderp2d.core.general import GridGlobals as GG
 
 def do(cumulative, mat_slope, G, surArr):
 

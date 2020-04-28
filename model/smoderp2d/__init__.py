@@ -23,7 +23,7 @@ The computational options are as follows:
 
 #import os
 #
-#from smoderp2d.providers.base import CompType
+#from model.smoderp2d.providers.base import CompType
 #from .providers.base.exceptions import DataPreparationInvalidInput
 #from .exceptions import SmoderpError
 #
@@ -34,16 +34,16 @@ The computational options are as follows:
 #    def _provider_factory(self):
 #        # initialize provider
 #        if os.getenv('ESRIACTIVEINSTALLATION'):
-#            from smoderp2d.providers.arcgis import ArcGisProvider
+#            from model.smoderp2d.providers.arcgis import ArcGisProvider
 #            provider_class = ArcGisProvider
 #        elif os.getenv('GISRC'):
-#            from smoderp2d.providers.grass import GrassGisProvider
+#            from model.smoderp2d.providers.grass import GrassGisProvider
 #            provider_class = GrassGisProvider
 #        elif isinstance(self, WpsRunner):
-#            from smoderp2d.providers.wps import WpsProvider
+#            from model.smoderp2d.providers.wps import WpsProvider
 #            provider_class = WpsProvider
 #        else:
-#            from smoderp2d.providers.cmd import CmdProvider
+#            from model.smoderp2d.providers.cmd import CmdProvider
 #            provider_class = CmdProvider
 #        provider = provider_class()
 #
@@ -75,7 +75,7 @@ The computational options are as follows:
 #            return
 #
 #        # must be called after initialization (!)
-#        from smoderp2d.runoff import Runoff
+#        from model.smoderp2d.runoff import Runoff
 #        # the computation
 #        runoff = Runoff(self._provider)
 #        runoff.run()

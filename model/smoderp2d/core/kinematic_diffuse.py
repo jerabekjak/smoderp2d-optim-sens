@@ -1,8 +1,8 @@
-from smoderp2d.core.general import Globals
-from smoderp2d.core.flow import *
-from smoderp2d.providers import Logger
+from model.smoderp2d.core.general import Globals
+from model.smoderp2d.core.flow import *
+from model.smoderp2d.providers import Logger
 
-import smoderp2d.flow_algorithm.flow_direction as flow_direction
+import model.smoderp2d.flow_algorithm.flow_direction as flow_direction
 
 class Kinematic(Mfda if Globals.mfda else D8):
 

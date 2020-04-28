@@ -1,10 +1,10 @@
-# @package smoderp2d.courant defines Class Courant which handels the time step adjustement
+# @package model.smoderp2d.courant defines Class Courant which handels the time step adjustement
 
 
 import math
-from smoderp2d.providers import Logger
+from model.smoderp2d.providers import Logger
 
-from smoderp2d.core.general import Globals as Gl
+from model.smoderp2d.core.general import Globals as Gl
 
 # Contains variables and methods needed for time step size handling
 #
@@ -144,7 +144,7 @@ class Courant():
                 return self.max_delta_t * self.max_delta_t_mult, ratio
 
             dt = round(
-                (Gl.mat_efect_cont[self.i, self.j] * self.cour_crit * self.cour_coef) /
+                (Gl.mat_efect_vrst[self.i, self.j] * self.cour_crit * self.cour_coef) /
                  self.cour_speed,
                 4)
 

@@ -5,10 +5,10 @@ if sys.version_info.major >= 3:
 else:
     from ConfigParser import ConfigParser, NoSectionError
 
-from smoderp2d.core.general import Globals
-from smoderp2d.providers.base import BaseProvider, Logger
-from smoderp2d.providers.cmd import CmdWritter
-from smoderp2d.exceptions import ConfigError
+from model.smoderp2d.core.general import Globals
+from model.smoderp2d.providers.base import BaseProvider, Logger
+from model.smoderp2d.providers.cmd import CmdWritter
+from model.smoderp2d.exceptions import ConfigError
 
 class WpsProvider(BaseProvider):
     def __init__(self):

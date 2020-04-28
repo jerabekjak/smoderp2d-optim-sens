@@ -9,7 +9,7 @@ if __name__ == "__main__":
     stand_alone = True
     BaseInfiltration = object
 else:
-    from model.smoderp2d.processes.infiltration import BaseInfiltration
+    from model.model.smoderp2d.processes.infiltration import BaseInfiltration
     stand_alone = False
 
 
@@ -197,7 +197,7 @@ class GreenAmptInfiltrationUnsteadyRain(BaseInfiltration):
     def __init__(self, soils_data):
         """ make instance of SingleSoilGAIUR for each soil type 
 
-        :param soils_data: combinat_index in the smoderp2d code
+        :param soils_data: combinat_index in the model.smoderp2d.code
         """
 
         self._n = len(soils_data)

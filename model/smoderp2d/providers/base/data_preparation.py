@@ -2,9 +2,9 @@ import os
 import shutil
 import numpy as np
 
-import smoderp2d.processes.rainfall as rainfall
+import model.smoderp2d.processes.rainfall as rainfall
 
-from smoderp2d.providers.base import Logger
+from model.smoderp2d.providers.base import Logger
 
 class PrepareDataBase(object):
     def __init__(self, writter):

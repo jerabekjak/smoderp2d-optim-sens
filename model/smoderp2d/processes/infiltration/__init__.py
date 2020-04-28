@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from smoderp2d.exceptions import NegativeWaterLevel
+from model.smoderp2d.exceptions import NegativeWaterLevel
 
 # combinatIndex muze byt tady jako globalni
 # primenna, main loop bude pro infiltraci volat

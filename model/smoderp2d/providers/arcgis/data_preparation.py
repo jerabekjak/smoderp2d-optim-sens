@@ -5,18 +5,18 @@ import numpy as np
 import math
 import csv
 
-import smoderp2d.processes.rainfall as rainfall
+import model.smoderp2d.processes.rainfall as rainfall
 
-from smoderp2d.core.general import GridGlobals
+from model.smoderp2d.core.general import GridGlobals
 
-from smoderp2d.providers.arcgis import constants
-from smoderp2d.providers.base import Logger
-from smoderp2d.providers.base.data_preparation import PrepareDataBase
-from smoderp2d.providers.base.exceptions import DataPreparationInvalidInput
+from model.smoderp2d.providers.arcgis import constants
+from model.smoderp2d.providers.base import Logger
+from model.smoderp2d.providers.base.data_preparation import PrepareDataBase
+from model.smoderp2d.providers.base.exceptions import DataPreparationInvalidInput
 
-from smoderp2d.providers.arcgis.terrain import compute_products
-from smoderp2d.providers.arcgis import constants
-from smoderp2d.providers.arcgis.manage_fields import ManageFields
+from model.smoderp2d.providers.arcgis.terrain import compute_products
+from model.smoderp2d.providers.arcgis import constants
+from model.smoderp2d.providers.arcgis.manage_fields import ManageFields
 
 import arcpy
 import arcgisscripting
@@ -97,7 +97,7 @@ class PrepareData(PrepareDataBase, ManageFields):
 
         :return: dem copy, binary mask
         """
-        # Do not work for CopyRaster, https://github.com/storm-fsv-cvut/smoderp2d/issues/46
+        # Do not work for CopyRaster, https://github.com/storm-fsv-cvut/model.smoderp2d.issues/46
         # dem_copy = os.path.join(self.data['temp'], 'dem_copy')
         dem_copy = self.storage.output_filepath('dem_copy')
 
@@ -382,7 +382,7 @@ class PrepareData(PrepareDataBase, ManageFields):
         self.data['mat_efect_cont'] = self._rst2np(efect_cont)
 
     def _streamPreparation(self, args):
-        from smoderp2d.providers.arcgis.stream_preparation import StreamPreparation
+        from model.smoderp2d.providers.arcgis.stream_preparation import StreamPreparation
 
         return StreamPreparation(args, writter=self.storage).prepare()
 

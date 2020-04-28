@@ -1,4 +1,4 @@
-from smoderp2d.providers.base import Logger
+from model.smoderp2d.providers.base import Logger
 
 class DataPreparationError(Exception):
     pass

@@ -6,10 +6,10 @@ import sys
 import arcpy
 from arcpy.sa import *
 
-from smoderp2d.providers.base import Logger
-from smoderp2d.providers.base.stream_preparation import StreamPreparationBase
-from smoderp2d.providers.base.stream_preparation import StreamPreparationError, ZeroSlopeError
-from smoderp2d.providers.arcgis.manage_fields import ManageFields
+from model.smoderp2d.providers.base import Logger
+from model.smoderp2d.providers.base.stream_preparation import StreamPreparationBase
+from model.smoderp2d.providers.base.stream_preparation import StreamPreparationError, ZeroSlopeError
+from model.smoderp2d.providers.arcgis.manage_fields import ManageFields
 
 class StreamPreparation(StreamPreparationBase, ManageFields):
     def __init__(self, args, writter):

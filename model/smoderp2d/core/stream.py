@@ -1,7 +1,7 @@
-from smoderp2d.stream_functions import stream_f
-from smoderp2d.core.general import GridGlobals, Globals as Gl
-from smoderp2d.providers import Logger
-from smoderp2d.exceptions import ProviderError
+from model.smoderp2d.stream_functions import stream_f
+from model.smoderp2d.core.general import GridGlobals, Globals as Gl
+from model.smoderp2d.providers import Logger
+from model.smoderp2d.exceptions import ProviderError
 
 class Reach(object):
     def __init__(self, id_, point_x, point_y, point_x_1, point_y_1,

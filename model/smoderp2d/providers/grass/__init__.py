@@ -1,12 +1,12 @@
 import os
 import logging
 
-from smoderp2d.providers.base import BaseProvider, CompType, BaseWritter
+from model.smoderp2d.providers.base import BaseProvider, CompType, BaseWritter
 
-from smoderp2d.core.general import Globals, GridGlobals
-from smoderp2d.exceptions import ProviderError
-from smoderp2d.providers.grass.logger import GrassGisLogHandler
-from smoderp2d.providers import Logger
+from model.smoderp2d.core.general import Globals, GridGlobals
+from model.smoderp2d.exceptions import ProviderError
+from model.smoderp2d.providers.grass.logger import GrassGisLogHandler
+from model.smoderp2d.providers import Logger
 
 import grass.script as gs
 from grass.pygrass.gis import Region
@@ -110,7 +110,7 @@ class GrassGisProvider(BaseProvider):
         """
         if not self._options:
             raise ProviderError("No options given")
-        from smoderp2d.providers.grass.data_preparation import PrepareData
+        from model.smoderp2d.providers.grass.data_preparation import PrepareData
 
         prep = PrepareData(self._options, self.storage)
         return prep.run()

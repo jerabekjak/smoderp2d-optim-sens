@@ -4,15 +4,15 @@ from subprocess import PIPE
 
 import numpy as np
 
-from smoderp2d.core.general import GridGlobals
+from model.smoderp2d.core.general import GridGlobals
 
-from smoderp2d.providers.grass.terrain import compute_products
-from smoderp2d.providers.grass.manage_fields import ManageFields
+from model.smoderp2d.providers.grass.terrain import compute_products
+from model.smoderp2d.providers.grass.manage_fields import ManageFields
 
-from smoderp2d.providers.base import Logger
-from smoderp2d.providers.base.exceptions import DataPreparationInvalidInput, \
+from model.smoderp2d.providers.base import Logger
+from model.smoderp2d.providers.base.exceptions import DataPreparationInvalidInput, \
     DataPreparationError
-from smoderp2d.providers.base.data_preparation import PrepareDataBase
+from model.smoderp2d.providers.base.data_preparation import PrepareDataBase
 
 from grass.pygrass.modules import Module
 from grass.pygrass.vector import VectorTopo, Vector
@@ -262,7 +262,7 @@ class PrepareData(PrepareDataBase, ManageFields):
         """
         # raster is read from current computation region
         # g.region cannot be called here,
-        # see https://github.com/storm-fsv-cvut/smoderp2d/issues/42
+        # see https://github.com/storm-fsv-cvut/model.smoderp2d.issues/42
         Region().from_rast(raster)
         return raster2numpy(raster)
 
@@ -284,7 +284,7 @@ class PrepareData(PrepareDataBase, ManageFields):
             self.data['vpix'] = data.info.nsres
             self.data['spix'] = data.info.ewres
             # check data consistency
-            # see https://github.com/storm-fsv-cvut/smoderp2d/issues/42
+            # see https://github.com/storm-fsv-cvut/model.smoderp2d.issues/42
             if data.info.rows != self.data['r'] or \
                data.info.cols != self.data['c']:
                 raise DataPreparationError(
@@ -379,7 +379,7 @@ class PrepareData(PrepareDataBase, ManageFields):
         self.data['mat_efect_cont'] = self._rst2np(efect_cont)
 
     def _streamPreparation(self, args):
-        from smoderp2d.providers.grass.stream_preparation import StreamPreparation
+        from model.smoderp2d.providers.grass.stream_preparation import StreamPreparation
 
         return StreamPreparation(args, writter=self.storage).prepare()
 

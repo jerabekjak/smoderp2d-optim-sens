@@ -1,7 +1,7 @@
 import math
 
-from smoderp2d.exceptions import SmoderpError
-from smoderp2d.providers import Logger
+from model.smoderp2d.exceptions import SmoderpError
+from model.smoderp2d.providers import Logger
 
 courantMax = 1.0
 courantMin = 0.2

@@ -5,8 +5,8 @@ if sys.version_info > (3, 0):
 else:
     from ConfigParser import ConfigParser
 
-from model.smoderp2d.core.general import Globals, GridGlobals
-from model.smoderp2d.providers.base import BaseProvider, Logger
+from model.model.smoderp2d.core.general import Globals, GridGlobals
+from model.model.smoderp2d.providers.base import BaseProvider, Logger
 from argparse import Namespace
 
 

@@ -4,12 +4,12 @@ import logging
 
 import arcpy
 
-from smoderp2d.core.general import Globals, GridGlobals
-from smoderp2d.providers.base import BaseProvider, CompType, BaseWritter
-from smoderp2d.providers.arcgis import constants
-from smoderp2d.providers.arcgis.logger import ArcPyLogHandler
-from smoderp2d.providers import Logger
-from smoderp2d.exceptions import GlobalsNotSet
+from model.smoderp2d.core.general import Globals, GridGlobals
+from model.smoderp2d.providers.base import BaseProvider, CompType, BaseWritter
+from model.smoderp2d.providers.arcgis import constants
+from model.smoderp2d.providers.arcgis.logger import ArcPyLogHandler
+from model.smoderp2d.providers import Logger
+from model.smoderp2d.exceptions import GlobalsNotSet
 
 class ArcGisWritter(BaseWritter):
     def __init__(self):
@@ -138,7 +138,7 @@ class ArcGisProvider(BaseProvider):
 
         :return dict: loaded data
         """
-        from smoderp2d.providers.arcgis.data_preparation import PrepareData
+        from model.smoderp2d.providers.arcgis.data_preparation import PrepareData
        
         prep = PrepareData(self.storage)
         return prep.run()

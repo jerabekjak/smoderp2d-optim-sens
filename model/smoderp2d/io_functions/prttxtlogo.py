@@ -1,8 +1,8 @@
-# small script to print a smoderp2d logo
+# small script to print a model.smoderp2d.logo
 #  before data initiation
 
 
-with open('smoderp2d/io_functions/txtlogo.txt', 'r') as f:
+with open('model.smoderp2d.io_functions/txtlogo.txt', 'r') as f:
     d = f.readlines()
 
 try:

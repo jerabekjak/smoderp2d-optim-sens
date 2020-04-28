@@ -1,6 +1,6 @@
 import numpy as np
 
-from smoderp2d.exceptions import SmoderpError
+from model.smoderp2d.exceptions import SmoderpError
 
 class Size(object):
     @staticmethod
@@ -138,7 +138,7 @@ class Globals:
     # raster contains digital elevation model
     mat_dem = None
     # raster contains efective couterline data
-    mat_efect_cont = None
+    mat_efect_vrst = None
     # raster contains surface slopes data
     mat_slope = None
     # raster labels not a number cells
@@ -250,7 +250,7 @@ class Globals:
 
     @classmethod
     def get_mat_efect_cont(cls):
-        return cls.mat_efect_cont
+        return cls.mat_efect_vrst
 
     @classmethod
     def get_mat_slope(cls, i, j):

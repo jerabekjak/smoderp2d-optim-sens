@@ -15,22 +15,22 @@ import time
 import os
 import numpy as np
 
-from smoderp2d.core.general import Globals, GridGlobals
-from smoderp2d.core.vegetation import Vegetation
-from smoderp2d.core.surface import Surface
-from smoderp2d.core.subsurface import Subsurface
-from smoderp2d.core.cumulative_max import Cumulative
+from model.smoderp2d.core.general import Globals, GridGlobals
+from model.smoderp2d.core.vegetation import Vegetation
+from model.smoderp2d.core.surface import Surface
+from model.smoderp2d.core.subsurface import Subsurface
+from model.smoderp2d.core.cumulative_max import Cumulative
 
-from smoderp2d.time_step import TimeStep
-from smoderp2d.courant import Courant
+from model.smoderp2d.time_step import TimeStep
+from model.smoderp2d.courant import Courant
 
-from smoderp2d.tools.times_prt import TimesPrt
-from smoderp2d.io_functions import post_proc
-from smoderp2d.io_functions import hydrographs as wf
+from model.smoderp2d.tools.times_prt import TimesPrt
+from model.smoderp2d.io_functions import post_proc
+from model.smoderp2d.io_functions import hydrographs as wf
 
-from smoderp2d.providers import Logger
+from model.smoderp2d.providers import Logger
 
-from smoderp2d.exceptions import MaxIterationExceeded
+from model.smoderp2d.exceptions import MaxIterationExceeded
 
 class FlowControl(object):
     """ Manage variables related to main computational loop. """
