@@ -1,6 +1,6 @@
 import time
 
-import model.smoderp2d.main as sm
+import model.smoderp2d.main_optim_sens as sm
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
 from diff_evol.mod_data_handling import RecModData

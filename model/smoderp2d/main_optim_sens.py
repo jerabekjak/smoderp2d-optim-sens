@@ -12,11 +12,11 @@ The computing itself is performed in src.runoff
 """
 
 import os
-from model.smoderp2d.providers.cmd import CmdProvider
+from model.smoderp2d.providers.optim_sens import OptimSensProvider
 
 def run(indata_path, params, obs):
     # initialize provider
-    provider = CmdProvider(indata_path)
+    provider = OptimSensProvider(indata_path)
     
     # load configuration (set global variables)
     provider.load('philip_optim/.philip', params, obs)
