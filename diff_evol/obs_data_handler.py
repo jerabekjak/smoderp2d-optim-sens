@@ -5,8 +5,10 @@ import sys
 
 if sys.version_info[0] < 3:
     from ConfigParser import ConfigParser
+    from ConfigParser import NoOptionError
 else:    
     from configparser import ConfigParser
+    from configparser import NoOptionError
 
 class RecObsData(object):
     """ RecObsData contains data of one observed record """
@@ -42,6 +44,11 @@ class ObsData(object):
         
         self.rainfall = self._config.getfloat('Params', 'rainfall')
         self.slope = self._config.getfloat('Params', 'slope')
+        # for field rainfall simulator 
+        try:
+          self.field_rs = self._config.getboolean('Params', 'field_rs')
+        except NoOptionError:
+          self.field_rs = False
         self.n = self._config.getint('ObsData', 'rows')
         file_ = self._config.get('ObsData', 'file')
         self.model_file = self._config.get('Model', 'mod_file')

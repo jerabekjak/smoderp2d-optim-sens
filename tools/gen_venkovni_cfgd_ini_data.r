@@ -11,6 +11,9 @@ text_optim_cfg <- function(slope,rainfall,n,obs_data,model_out_path) {
 rainfall: ',rainfall,'
 # slope [-]
 slope: ',slope,'
+# field rainfall simulator [-]
+field_rs: True
+ 
 
 # data area stored in data file
 # where first col is time in minutes
