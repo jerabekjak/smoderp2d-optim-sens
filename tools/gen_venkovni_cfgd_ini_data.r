@@ -66,10 +66,10 @@ text_cmd <- function(out_dir, model_ini, optim_cgs, mer_name){
   return(paste('./optim.py -o',out_dir,'-m',model_ini,'-O',optim_cgs,'&>',log))
 }
 
-for (i.file in files_[1:3]) {
+for (i.file in files_) {
   r = read.table(i.file, header = TRUE, sep=',', dec='.')
   r = r[order(r$time_min),]
-  plot(r$time_min, r$discharge.l_min.1.)
+  # plot(r$time_min, r$discharge.l_min.1.)
   slope_prc = slope = r$sklon[1] # TODO prevest na procenta
   rainfall = r$rain[1]
   n = length(r$ID)
