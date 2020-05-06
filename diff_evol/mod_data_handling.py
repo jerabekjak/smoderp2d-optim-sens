@@ -16,14 +16,14 @@ class RecModData(object):
         self.val = val
 
 
-def read_mod_file(path, col='surfaceRunoff[m/s]', t_col='time[s]', multip = 1):
+def read_mod_file(path, col='surfaceFlow[m3/s]', t_col='time[s]', multip = 1):
 
     with open(path, 'r') as md:
 
         lines = md.readlines()
         nlines = len(lines)
-        nlineheader = 4
-        header = lines[3].replace('#', '').replace(
+        nlineheader = 3
+        header = lines[2].replace('#', '').replace(
             ' ', '').replace('\n', '').split(';')
         ncols = len(header)
 

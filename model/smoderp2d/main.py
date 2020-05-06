@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 
 """
 Resolves some input variables and start the computing
@@ -30,3 +30,4 @@ def run(indata_path, params, obs):
 
 if __name__ == "__main__":
     run()
+

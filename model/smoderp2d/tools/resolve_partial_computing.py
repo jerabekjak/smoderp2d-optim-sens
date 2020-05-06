@@ -1,4 +1,4 @@
-# @package model.smoderp2d.tools.resolve_partial_computing
+# @package model.model.smoderp2d.tools.resolve_partial_computing
 #
 #  smodepr2d can be run in several modes
 #  full mode, only data preparation mode and only runoff mode
@@ -12,13 +12,13 @@ import os
 import sys
 
 
-import model.smoderp2d.constants as constants
-from model.smoderp2d.tools.tools import get_argv
-from model.smoderp2d.tools.tools import set_argv
-from model.smoderp2d.tools.tools import prt_sys_argv
-from model.smoderp2d.tools.tools import int_comp_type
-from model.smoderp2d.tools.tools import logical_argv
-from model.smoderp2d.exceptions import RainfallFileMissing
+import model.model.smoderp2d.constants as constants
+from model.model.smoderp2d.tools.tools import get_argv
+from model.model.smoderp2d.tools.tools import set_argv
+from model.model.smoderp2d.tools.tools import prt_sys_argv
+from model.model.smoderp2d.tools.tools import int_comp_type
+from model.model.smoderp2d.tools.tools import logical_argv
+from model.model.smoderp2d.exceptions import RainfallFileMissing
 
 #
 # from inspect import currentframe, getframeinfo
@@ -31,10 +31,10 @@ def get_indata_lin(tc, args):
     if tc == 'roff':
 
         import ConfigParser
-        import model.smoderp2d.tools.save_load_data as sld
-        import model.smoderp2d.processes.rainfall as rainfall
+        import model.model.smoderp2d.tools.save_load_data as sld
+        import model.model.smoderp2d.processes.rainfall as rainfall
 
-        # import  model.smoderp2d.tools.save_load_data_nopickle    as sld   #
+        # import  model.model.smoderp2d.tools.save_load_data_nopickle    as sld   #
         # preparated
         Config = ConfigParser.ConfigParser()
         Config.read(args.indata)
@@ -122,7 +122,7 @@ def get_indata_win(tc, args):
     # full computation
     #      data_preparation + runoff model
     if tc == 'full':
-        from model.smoderp2d.data_preparation import prepare_data
+        from model.model.smoderp2d.data_preparation import prepare_data
 
         return prepare_data(sys.argv)
 
@@ -130,8 +130,8 @@ def get_indata_win(tc, args):
     #      data are saved in dump, can be stored and loaded later on
     elif tc == 'dpre':
 
-        from model.smoderp2d.data_preparation import prepare_data
-        import model.smoderp2d.tools.save_load_data as sld
+        from model.model.smoderp2d.data_preparation import prepare_data
+        import model.model.smoderp2d.tools.save_load_data as sld
 
         boundaryRows, boundaryCols, mat_boundary, rrows, rcols, outletCells, x_coordinate, y_coordinate,\
             NoDataValue, array_points, \
@@ -146,7 +146,7 @@ def get_indata_win(tc, args):
             toky, cell_stream, mat_tok_usek, STREAM_RATIO, tokyLoc = prepare_data(
                 sys.argv)
 
-        # import  model.smoderp2d.tools.save_load_data_nopickle    as sld   #
+        # import  model.model.smoderp2d.tools.save_load_data_nopickle    as sld   #
         # preparate
 
         dataList = [
@@ -186,9 +186,9 @@ def get_indata_win(tc, args):
         logical_argv(constants.PARAMETER_MFDA)
         indata = get_argv(constants.PARAMETER_INDATA)
 
-        import model.smoderp2d.tools.save_load_data as sld
-        import model.smoderp2d.processes.rainfall as rainfall
-        # import  model.smoderp2d.tools.save_load_data_nopickle    as sld   #
+        import model.model.smoderp2d.tools.save_load_data as sld
+        import model.model.smoderp2d.processes.rainfall as rainfall
+        # import  model.model.smoderp2d.tools.save_load_data_nopickle    as sld   #
         # preparated
 
         # the data are loared from a pickle file

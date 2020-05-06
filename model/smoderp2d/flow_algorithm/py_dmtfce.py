@@ -1,9 +1,7 @@
 import numpy as np
 import math
 
-
 from model.smoderp2d.providers import Logger
-
 
 FB = math.pi / 4  # facet boundary
 PI_HALF = math.pi / 2
@@ -11,9 +9,7 @@ THREE_PI_HALF = 3 * math.pi / 2
 VE = 4  # variable exponent
 
 def neighbors(i, j, array, x, y):  # function to determine all neighbor cell to actual cell in the raster dataset
-    """Return all neigbours to actuall cell 
-    in the raster dataset
-    """
+    "Return all neigbours to actuall cell in the raster dataset"
     if i > 0 and i < (x - 1) and j > 0 and j < (y - 1):  # non edge cells
         nb1 = array[i - 1][j - 1]
         nb2 = array[i - 1][j]
@@ -107,7 +103,7 @@ def neighbors(i, j, array, x, y):  # function to determine all neighbor cell to 
     return nb1, nb2, nb3, nb4, nb5, nb6, nb7, nb8
 
 
-def removeCellsWithSameHeightNeighborhood(mat_dmt, mat_nan, rows, cols):  # function determines if cell neighborhood has exactly same values of height a and than it save that cell as NoData
+def removeCellsWithSameHeightNeighborhood(mat_dem, mat_nan, rows, cols):  # function determines if cell neighborhood has exactly same values of height a and than it save that cell as NoData
     "Returns an array with the values of heights, adjusted for the value of NoData cells"
 
     bad_cells = []
@@ -117,18 +113,18 @@ def removeCellsWithSameHeightNeighborhood(mat_dmt, mat_nan, rows, cols):  # func
         for j in range(cols):
             c = [i, j]
             count_nbrs = 0
-            point_m = mat_dmt[i][j]
+            point_m = mat_dem[i][j]
 
             if i > 0 and i < (rows - 1) and j > 0 and j < (cols - 1):  # non edge cells - edge cells are excluded thanks to slope trimming
 
-                nbrs = [mat_dmt[i - 1][j - 1],
-                        mat_dmt[i - 1][j],
-                        mat_dmt[i - 1][j + 1],
-                        mat_dmt[i][j - 1],
-                        mat_dmt[i][j + 1],
-                        mat_dmt[i + 1][j - 1],
-                        mat_dmt[i + 1][j],
-                        mat_dmt[i + 1][j + 1]]
+                nbrs = [mat_dem[i - 1][j - 1],
+                        mat_dem[i - 1][j],
+                        mat_dem[i - 1][j + 1],
+                        mat_dem[i][j - 1],
+                        mat_dem[i][j + 1],
+                        mat_dem[i + 1][j - 1],
+                        mat_dem[i + 1][j],
+                        mat_dem[i + 1][j + 1]]
 
                 for k in range(8):
                     if point_m > 0 and point_m == nbrs[k]:
@@ -140,6 +136,7 @@ def removeCellsWithSameHeightNeighborhood(mat_dmt, mat_nan, rows, cols):  # func
     Logger.info(
         "Possible water circulation! Check the input DTM raster for flat areas with the same height neighborhood."
     )
+
     # all problem cells set as NoData
     if len(bad_cells) > 0:
         for i in range(rows):
@@ -149,7 +146,7 @@ def removeCellsWithSameHeightNeighborhood(mat_dmt, mat_nan, rows, cols):  # func
                     bc_j = bad_cells[0][1]
 
                     if bc_i == i and bc_j == j:
-                        mat_dmt[i][j] = -3.40282346639e+038
+                        mat_dem[i][j] = -3.40282346639e+038
                         mat_nan[i][j] = -3.40282346639e+038
                         bad_cells.pop(0)
                         if len(bad_cells) == 0:
@@ -157,11 +154,10 @@ def removeCellsWithSameHeightNeighborhood(mat_dmt, mat_nan, rows, cols):  # func
                 else:
                     break
 
-    return mat_dmt, mat_nan
+    return mat_dem, mat_nan
 
 
-def dirSlope(point_m, nbrs, vpix, spix):  
-    """ function calculates for each triangular facet outflow direction and slope """
+def dirSlope(point_m, nbrs, vpix, spix):  # function calculates for each triangular facet outflow direction and slope
     "Return a list of direction a slope values for each triangular facet"
     direction = np.zeros(8)
     slope = np.zeros(8)

@@ -1,4 +1,4 @@
-# @package model.smoderp2d.tools.save_load_data to safe and load data to with a pickle package
+# @package model.model.smoderp2d.tools.save_load_data to safe and load data to with a pickle package
 #
 #  to safe and load data to with a pickle package
 
@@ -8,7 +8,7 @@ import pickle
 import sys
 
 
-# import model.smoderp2d.io_functions.prt          as prt
+# import model.model.smoderp2d.io_functions.prt          as prt
 
 
 def splitdirfile(dirfile_):

@@ -66,8 +66,14 @@ class D8(object):
             bx = self.inflows[i][j][z][1]
             iax = i + ax
             jbx = j + bx
-            insurfflow_from_cell = self.arr[iax][jbx].vol_runoff
-            inrillflow_from_cell = self.arr[iax][jbx].vol_runoff_rill
+            try:
+                insurfflow_from_cell = self.arr[iax][jbx].vol_runoff
+            except:
+                insurfflow_from_cell = 0.0
+            try:
+                inrillflow_from_cell = self.arr[iax][jbx].vol_runoff_rill
+            except:
+                inrillflow_from_cell = 0.0
             inflow_from_cells = inflow_from_cells + \
                 insurfflow_from_cell + inrillflow_from_cell
 
@@ -92,7 +98,7 @@ class Mfda(object):
 
         Logger.info("Multiflow direction algorithm")
         self.inflows, fd_rill = mfd.new_mfda(
-            mat_dmt, mat_nan, mat_fd, vpix, spix, rows, cols
+            mat_dem, mat_nan, mat_fd, vpix, spix, rows, cols
         )
         self.inflowsRill = D8_.new_inflows(fd_rill)
 

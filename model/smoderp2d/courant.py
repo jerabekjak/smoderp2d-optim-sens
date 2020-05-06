@@ -3,6 +3,7 @@
 
 import math
 from model.smoderp2d.providers import Logger
+
 from model.smoderp2d.core.general import Globals as Gl
 
 # Contains variables and methods needed for time step size handling
@@ -38,9 +39,11 @@ class Courant():
     def set_time_step(self, dt):
         self.orig_dt = dt
 
-    # Resets the self.cour_most and self.cour_speed after each time stop computation is successfully completed
     #
     def reset(self):
+        """Resets the cour_most and cour_speed after each time stop
+        computation is successfully completed.
+        """
         self.cour_most = 0
         self.cour_speed = 0
         self.cour_most_rill = 0
@@ -76,10 +79,12 @@ class Courant():
         # return self.initGuess
         return Gl.maxdt
 
-    # Checks and store in each computational cell the maximum velocity and maximum Courant coefficient
     #
-    def CFL(self, i, j, h0, v, delta_t, efect_vrst, co, rill_courant):
-        cour = v / self.cour_coef * delta_t / efect_vrst
+    def CFL(self, i, j, h0, v, delta_t, efect_cont, co, rill_courant):
+        """Checks and store in each computational cell the maximum velocity
+        and maximum Courant coefficient.
+        """
+        cour = v / self.cour_coef * delta_t / efect_cont
         cour = max(cour, rill_courant)
         # print cour
 
@@ -129,7 +134,6 @@ class Courant():
         # explicitne se dopocita dt na nejvetsi mozne
         #                                      xor
         if ((self.cour_most < self.cour_least) != (self.cour_crit <= self.cour_most)):
-
 
         # pokud se na povrchu nic nedeje
         # nema se zmena dt cim ridit

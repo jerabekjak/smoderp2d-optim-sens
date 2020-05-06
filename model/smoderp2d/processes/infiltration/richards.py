@@ -1,5 +1,5 @@
 try:
-    from model.smoderp2d.processes.infiltration import BaseInfiltration
+    from model.model.smoderp2d.processes.infiltration import BaseInfiltration
 except ImportError:
     print 'test version of richards infiltration'
     instance = True
