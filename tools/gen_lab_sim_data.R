@@ -1,8 +1,8 @@
 # 1 - nacte merdata.RData
 # 2 - udela csv do adresare obs_data
-load_data = FALSE
-optim_ = FALSE
-sens_  = TRUE
+load_data = T
+optim_ = T
+sens_  = F
 obs_dir = 'obs_data'
 cfg_dir = 'cfgs'
 cfg_dir_bf = 'cfgs_sens'
@@ -17,6 +17,10 @@ text_optim_cfg <- function(slope,rainfall,n,obs_data,model_out_path) {
 rainfall: ',rainfall,'
 # slope [-]
 slope: ',slope,'
+# length of plot meters
+plotlength: 4
+# width of plot meters
+plotwidth: 1
 
 # data area stored in data file
 # where first col is time in minutes
@@ -132,7 +136,7 @@ if (optim_){
     write(text_cmd(out_pat,model_ini_path,conf_path), file = paste('runs',scen,sep='/'))
     
     # write optim cfg
-    write(text_optim_cfg(slope_prc, rainfall, n, data_path, model_out_path),file = conf_path)
+    write(text_optim_cfg(slope_prc, rainfall, n, data_path, model_out_path), file = conf_path)
     
     # write obs data
     write.table(x = data.frame(cas=cas, val=val),
