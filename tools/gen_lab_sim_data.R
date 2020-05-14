@@ -31,7 +31,7 @@ rows: ',n,'
 file: ',obs_data,'
 
 [Model]
-mod_file: ',model_out_path,'/point001.dat
+mod_file: ',model_out_path,'/point001.csv
 ', sep = ''))
 }
 
@@ -85,8 +85,8 @@ lu: -
 [shape atr]
 soil-atr: -
 lu-atr: -
-[srazka]
-file: model/indata/srazka.txt
+[rainfall]
+file: model/indata/rainfall.txt
 [time]
 # sec
 maxdt: 10
@@ -134,10 +134,10 @@ if (optim_){
     
     # write cli run
     write(text_cmd(out_pat,model_ini_path,conf_path), file = paste('runs',scen,sep='/'))
-    
+
     # write optim cfg
     write(text_optim_cfg(slope_prc, rainfall, n, data_path, model_out_path), file = conf_path)
-    
+
     # write obs data
     write.table(x = data.frame(cas=cas, val=val),
                 file = data_path,
