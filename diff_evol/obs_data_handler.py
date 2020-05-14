@@ -44,11 +44,9 @@ class ObsData(object):
         
         self.rainfall = self._config.getfloat('Params', 'rainfall')
         self.slope = self._config.getfloat('Params', 'slope')
-        # for field rainfall simulator 
-        try:
-          self.field_rs = self._config.getboolean('Params', 'field_rs')
-        except NoOptionError:
-          self.field_rs = False
+        self.plotlength = self._config.getfloat('Params', 'plotlength')
+        self.plotwidth  = self._config.getfloat('Params', 'plotwidth')
+
         self.n = self._config.getint('ObsData', 'rows')
         file_ = self._config.get('ObsData', 'file')
         self.model_file = self._config.get('Model', 'mod_file')

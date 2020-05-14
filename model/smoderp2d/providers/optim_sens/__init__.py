@@ -111,7 +111,7 @@ class OptimSensProvider(BaseProvider):
             #
             #
             # Change vals in globs for optimalization
-            #self._adjust_domain_size()
+            self._adjust_domain_size(pl = obs.plotlength, pw = obs.plotwidth)
             self._set_philips_to_glob(params)
             self._set_rainfall_to_glob(obs.rainfall)
             self._set_slope_to_glob(obs.slope)
@@ -176,11 +176,19 @@ class OptimSensProvider(BaseProvider):
         Globals.mat_aa = X*Globals.mat_slope**Y
         Globals.mat_b.fill(b)
         
-    def _adjust_domain_size(self):
-        """ set domain size to lab rainfal simulator plot """
-        GridGlobals.dx =0.9/4.
-        GridGlobals.dy =8.0/13.
-        GridGlobals.pixel_area =  0.9*8.0
+    def _adjust_domain_size(self, pl, pw):
+        """ set domain size to lab rainfal simulator plot 
+        pl - plot length
+        pw - plot width
+        """
+        nrr = len(GridGlobals.rr)
+        nrc = len(GridGlobals.rc[GridGlobals.rr[0]])
+        dx = pw/nrc
+        dy = pl/nrr
+
+        GridGlobals.dx = dx
+        GridGlobals.dy = dy
+        GridGlobals.pixel_area =  dx*dy
         
     def _set_total_raster_area(self):
         rr = GridGlobals.rr
