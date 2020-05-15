@@ -36,6 +36,7 @@ class DiffEvol(object):
         self._read_mod_file = read_mod_file
         self._interp_mod_data = interpolate
         self._plot = True
+        self._plot = False
         self._model_runs = 0
         # count iterations
         self.iter_ = 0

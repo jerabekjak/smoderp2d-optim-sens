@@ -310,7 +310,7 @@ class Runoff(object):
                             self.delta_t,
                             self.surface,
                             self.subsurface,
-                            self.curr_rain
+                            actRain
                         )
                 # TODO
                 # post_proc.do(self.cumulative, Globals.mat_slope, Gl, surface.arr)
