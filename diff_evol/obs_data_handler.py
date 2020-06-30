@@ -67,7 +67,8 @@ class ObsData(object):
         # rainfall intensity from mm/hour to m/sec
         self.rainfall = self.rainfall/1000./60./60.
         # runoff intensity from mm/minute to m/sec
-        self.data.val = self.data.val/1000./60.
+        #self.data.val = self.data.val/1000./60.
+        self.data.val = self.data.val
         
         self.data.calc_infiltration(self.rainfall)
         

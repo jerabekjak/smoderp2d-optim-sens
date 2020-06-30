@@ -77,7 +77,7 @@ text_cmd <- function(out_dir, model_ini, optim_cgs, mer_name){
 for (i.file in files_) {
   r = read.table(i.file, header = TRUE, sep=',', dec='.')
   id = unique(r$ID.simulace)
-  for (i.id in id[1]) 
+  for (i.id in id) 
   {
     ii = which(r$ID.simulace == i.id)
     d = r[ii,]
@@ -111,7 +111,8 @@ for (i.file in files_) {
     h = prutok_m3_s/v/sirka # vyska hladiny na useku m
     
     # zapis pozorovanych dat
-    outdata = data.frame(cas, prutok, h)
+    # outdata = data.frame(cas, prutok, h)
+    outdata = data.frame(cas, h)
     write.table(outdata, file = data_path, sep = '\t', col.names = F, row.names = F)
 
     # write cli run
