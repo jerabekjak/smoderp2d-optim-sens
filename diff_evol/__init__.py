@@ -60,6 +60,8 @@ class DiffEvol(object):
             mod=self._mod_data, obs=self._obs_data)
 
         ss = sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
+        if (self._mod_data_interp.val.sum() == 0) :
+            ss = 1
 
         self.result.x = params
         self.result.fun = ss
@@ -70,29 +72,48 @@ class DiffEvol(object):
         print ('In interation ;{}; model run ;{}; runs ;{:1.2f}; secs with ss = ;{:1.4e};with pars set ;{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e}'.format(self.iter_,
                                                                                                                                                                 self._model_runs, t2-t1, ss, params[0], params[1], params[2], params[3], params[4], params[5]))
 
-        return sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
+        return ss
 
     def make_de(self):
 
         # bounds for parameters [X,Y,b]
-        #bounds = [(1, 20), (0.01, 1.), (1., 2.0),
-                  #(1e-8, 1e-5), (1e-8, 1e-3), (-0.1, 0)]
-        bounds = [(1, 30), (0.01, 5.), (1., 4.0),
-                  (1e-8, 1e-5), (1e-8, 1e-3), (-0.5, 0)]
-        #x0 = [3.5822e+02, 7.6509e-01, 1.6578e+00, 4.4133e-06, 7.9349e-06]
-        #self.result = minimize(self.model, x0, method='Nelder-Mead')
+        bounds = [(1, 20), (0.01, 1.), (1., 2.0),
+                  (1e-8, 1e-6), (1e-8, 1e-1), (-0.005, 0)]
+        #bounds = [(1, 30), (0.01, 5.), (1., 4.0),
+        #         (1e-8, 1e-5), (1e-8, 1e-3), (-0.5, 0)]
+        x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
+        #self.result = self._minimize(self.model, x0, method='Nelder-Mead')
+        self.result = self._minimize(self.model, x0, method='CG')
 
-        self._mod_data_interp.val.fill(0.0)
-        while self._mod_data_interp.val.sum() == 0.0:
-            self.iter_ += 1
-            if (self._max_iter()):
-                break
-            self.result = self._de(self.model, bounds, disp=False)
+       # self.result = self._de(self.model, bounds, disp=False,
+       #         init='random'
+       #         #mutation=(0.1,0.9),
+       #         #recombination=0.9,
+       #         #strategy='rand2exp'
+       #         )
+       #         #popsize=5, maxiter=4)
+       # print ('vals {}'.format(self._mod_data_interp.val))
+
+        #self._mod_data_interp.val.fill(0.0)
+        #while self._mod_data_interp.val.sum() == 0.0:
+        #    self.iter_ += 1
+        #    if (self._max_iter()):
+        #        break
+        #    self.result = self._de(self.model, bounds, disp=False,
+        #    strategy='best2exp', popsize=4, maxiter=3)
+        #    print ('vals {}'.format(self._mod_data_interp.val))
 
     def _max_iter(self):
         return self.iter_ > self._maxIter
 
     def __del__(self):
+
+        print ('\n{}'.format(self.result.message))
+        print ('{} model runs during optimalization'.format(self._model_runs))
+        print ('final parameters: X={:.2E}, Y={:.2E}, b={:.2E}\n\tKs={:.2E}, S={:.2E}, ret={:.2E}'.format(
+            self.result.x[0], self.result.x[1], self.result.x[2], self.result.x[3], self.result.x[4], self.result.x[5]))
+        print ('sum of squares = {:.2E}'.format(self.result.fun))
+        print (self.result)
 
         if self._plot:
             plot_de(self._obs_data, self._mod_data_interp,
@@ -103,9 +124,3 @@ class DiffEvol(object):
         write_de(self._obs, self._mod_data_interp,
                  self.result, self._out_dir)
 
-        print ('\n{}'.format(self.result.message))
-        print ('{} model runs during optimalization'.format(self._model_runs))
-        print ('final parameters: X={:.2E}, Y={:.2E}, b={:.2E}\n\tKs={:.2E}, S={:.2E}, ret={:.2E}'.format(
-            self.result.x[0], self.result.x[1], self.result.x[2], self.result.x[3], self.result.x[4], self.result.x[5]))
-        print ('sum of squares = {:.2E}'.format(self.result.fun))
-        print (self.result)
