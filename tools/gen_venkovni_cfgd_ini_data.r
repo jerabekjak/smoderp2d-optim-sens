@@ -75,7 +75,7 @@ for (i.file in files_) {
   r = read.table(i.file, header = TRUE, sep=',', dec='.')
   r = r[order(r$time_min),]
   # plot(r$time_min, r$discharge.l_min.1.)
-  slope_prc = slope = r$sklon[1] # TODO prevest na procenta
+  slope_prc = slope = r$sklon[1]/100 # TODO prevest na procenta
   rainfall = r$rain[1]
   n = length(r$ID)
   obs_name = basename(i.file)
