@@ -14,6 +14,8 @@ def nash_sutcliffe(obs, mod):
 def sum_of_squares(obs, mod):
     
     r = np.array(obs) - np.array(mod)
+    r[0] = r[0]*50.
+    r[1] = r[1]*5.
     r = r**2.0
 
     return sum(r)
