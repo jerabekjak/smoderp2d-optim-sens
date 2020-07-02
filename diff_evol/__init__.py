@@ -53,7 +53,12 @@ class DiffEvol(object):
 
         :param params: smoderp parameters [X,Y,b,ks,s]
         """
-        print (params[0:4])
+        if  (any(params[0:5]<=0)) :
+            self.result.x = params
+            self.result.fun = 999
+            self.result.message = 'I stopped the optimization...'
+            return 999
+
         t1 = time.time()
         sm.run(self._mod_conf, params, self._obs)
         t2 = time.time()
@@ -62,6 +67,8 @@ class DiffEvol(object):
                 col = 'totalWaterLevel[m]')
         self._mod_data_q = self._read_mod_file(self._mod_file,
                 col = 'surfaceFlow[m3/s]')
+        self._mod_data_q.val = [
+                self._mod_data_q.val / 16 for self._mod_data_q.val in self._mod_data_q.val]
 
         self._mod_data_h_interp = self._interp_mod_data(
                 mod=self._mod_data_h, obs=self._obs_data_h)
@@ -71,9 +78,9 @@ class DiffEvol(object):
         ssh = sum_of_squares(self._obs_data_h.val, self._mod_data_h_interp.val)
         ssq = sum_of_squares(self._obs_data_q.val, self._mod_data_q_interp.val)
         if (self._mod_data_h_interp.val.sum() == 0) :
-            ssh = 1
+            ssh = 999
         if (self._mod_data_q_interp.val.sum() == 0) :
-            ssq = 1
+            ssq = 999
         ss = ssh + ssq
 
         self.result.x = params
@@ -90,21 +97,23 @@ class DiffEvol(object):
     def make_de(self):
 
         # bounds for parameters [X,Y,b]
-        bounds = [(1, 20), (0.01, 1.), (1., 2.0),
-                  (1e-8, 1e-6), (1e-8, 1e-1), (-0.005, 0)]
-        #bounds = [(1, 30), (0.01, 5.), (1., 4.0),
-        #         (1e-8, 1e-5), (1e-8, 1e-3), (-0.5, 0)]
+        #bounds = [(1, 20), (0.01, 1.), (1., 2.0),
+        #          (1e-8, 1e-6), (1e-8, 1e-1), (-0.005, 0)]
+        bounds = [(1, 30), (0.01, 5.), (1., 4.0),
+                 (1e-8, 1e-6), (1e-8, 1e-3), (-0.5, 0)]
         x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
         #self.result = self._minimize(self.model, x0, method='Nelder-Mead')
-        self.result = self._minimize(self.model, x0, method='CG')
+        #self.result = self._minimize(self.model, x0, method='CG')
 
-       # self.result = self._de(self.model, bounds, disp=False,
-       #         init='random'
-       #         #mutation=(0.1,0.9),
-       #         #recombination=0.9,
-       #         #strategy='rand2exp'
-       #         )
-       #         #popsize=5, maxiter=4)
+        self.result = self._de(self.model, bounds, disp=False,
+                #init='random',
+                #mutation=(0.1,0.9),
+                #maxiter=1,
+                #popsize=1,
+                #recombination=0.9,
+                strategy='rand2exp'
+                )
+                #popsize=5, maxiter=4)
        # print ('vals {}'.format(self._mod_data_interp.val))
 
         #self._mod_data_interp.val.fill(0.0)
@@ -134,6 +143,8 @@ class DiffEvol(object):
             plot_de_residuals(
                 self._obs_data, self._mod_data_interp, self._out_dir)
 
-        write_de(self._obs, self._mod_data_interp,
-                 self.result, self._out_dir)
+        write_de(self._obs, 
+                self._mod_data_h_interp,
+                self._mod_data_q_interp,
+                self.result, self._out_dir)
 
