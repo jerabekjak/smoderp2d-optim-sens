@@ -6,7 +6,10 @@ outs = ''
 plocha = 16 # m2
 sirka = 2 # m
 
-text_optim_cfg <- function(slope,rainfall,n,obs_data,model_out_path) {
+text_optim_cfg <- function(slope,rainfall,
+                           n.h, data_path.h,
+                           n.q, data_path.q,
+                           model_out_path) {
   return (paste('[Params]
 # in mm per hour
 rainfall: ',rainfall,'
@@ -22,9 +25,12 @@ plotwidth: 2
 # where first col is time in minutes
 # where second col is runoff in mm/min
 # where cols are separated with tab
-[ObsData]
-rows: ',n,'
-file: ',obs_data,'
+[ObsDataWLevel]
+rows: ',n.h,'
+file: ',data_path.h,'
+[ObsDataDischarge]
+rows: ',n.q,'
+file: ',data_path.q,'
 
 [Model]
 mod_file: ',model_out_path,'/point001.csv
@@ -77,7 +83,7 @@ text_cmd <- function(out_dir, model_ini, optim_cgs, mer_name){
 for (i.file in files_) {
   r = read.table(i.file, header = TRUE, sep=',', dec='.')
   id = unique(r$ID.simulace)
-  for (i.id in id) 
+  for (i.id in id[2]) 
   {
     ii = which(r$ID.simulace == i.id)
     d = r[ii,]
@@ -90,8 +96,10 @@ for (i.file in files_) {
       sep = '-'
     )
     # csv simulace
-    obs_name = paste(mer_name, 'csv', sep = '.')
-    data_path = paste(outs,'obs_data/',obs_name, sep='')
+    obs_name.h = paste(mer_name,'-h', '.csv', sep = '')
+    obs_name.q = paste(mer_name,'-q', '.csv', sep = '')
+    data_path.h = paste(outs,'obs_data/',obs_name.h, sep='')
+    data_path.q = paste(outs,'obs_data/',obs_name.q, sep='')
     model_out_path = paste(outs,'model/','out-',mer_name,sep='')
     model_ini_path =paste(outs,'model/',paste(mer_name,'ini',sep='.'),sep='')
     conf_path = paste(outs,'cfgs/',mer_name,'.cfgs',sep='')
@@ -102,7 +110,8 @@ for (i.file in files_) {
     cas = minute(cas) + second(cas)/60
     slope_prc = d$sklon.terénu[1]
     rainfall = d$intenzita[1]
-    n = length(d$ID.simulace)
+    n.h = length(d$rychlost.na.posledním.úseku..m.s.[!is.na(d$rychlost.na.posledním.úseku..m.s.)])
+    n.q = length(d$průtok..l.min.[!is.na(d$průtok..l.min.)])
     prutok_m3_s = d$průtok..l.min./1000/60
     # prutok jde ven
     prutok = (d$průtok..l.min./1000)/plocha*1000 # l/min -> mm/min
@@ -113,16 +122,23 @@ for (i.file in files_) {
     # zapis pozorovanych dat
     # outdata = data.frame(cas, prutok, h)
     outdata = data.frame(cas, h)
-    write.table(outdata, file = data_path, sep = '\t', col.names = F, row.names = F)
-
-    # write cli run
+    write.table(outdata, file = data_path.h, sep = '\t', 
+                col.names = F, row.names = F)
+    outdata = data.frame(cas, prutok)
+    write.table(outdata, file = data_path.q, sep = '\t', 
+                col.names = F, row.names = F)
+    # 
+    # # write cli run
     write(text_cmd(out_pat,model_ini_path,conf_path,mer_name),
           file = paste(outs,'runs_field_ds_waterheight/',mer_name,sep=''))
-     
-    # write optim cfg
-    write(text_optim_cfg(slope_prc, rainfall, n, data_path, model_out_path),
+    #  
+    # # write optim cfg
+    write(text_optim_cfg(slope_prc, rainfall,
+                         n.h, data_path.h,
+                         n.q, data_path.q,
+                         model_out_path),
           file = conf_path)
-
+    # 
     # write model ini
     write(text_model_ini(model_out_path), file = model_ini_path)
   }

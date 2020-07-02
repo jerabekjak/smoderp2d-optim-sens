@@ -1,4 +1,4 @@
-#from exceptions import IncorrectDataInObsFile
+from exceptions import IncorrectDataInObsFile
 #import exceptions
 import numpy as np
 import sys
@@ -47,30 +47,45 @@ class ObsData(object):
         self.plotlength = self._config.getfloat('Params', 'plotlength')
         self.plotwidth  = self._config.getfloat('Params', 'plotwidth')
 
-        self.n = self._config.getint('ObsData', 'rows')
-        file_ = self._config.get('ObsData', 'file')
+        self.nh = self._config.getint('ObsDataWLevel', 'rows')
+        file_h = self._config.get('ObsDataWLevel', 'file')
+        self.nq = self._config.getint('ObsDataDischarge', 'rows')
+        file_q = self._config.get('ObsDataDischarge', 'file')
         self.model_file = self._config.get('Model', 'mod_file')
         
-        self.data = RecObsData(self.n)
+        self.data_h = RecObsData(self.nh)
+        self.data_q = RecObsData(self.nq)
         
+        # read water level level data
         i = 0
-        with open(file_, 'r') as ob_ls:
+        with open(file_h, 'r') as ob_ls:
             ob_ls = ob_ls.readlines()
             for line in ob_ls:
                 time = (self._read_line_vals(line)[0])
                 val = (self._read_line_vals(line)[1])
-                self.data.set_vals(i=i, time=time, val=val)
+                self.data_h.set_vals(i=i, time=time, val=val)
+                i += 1
+        
+        i = 0
+        with open(file_q, 'r') as ob_ls:
+            ob_ls = ob_ls.readlines()
+            for line in ob_ls:
+                time = (self._read_line_vals(line)[0])
+                val = (self._read_line_vals(line)[1])
+                self.data_q.set_vals(i=i, time=time, val=val)
                 i += 1
         
         # time minutes to sec
-        self.data.time = self.data.time*60.
+        self.data_h.time = self.data_h.time*60.
+        self.data_q.time = self.data_q.time*60.
         # rainfall intensity from mm/hour to m/sec
         self.rainfall = self.rainfall/1000./60./60.
+        # runoff water level in meter from obs data m
+        self.data_q.val = self.data_q.val
         # runoff intensity from mm/minute to m/sec
-        #self.data.val = self.data.val/1000./60.
-        self.data.val = self.data.val
+        self.data_h.val = self.data_h.val/1000./60.
         
-        self.data.calc_infiltration(self.rainfall)
+        self.data_q.calc_infiltration(self.rainfall)
         
     def _read_line_int(self, _line):
         try:
@@ -89,7 +104,7 @@ class ObsData(object):
     def _read_line_vals(self, _line):
 
         _line = _line.replace('\n', '').split('\t')
-        if not(len(_line) == 2):
+        if not(len(_line) > 1):
             raise IncorrectDataInObsFile(_line)
 
         try:
@@ -106,4 +121,5 @@ class ObsData(object):
             obs = float(val[1])
         except ValueError:
             raise IncorrectDataInObsFile(val[1])
+
         return time, obs
