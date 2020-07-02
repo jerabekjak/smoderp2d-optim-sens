@@ -24,10 +24,13 @@ class DiffEvol(object):
         :param obs: list of obs_data_handler.RecObsData instances  
         """
         self._obs = obs
-        self._obs_data = obs.data
-        self._mod_data = None
+        self._obs_data_h = obs.data_h
+        self._obs_data_q = obs.data_q
+        self._mod_data_h = None
+        self._mod_data_q = None
         # prepare for repeating run
-        self._mod_data_interp = RecModData(len(self._obs_data.time))
+        self._mod_data_h_interp = RecModData(len(self._obs_data_h.time))
+        self._mod_data_q_interp = RecModData(len(self._obs_data_q.time))
         self._de = differential_evolution
         self._minimize = minimize
         self._mod_conf = pars.mod_conf
@@ -54,15 +57,23 @@ class DiffEvol(object):
         sm.run(self._mod_conf, params, self._obs)
         t2 = time.time()
 
-        self._mod_data = self._read_mod_file(self._mod_file,
+        self._mod_data_h = self._read_mod_file(self._mod_file,
                 col = 'totalWaterLevel[m]')
+        self._mod_data_q = self._read_mod_file(self._mod_file,
+                col = 'surfaceFlow[m3/s]')
 
-        self._mod_data_interp = self._interp_mod_data(
-            mod=self._mod_data, obs=self._obs_data)
+        self._mod_data_h_interp = self._interp_mod_data(
+                mod=self._mod_data_h, obs=self._obs_data_h)
+        self._mod_data_q_interp = self._interp_mod_data(
+                mod=self._mod_data_q, obs=self._obs_data_q)
 
-        ss = sum_of_squares(self._obs_data.val, self._mod_data_interp.val)
-        if (self._mod_data_interp.val.sum() == 0) :
-            ss = 1
+        ssh = sum_of_squares(self._obs_data_h.val, self._mod_data_h_interp.val)
+        ssq = sum_of_squares(self._obs_data_q.val, self._mod_data_q_interp.val)
+        if (self._mod_data_h_interp.val.sum() == 0) :
+            ssh = 1
+        if (self._mod_data_q_interp.val.sum() == 0) :
+            ssq = 1
+        ss = ssh + ssq
 
         self.result.x = params
         self.result.fun = ss

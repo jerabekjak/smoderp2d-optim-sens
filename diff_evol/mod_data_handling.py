@@ -16,7 +16,7 @@ class RecModData(object):
         self.val = val
 
 
-def read_mod_file(path, col='surfaceFlow[m3/s]', t_col='time[s]', multip = 1):
+def read_mod_file(path, col, t_col='time[s]', multip = 1):
 
     with open(path, 'r') as md:
 
