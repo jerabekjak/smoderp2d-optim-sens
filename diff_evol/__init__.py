@@ -53,6 +53,7 @@ class DiffEvol(object):
 
         :param params: smoderp parameters [X,Y,b,ks,s]
         """
+        print (params[0:4])
         t1 = time.time()
         sm.run(self._mod_conf, params, self._obs)
         t2 = time.time()
