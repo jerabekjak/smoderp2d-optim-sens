@@ -94,8 +94,8 @@ class DiffEvol(object):
         #bounds = [(1, 30), (0.01, 5.), (1., 4.0),
         #         (1e-8, 1e-5), (1e-8, 1e-3), (-0.5, 0)]
         x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
-        self.result = self._minimize(self.model, x0, method='Nelder-Mead')
-        #self.result = self._minimize(self.model, x0, method='CG')
+        #self.result = self._minimize(self.model, x0, method='Nelder-Mead')
+        self.result = self._minimize(self.model, x0, method='CG')
 
        # self.result = self._de(self.model, bounds, disp=False,
        #         init='random'
