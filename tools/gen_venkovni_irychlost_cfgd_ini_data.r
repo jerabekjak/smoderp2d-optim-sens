@@ -1,6 +1,7 @@
 library(lubridate)
 setwd("/home/hdd/data/16_smod_paper_optim/smoderp2d-optim-sens/")
-files_ = list.files('../data_raw/obs_data_venku_prutok_ruchlost_raw/', pattern = '*.csv', full.names = T)
+files_ = list.files('../data_raw/obs_data_venku_prutok_ruchlost_raw/', pattern = '*.csv', full.names = T)[2]
+
 
 outs = ''
 plocha = 16 # m2
@@ -83,7 +84,7 @@ text_cmd <- function(out_dir, model_ini, optim_cgs, mer_name){
 for (i.file in files_) {
   r = read.table(i.file, header = TRUE, sep=',', dec='.')
   id = unique(r$ID.simulace)
-  for (i.id in id[2]) 
+  for (i.id in id) 
   {
     ii = which(r$ID.simulace == i.id)
     d = r[ii,]
@@ -122,6 +123,7 @@ for (i.file in files_) {
     # zapis pozorovanych dat
     # outdata = data.frame(cas, prutok, h)
     outdata = data.frame(cas, h)
+    outdata = outdata[!is.na(outdata$h),]
     write.table(outdata, file = data_path.h, sep = '\t', 
                 col.names = F, row.names = F)
     outdata = data.frame(cas, prutok)
