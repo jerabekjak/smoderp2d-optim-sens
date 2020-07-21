@@ -8,6 +8,7 @@ from tools.plots import plot_de
 from tools.writes import write_de
 from tools.plots import plot_de_residuals
 from tools.optim_fnc import sum_of_squares
+from tools.optim_fnc import nash_sutcliffe as ns
 
 class DiffEvol(object):
 
@@ -77,6 +78,8 @@ class DiffEvol(object):
 
         ssh = sum_of_squares(self._obs_data_h.val, self._mod_data_h_interp.val)
         ssq = sum_of_squares(self._obs_data_q.val, self._mod_data_q_interp.val)
+        nsh = ns(self._obs_data_h.val, self._mod_data_h_interp.val)
+        nsq = ns(self._obs_data_q.val, self._mod_data_q_interp.val)
         if (self._mod_data_h_interp.val.sum() == 0) :
             ssh = 999
         if (self._mod_data_q_interp.val.sum() == 0) :
@@ -89,8 +92,15 @@ class DiffEvol(object):
 
         self._model_runs += 1
 
-        print ('In interation ;{}; model run ;{}; runs ;{:1.2f}; secs with ss = ;{:1.4e};with pars set ;{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e}'.format(self.iter_,
-                                                                                                                                                                self._model_runs, t2-t1, ss, params[0], params[1], params[2], params[3], params[4], params[5]))
+        #print ('In interation ;{}; model run ;{}; runs ;{:1.2f}; secs with ss = ;{:1.4e};with pars set ;{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e}'.format(self.iter_,
+        msg =   'In interation ;{}; model run ;{}; runs;{:1.2f} secs;'.format(self.iter_,self._model_runs, t2-t1)
+        msg +=  'with ssh = ;{:1.4e};'.format(ssh)
+        msg +=  'with ssq = ;{:1.4e};'.format(ssq)
+        msg +=  'with ss = ;{:1.4e};'.format(ss)
+        msg +=  'with nsh = ;{:1.4e};'.format(nsh)
+        msg +=  'with nsq = ;{:1.4e};'.format(nsq)
+        msg +=  'with pars set;{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e};{:1.4e}'.format(params[0], params[1], params[2], params[3], params[4], params[5])
+        print (msg)
 
         return ss
 
@@ -100,7 +110,7 @@ class DiffEvol(object):
         #bounds = [(1, 20), (0.01, 1.), (1., 2.0),
         #          (1e-8, 1e-6), (1e-8, 1e-1), (-0.005, 0)]
         bounds = [(1, 30), (0.01, 5.), (1., 4.0),
-                 (1e-8, 1e-6), (1e-8, 1e-3), (-0.5, 0)]
+                 (1e-8, 1e-6), (1e-8, 1e-3), (-0.005, 0)]
         x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
         #self.result = self._minimize(self.model, x0, method='Nelder-Mead')
         #self.result = self._minimize(self.model, x0, method='CG')
@@ -111,10 +121,10 @@ class DiffEvol(object):
                 #maxiter=1,
                 #popsize=1,
                 #recombination=0.9,
-                strategy='rand2exp'
+                #strategy='rand2exp'
                 )
                 #popsize=5, maxiter=4)
-       # print ('vals {}'.format(self._mod_data_interp.val))
+        #print ('vals {}'.format(self._mod_data_interp.val))
 
         #self._mod_data_interp.val.fill(0.0)
         #while self._mod_data_interp.val.sum() == 0.0:
