@@ -84,7 +84,7 @@ text_cmd <- function(out_dir, model_ini, optim_cgs, mer_name){
 for (i.file in files_) {
   r = read.table(i.file, header = TRUE, sep=',', dec='.')
   id = unique(r$ID.simulace)
-  for (i.id in id[11]) 
+  for (i.id in id) 
   {
     ii = which(r$ID.simulace == i.id)
     d = r[ii,]
@@ -124,10 +124,14 @@ for (i.file in files_) {
     # outdata = data.frame(cas, prutok, h)
     outdata = data.frame(cas, h)
     outdata = outdata[!is.na(outdata$h),]
+    outdata = outdata[order(outdata$cas),]
+    plot(outdata, main=mer_name)
     write.table(outdata, file = data_path.h, sep = '\t', 
                 col.names = F, row.names = F)
     outdata = data.frame(cas, prutok)
-    plot(outdata, main=mer_name)
+    outdata = outdata[order(outdata$cas),]
+    plot(outdata, main=mer_name, ylim=range(outdata$prutok, rainfall/60))
+    abline(h = rainfall/60)
     write.table(outdata, file = data_path.q, sep = '\t', 
                 col.names = F, row.names = F)
     # 

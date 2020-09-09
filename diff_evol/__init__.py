@@ -1,4 +1,5 @@
 import time
+import math
 
 import model.smoderp2d.main_optim_sens as sm
 from diff_evol.mod_data_handling import read_mod_file
@@ -54,6 +55,7 @@ class DiffEvol(object):
 
         :param params: smoderp parameters [X,Y,b,ks,s]
         """
+        print (type(params))
         if  (any(params[0:5]<=0)) :
             self.result.x = params
             self.result.fun = 999
@@ -77,14 +79,15 @@ class DiffEvol(object):
                 mod=self._mod_data_q, obs=self._obs_data_q)
 
         ssh = sum_of_squares(self._obs_data_h.val, self._mod_data_h_interp.val)
-        ssq = sum_of_squares(self._obs_data_q.val, self._mod_data_q_interp.val)
+        ssq = sum_of_squares(self._obs_data_q.val,
+                self._mod_data_q_interp.val)*100
         nsh = ns(self._obs_data_h.val, self._mod_data_h_interp.val)
         nsq = ns(self._obs_data_q.val, self._mod_data_q_interp.val)
+        ss = (ssh*math.log10(ssh) + ssq*math.log10(ssq))/(math.log10(ssh)+math.log10(ssq))
         if (self._mod_data_h_interp.val.sum() == 0) :
-            ssh = 999
+            ss = 1e0
         if (self._mod_data_q_interp.val.sum() == 0) :
-            ssq = 999
-        ss = ssh + ssq
+            ss = 1e0
 
         self.result.x = params
         self.result.fun = ss
@@ -110,16 +113,17 @@ class DiffEvol(object):
         #bounds = [(1, 20), (0.01, 1.), (1., 2.0),
         #          (1e-8, 1e-6), (1e-8, 1e-1), (-0.005, 0)]
         bounds = [(1, 30), (0.01, 5.), (1., 4.0),
-                 (1e-8, 1e-6), (1e-8, 1e-3), (-0.005, 0)]
+                 (1e-9, 1e-5), (0, 1e-1), (-0.01, 0)]
         x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
         #self.result = self._minimize(self.model, x0, method='Nelder-Mead')
         #self.result = self._minimize(self.model, x0, method='CG')
 
         self.result = self._de(self.model, bounds, disp=False,
-                #init='random',
-                #mutation=(0.1,0.9),
+                init='random',
+                #mutation=(0.5,1.5),
+                #mutation=1.5,
                 #maxiter=1,
-                #popsize=1,
+                popsize=100,
                 #recombination=0.9,
                 #strategy='rand2exp'
                 )

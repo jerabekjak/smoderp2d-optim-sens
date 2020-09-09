@@ -5,7 +5,7 @@ from diff_evol import DiffEvol
 from philip_optim import get_ks_s
 from diff_evol.read_parser import read_parser
 import os
-
+import numpy
 def main(pars):
 
     # load observation data
@@ -17,7 +17,15 @@ def main(pars):
     #get_ks_s(OD.data, pars.out_dir)
         
     DE = DiffEvol(pars = pars, obs = OD)
-    DE.model([4.5,0.79,1.3,4.7e-06,2.6e-05,-0.00025])
+    # vysledky.1/2/2018-05-31-risuty-157.log
+    # nejlepsi nsh
+    # params = numpy.array([9.8594, 1.4845, 1.0190, 3.8951e-08, 0.00044035, -1.7336e-03])
+    # nejlepsi nsq
+    # params = numpy.array([23.3550, 1.8210, 1.0189, 1.4811e-08, 0.00032817, -1.1557e-03])
+    # kompromis nsq a nsh
+    params = numpy.array([23.4130, 1.8363, 1.0012, 1.0446e-08, 0.00035244, -3.1222e-03])
+    #params = numpy.array([4.5,0.79,1.3,4.7e-06,2.6e-05,-0.00025])
+    DE.model(params)
     
 if __name__ == '__main__':
 
