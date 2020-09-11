@@ -111,9 +111,9 @@ class DiffEvol(object):
         # bounds for parameters [X,Y,b]
         #bounds = [(1, 20), (0.01, 1.), (1., 2.0),
         #          (1e-8, 1e-6), (1e-8, 1e-1), (-0.005, 0)]
+        # x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
         bounds = [(1, 100), (0.01, 5.), (1., 2.0),
-                 (1e-9, 1e-4), (0, 1e-1), (-0.01, 0)]
-        x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
+                 (2.7778e-07, 1.6667e-5), (1e-8, 1e-4), (-0.01, 0)]
         #self.result = self._minimize(self.model, x0, method='Nelder-Mead')
         #self.result = self._minimize(self.model, x0, method='CG')
 
@@ -123,12 +123,12 @@ class DiffEvol(object):
             if (self._max_iter()):
                 break
             self.result = self._de(self.model, bounds, disp=False,
-                    # init='random',
-                    init='latinhypercube',
-                    # mutation=(0.5,1.9),
+                    init='random',
+                    # init='latinhypercube',
+                    mutation=(0.5,1.9),
                     #mutation=1.5,
                     #maxiter=1,
-                    popsize=100,
+                    popsize=25,
                     #recombination=0.9,
                     # strategy='randtobest1exp'
                     )
