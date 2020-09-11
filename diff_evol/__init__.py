@@ -55,7 +55,6 @@ class DiffEvol(object):
 
         :param params: smoderp parameters [X,Y,b,ks,s]
         """
-        print (type(params))
         if  (any(params[0:5]<=0)) :
             self.result.x = params
             self.result.fun = 999
@@ -112,32 +111,28 @@ class DiffEvol(object):
         # bounds for parameters [X,Y,b]
         #bounds = [(1, 20), (0.01, 1.), (1., 2.0),
         #          (1e-8, 1e-6), (1e-8, 1e-1), (-0.005, 0)]
-        bounds = [(1, 30), (0.01, 5.), (1., 4.0),
-                 (1e-9, 1e-5), (0, 1e-1), (-0.01, 0)]
+        bounds = [(1, 100), (0.01, 5.), (1., 2.0),
+                 (1e-9, 1e-4), (0, 1e-1), (-0.01, 0)]
         x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
         #self.result = self._minimize(self.model, x0, method='Nelder-Mead')
         #self.result = self._minimize(self.model, x0, method='CG')
 
-        self.result = self._de(self.model, bounds, disp=False,
-                init='random',
-                #mutation=(0.5,1.5),
-                #mutation=1.5,
-                #maxiter=1,
-                popsize=100,
-                #recombination=0.9,
-                #strategy='rand2exp'
-                )
-                #popsize=5, maxiter=4)
-        #print ('vals {}'.format(self._mod_data_interp.val))
-
-        #self._mod_data_interp.val.fill(0.0)
-        #while self._mod_data_interp.val.sum() == 0.0:
-        #    self.iter_ += 1
-        #    if (self._max_iter()):
-        #        break
-        #    self.result = self._de(self.model, bounds, disp=False,
-        #    strategy='best2exp', popsize=4, maxiter=3)
-        #    print ('vals {}'.format(self._mod_data_interp.val))
+        self._mod_data_q_interp.val.fill(0.0)
+        while self._mod_data_q_interp.val.sum() == 0.0:
+            self.iter_ += 1
+            if (self._max_iter()):
+                break
+            self.result = self._de(self.model, bounds, disp=False,
+                    # init='random',
+                    init='latinhypercube',
+                    # mutation=(0.5,1.9),
+                    #mutation=1.5,
+                    #maxiter=1,
+                    popsize=100,
+                    #recombination=0.9,
+                    # strategy='randtobest1exp'
+                    )
+                    #popsize=5, maxiter=4)
 
     def _max_iter(self):
         return self.iter_ > self._maxIter
