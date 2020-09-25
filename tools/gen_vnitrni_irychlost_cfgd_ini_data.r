@@ -5,7 +5,7 @@ sheets = excel_sheets(file_)
 
 outs = ''
 plocha = 16 # m2
-sirka = 2 # m
+sirka = 0.9 # m #TODO - skontrolovat
 
 text_optim_cfg <- function(slope,rainfall,
                            n.h, data_path.h,
@@ -111,18 +111,51 @@ for (i.sheet in sheets) {
   n.q = length(which(!is.na(r$...2[8:length(r$...1)])))
   dt = cas.q[2:n.cas.q] - cas.q[1:(n.cas.q-1)] # minuty
   prutok_l_min = prutok_kg[2:n.q]/dt
-  plot(cas.q,c(0,prutok_l_min))
+  prutok_m3_s = NULL #TODO
+  # plot(cas.q,c(0,prutok_l_min))
   
   # prutok jde ven
-  prutok = NULL# l/min -> mm/min
+  prutok = NULL# l/min -> mm/min  #TODO
+  
+  # zapis  #TODO
+  # outdata = data.frame(cas.q, prutok)
+  # plot(outdata, main=mer_name)
+  # write.table(outdata, file = data_path.q, sep = '\t',
+  #             col.names = F, row.names = F)
   
   # # vyaks hlasiny
-  # n.h = length(which(!is.na(r$...3[8:length(r$...1)])))
-  # v = d$rychlost.na.posledním.úseku..m.s. # m/s
-  # # h jde ven
-  # h = prutok_m3_s/v/sirka # vyska hladiny na useku m
+  cas.h = as.numeric(r$...1[8:length(r$...1)])
+  v = as.numeric(r$...3[8:length(r$...1)]) # cas v sec za 0.5 metru
+  v = 0.5/v # m/s
+  cas.h = cas.h[!is.na(v)]
+  v = v[!is.na(v)]
+  n.h = length(which(!is.na(r$...3[8:length(r$...1)])))
+  # h jde ven
+  # h jde ven
+  h = prutok_m3_s/v/sirka # vyska hladiny na useku m
   
+  # zapis  #TODO
+  # outdata = data.frame(cas.h, h)
+  # plot(outdata, main=mer_name)
+  # write.table(outdata, file = data_path.h, sep = '\t',
+  #             col.names = F, row.names = F)
   
+  #     # 
+  #     # # write cli run
+  #     write(text_cmd(out_pat,model_ini_path,conf_path,mer_name),
+  #           file = paste(outs,'runs_field_ds_waterheight/',mer_name,sep=''))
+  #     #  
+  #     # # write optim cfg
+  #     write(text_optim_cfg(slope_prc, rainfall,
+  #                          n.h, data_path.h,
+  #                          n.q, data_path.q,
+  #                          model_out_path),
+  #           file = conf_path)
+  #     # 
+  #     # write model ini
+  #     write(text_model_ini(model_out_path), file = model_ini_path)
+  
+  #TODO - ju jsem skoncil
   
 #   for (i.id in id) 
 #   {
