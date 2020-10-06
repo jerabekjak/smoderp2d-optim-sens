@@ -1,10 +1,12 @@
 library("readxl")
 setwd("/home/hdd/data/16_smod_paper_optim/smoderp2d-optim-sens/")
 file_ = '../data_raw/obs_data_vnitrni_rychlosti/trebsin2_smoderp.xlsx'
+file_ = '../data_raw/obs_data_vnitrni_rychlosti/trebsin2_smoderp_opraveno.xlsx'
 sheets = excel_sheets(file_)
+pdf_ = T
 
 outs = ''
-plocha = 16 # m2
+plocha = 0.9*4 # m2 #TODO - skontrolovat
 sirka = 0.9 # m #TODO - skontrolovat
 
 text_optim_cfg <- function(slope,rainfall,
@@ -17,9 +19,9 @@ rainfall: ',rainfall,'
 # slope [-]
 slope: ',slope,'
 # length of plot meters
-plotlength: 8
+plotlength: 4
 # width of plot meters
-plotwidth: 2
+plotwidth: 0.9
 
 
 # data area stored in data file
@@ -81,6 +83,7 @@ text_cmd <- function(out_dir, model_ini, optim_cgs, mer_name){
 
 
 # 
+if (pdf_) {pdf('Rplot.pdf')}
 for (i.sheet in sheets) {
   r = read_xlsx(file_, sheet=i.sheet, col_names = F)
   id = paste(iconv(substring(r$...2[3], 1, 3),from="UTF-8",to="ASCII//TRANSLIT"),
@@ -99,7 +102,8 @@ for (i.sheet in sheets) {
   
   n = length(r$...1)
   slope_stup = as.numeric(r$...2[5])
-  slope_prc = NULL #TODO
+  slope_rad = slope_stup*pi/180
+  slope_prc = tan(slope_rad)
   rainfall = as.numeric(r$...2[4])
   
   # vypocet prutoku
@@ -111,49 +115,50 @@ for (i.sheet in sheets) {
   n.q = length(which(!is.na(r$...2[8:length(r$...1)])))
   dt = cas.q[2:n.cas.q] - cas.q[1:(n.cas.q-1)] # minuty
   prutok_l_min = prutok_kg[2:n.q]/dt
-  prutok_m3_s = NULL #TODO
-  # plot(cas.q,c(0,prutok_l_min))
-  
+  prutok_m3_s = prutok_l_min/1000/60 
+
   # prutok jde ven
-  prutok = NULL# l/min -> mm/min  #TODO
+  prutok = prutok_m3_s/plocha*1000*60 # m3/sec -> mm/min 
   
-  # zapis  #TODO
-  # outdata = data.frame(cas.q, prutok)
-  # plot(outdata, main=mer_name)
-  # write.table(outdata, file = data_path.q, sep = '\t',
-  #             col.names = F, row.names = F)
+  # zapis 
+  outdata = data.frame(cas.q,c(0,prutok))
+  plot(outdata, main=mer_name)
+  write.table(outdata, file = data_path.q, sep = '\t',
+              col.names = F, row.names = F)
   
-  # # vyaks hlasiny
+  # # vyska hladiny
   cas.h = as.numeric(r$...1[8:length(r$...1)])
   v = as.numeric(r$...3[8:length(r$...1)]) # cas v sec za 0.5 metru
   v = 0.5/v # m/s
   cas.h = cas.h[!is.na(v)]
   v = v[!is.na(v)]
   n.h = length(which(!is.na(r$...3[8:length(r$...1)])))
+
+  # pritok pro cas mereni rychlosti
+  splfun = splinefun(x=cas.q, y=c(0,prutok_m3_s))
   # h jde ven
-  # h jde ven
-  h = prutok_m3_s/v/sirka # vyska hladiny na useku m
+  h = splfun(cas.h)/v/sirka # vyska hladiny na useku m
   
-  # zapis  #TODO
-  # outdata = data.frame(cas.h, h)
-  # plot(outdata, main=mer_name)
-  # write.table(outdata, file = data_path.h, sep = '\t',
-  #             col.names = F, row.names = F)
+  # zapis 
+  outdata = data.frame(cas.h, h)
+  plot(outdata, main=mer_name)
+  write.table(outdata, file = data_path.h, sep = '\t',
+              col.names = F, row.names = F)
   
-  #     # 
-  #     # # write cli run
-  #     write(text_cmd(out_pat,model_ini_path,conf_path,mer_name),
-  #           file = paste(outs,'runs_field_ds_waterheight/',mer_name,sep=''))
-  #     #  
-  #     # # write optim cfg
-  #     write(text_optim_cfg(slope_prc, rainfall,
-  #                          n.h, data_path.h,
-  #                          n.q, data_path.q,
-  #                          model_out_path),
-  #           file = conf_path)
-  #     # 
-  #     # write model ini
-  #     write(text_model_ini(model_out_path), file = model_ini_path)
+  # 
+  # # write cli run
+  write(text_cmd(out_pat,model_ini_path,conf_path,mer_name),
+        file = paste(outs,'runs_lab_ds_waterheight/',mer_name,sep=''))
+  #  
+  # # write optim cfg
+  write(text_optim_cfg(slope_prc, rainfall,
+                       n.h, data_path.h,
+                       n.q, data_path.q,
+                       model_out_path),
+        file = conf_path)
+  # 
+  # write model ini
+  write(text_model_ini(model_out_path), file = model_ini_path)
   
   #TODO - ju jsem skoncil
   
@@ -223,6 +228,7 @@ for (i.sheet in sheets) {
 #     write(text_model_ini(model_out_path), file = model_ini_path)
 #   }
 }
+if (pdf_) {dev.off()}
 # 
 # 
 # 
