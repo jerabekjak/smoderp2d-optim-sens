@@ -46,6 +46,7 @@ class DiffEvol(object):
         # count iterations
         self.iter_ = 0
         self.result = OptimizeResult
+        self._plotarea = self._obs.plotlength*self._obs.plotwidth
 
         # repeat optimalization id best fit is zero vector
         self._maxIter = 5
@@ -70,7 +71,7 @@ class DiffEvol(object):
         self._mod_data_q = self._read_mod_file(self._mod_file,
                 col = 'surfaceFlow[m3/s]')
         self._mod_data_q.val = [
-                self._mod_data_q.val / 16 for self._mod_data_q.val in self._mod_data_q.val]
+                self._mod_data_q.val / self._plotarea for self._mod_data_q.val in self._mod_data_q.val]
 
         self._mod_data_h_interp = self._interp_mod_data(
                 mod=self._mod_data_h, obs=self._obs_data_h)
