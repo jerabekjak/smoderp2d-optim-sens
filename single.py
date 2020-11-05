@@ -24,7 +24,7 @@ def main(pars):
     # params = numpy.array([23.3550, 1.8210, 1.0189, 1.4811e-08, 0.00032817, -1.1557e-03])
     # kompromis nsq a nsh
     # params = numpy.array([23.4130, 1.8363, 1.0012, 1.0446e-08, 0.00035244, -3.1222e-03])
-    params = numpy.array([3.6542e+01,3.0150e+00,1.2837e+00,7.9533e-07,1.0284e-04,-1.8243e-03])
+    params = numpy.array([30e+00,2,1.5e+00,5.11111e-6,1.0284e-06,-1.8243e-03])
     DE.model(params)
     
 if __name__ == '__main__':

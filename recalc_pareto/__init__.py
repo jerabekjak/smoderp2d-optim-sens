@@ -13,3 +13,6 @@ class RecalcPareto(DiffEvol):
             list_ = [float(x) for x in list_]
             self.pars_matrix.append(list_)
 
+    def __del__(self):
+        print ("\n\n\nENDE\n\n\n--------------------------")
+    

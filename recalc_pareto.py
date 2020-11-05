@@ -4,7 +4,7 @@ from diff_evol.obs_data_handler import ObsData
 from recalc_pareto import RecalcPareto
 from philip_optim import get_ks_s
 from diff_evol.read_parser import read_parser
-from tools.writes import write_de
+from tools.writes import write_rp
 import os
 import numpy
 import shutil
@@ -26,10 +26,12 @@ def main(pars):
             shutil.rmtree(new_pth)
         shutil.copytree(pars.out_dir, new_pth)
         counter += 1
-        write_de(RP._obs, 
+        write_rp(RP._obs, 
                 RP._mod_data_h_interp,
                 RP._mod_data_q_interp,
                 RP.result, new_pth)
+
+    shutil.rmtree(pars.out_dir)
 
 
 def msg():
