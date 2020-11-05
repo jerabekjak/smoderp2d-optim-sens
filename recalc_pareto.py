@@ -31,8 +31,17 @@ def main(pars):
                 RP._mod_data_q_interp,
                 RP.result, new_pth)
 
-    
-    print ('111111111111111111111111')
+
+def msg():
+    _str = '-'
+    print (_str*50)
+    for i in range(4): print (_str)
+    print (_str, 'RECALC PARETO PARAMETERS (NOT AN OPTIMIZATION)')
+    for i in range(4): print (_str)
+    print (_str*50)
+
+
 if __name__ == '__main__':
 
+    msg()
     main(read_parser())
