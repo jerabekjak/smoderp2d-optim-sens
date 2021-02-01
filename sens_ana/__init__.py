@@ -8,7 +8,7 @@ import sys
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
 from diff_evol.mod_data_handling import RecModData
-import model.smoderp2d.main as sm
+import model.smoderp2d.main_optim_sens as sm
 from tools.writes import write_sa
 from tools.plots import barplot_sa
 from tools.optim_fnc import sum_of_squares
