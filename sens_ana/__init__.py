@@ -240,6 +240,7 @@ class SensAna(object):
                             i][self._nparams:(self._nparams+2)] = model_res[0]
         self._plus_minus_res[2 *
                             i][(self._nparams+2):(self._nparams+4)] = model_res[1]
+        self._store_good_run(self._plus_minus_res[2*i])
         for i in range(self._nparams):
 
             sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
@@ -252,6 +253,7 @@ class SensAna(object):
                                 i+1][self._nparams:(self._nparams+2)] = model_res[0]
             self._plus_minus_res[2 *
                                 i+1][(self._nparams+2):(self._nparams+4)] = model_res[1]
+            self._store_good_run(self._plus_minus_res[2*i+1])
 
             params = self._gen_plus_minus_param_set(i, plus=False)
             self._plus_minus_res[2*i+2][0:self._nparams] = params
@@ -260,10 +262,9 @@ class SensAna(object):
                                 i+2][self._nparams:(self._nparams+2)] = model_res[0]
             self._plus_minus_res[2 *
                                 i+2][(self._nparams+2):(self._nparams+4)] = model_res[1]
-
+            self._store_good_run(self._plus_minus_res[2*i+2])
             t2 = time.time()
             print (' done in {:1.2f} secs'.format(t2-t1))
-        print (self._plus_minus_res)
 
     def _monte_carlo(self):
 
@@ -307,24 +308,32 @@ class SensAna(object):
 
         path_run = '{0}{sep}{1}'.format(dir_, 'params.dat', sep=os.sep)
         with open(path_run, 'w') as pf:
-            pf.write('X;Y;b;Ks;S;ret;SofSq;NashSutcliffe\n')
-            for ix in results[0:(self._nparams+1)]:
+            pf.write('X;Y;b;Ks;S;ret;SofS_h;SofS_q;NashSutcliffe_h;NashSutcliffe_q\n')
+            for ix in results[0:(self._nparams+3)]:
                 pf.write('{:1.3e};'.format(ix))
-            pf.write('{:1.3e}'.format(results[self._nparams+2-1]))
+            pf.write('{:1.3e}'.format(results[self._nparams+4-1]))
 
-        n = len(self._bf_data.time)
-
-        path_run = '{0}{sep}{1}'.format(dir_, 'mod_obs.dat', sep=os.sep)
-
+        n = len(self._bf_data_h.time)
+        path_run = '{0}{sep}{1}'.format(dir_, 'mod_obs_h.dat', sep=os.sep)
         print_arr = np.zeros([4, n], float)
-        print_arr[0] = self._bf_data.time
-        print_arr[1] = self._bf_data.val
-        print_arr[2] = self._mod_data_interp.val
-        print_arr[3] = self._mod_data_interp_wl.val
+        print_arr[0] = self._bf_data_h.time
+        print_arr[1] = self._bf_data_h.val
+        print_arr[1] = self._bf_data_h.fit_vals
+        print_arr[2] = self._mod_data_interp_h.val
         print_arr = np.transpose(print_arr)
-
         np.savetxt(path_run, print_arr, fmt='%1.4e', comments='',
-                   header='time;obs;mod;mod_wl', delimiter=';')
+                   header='time;obs;mod_bf;mod_sens', delimiter=';')
+
+        n = len(self._bf_data_q.time)
+        path_run = '{0}{sep}{1}'.format(dir_, 'mod_obs_q.dat', sep=os.sep)
+        print_arr = np.zeros([4, n], float)
+        print_arr[0] = self._bf_data_q.time
+        print_arr[1] = self._bf_data_q.val
+        print_arr[1] = self._bf_data_q.fit_vals
+        print_arr[2] = self._mod_data_interp_q.val
+        print_arr = np.transpose(print_arr)
+        np.savetxt(path_run, print_arr, fmt='%1.4e', comments='',
+                   header='time;obs;mod_bf;mod_sens', delimiter=';')
 
         # updata dir name
         self._good_run_dir_int += 1
