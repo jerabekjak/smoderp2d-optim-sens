@@ -231,26 +231,26 @@ class SensAna(object):
         # first row in _plus_minus_res is the best fir run
         i = 0
         params = self._get_best_param_set()
-        self._plus_minus_res[2*i][0:self._nparams] = params
-        self._plus_minus_res[2 *
-                             i][self._nparams:(self._nparams+2)] = self._model(params)
-        for i in range(self._nparams):
+        #self._plus_minus_res[2*i][0:self._nparams] = params
+        #self._plus_minus_res[2 *
+        #                     i][self._nparams:(self._nparams+2)] = self._model(params)
+        #for i in range(self._nparams):
 
-            sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
-            t1 = time.time()
+        #    sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
+        #    t1 = time.time()
 
-            params = self._gen_plus_minus_param_set(i)
-            self._plus_minus_res[2*i+1][0:self._nparams] = params
-            self._plus_minus_res[2 *
-                                 i+1][self._nparams:(self._nparams+2)] = self._model(params)
+        #    params = self._gen_plus_minus_param_set(i)
+        #    self._plus_minus_res[2*i+1][0:self._nparams] = params
+        #    self._plus_minus_res[2 *
+        #                         i+1][self._nparams:(self._nparams+2)] = self._model(params)
 
-            params = self._gen_plus_minus_param_set(i, plus=False)
-            self._plus_minus_res[2*i+2][0:self._nparams] = params
-            self._plus_minus_res[2*i +
-                                 2][self._nparams:(self._nparams+2)] = self._model(params)
+        #    params = self._gen_plus_minus_param_set(i, plus=False)
+        #    self._plus_minus_res[2*i+2][0:self._nparams] = params
+        #    self._plus_minus_res[2*i +
+        #                         2][self._nparams:(self._nparams+2)] = self._model(params)
 
-            t2 = time.time()
-            print (' done in {:1.2f} secs'.format(t2-t1))
+        #    t2 = time.time()
+        #    print (' done in {:1.2f} secs'.format(t2-t1))
 
     def _monte_carlo(self):
 
