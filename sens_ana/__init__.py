@@ -183,7 +183,7 @@ class SensAna(object):
 
         sm.run(self._mod_conf, params, self._cfgs)
 
-        mod_data = self._read_mod_file(self._mod_file)
+        mod_data = self._read_mod_file(self._mod_file, col = 'surfaceFlow[m3/s]')
         mod_data_wl = self._read_mod_file(self._mod_file, col = 'totalWaterLevel[m]')
         
         self._mod_data_interp = self._interp_mod_data(
@@ -231,9 +231,10 @@ class SensAna(object):
         # first row in _plus_minus_res is the best fir run
         i = 0
         params = self._get_best_param_set()
-        #self._plus_minus_res[2*i][0:self._nparams] = params
-        #self._plus_minus_res[2 *
-        #                     i][self._nparams:(self._nparams+2)] = self._model(params)
+        print (params)
+        self._plus_minus_res[2*i][0:self._nparams] = params
+        self._plus_minus_res[2 *
+                             i][self._nparams:(self._nparams+2)] = self._model(params)
         #for i in range(self._nparams):
 
         #    sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
