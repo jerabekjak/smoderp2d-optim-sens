@@ -22,7 +22,8 @@ class SensAna(object):
 
         :param pars: parser namespace
         """
-        self._bf_data = cfgs.data
+        self._bf_data_h = cfgs.data_h
+        self._bf_data_q = cfgs.data_q
         self._mod_data = None
         self._mod_data_interp = None
         self._mod_data_interp_wl = None # wl stands for water level
@@ -195,6 +196,34 @@ class SensAna(object):
         
         return ss, ns
 
+    def _plus_minus_proc_bak(self):
+
+        print ('# plus minus sensitivity...')
+
+        # first row in _plus_minus_res is the best fir run
+        i = 0
+        params = self._get_best_param_set()
+        self._plus_minus_res[2*i][0:self._nparams] = params
+        self._plus_minus_res[2 *
+                             i][self._nparams:(self._nparams+2)] = self._model(params)
+        for i in range(self._nparams):
+
+            sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
+            t1 = time.time()
+
+            params = self._gen_plus_minus_param_set(i)
+            self._plus_minus_res[2*i+1][0:self._nparams] = params
+            self._plus_minus_res[2 *
+                                 i+1][self._nparams:(self._nparams+2)] = self._model(params)
+
+            params = self._gen_plus_minus_param_set(i, plus=False)
+            self._plus_minus_res[2*i+2][0:self._nparams] = params
+            self._plus_minus_res[2*i +
+                                 2][self._nparams:(self._nparams+2)] = self._model(params)
+
+            t2 = time.time()
+            print (' done in {:1.2f} secs'.format(t2-t1))
+
     def _plus_minus_proc(self):
 
         print ('# plus minus sensitivity...')
@@ -251,9 +280,9 @@ class SensAna(object):
 
     def do_sa(self):
 
-        #self._plus_minus_proc()
+        self._plus_minus_proc()
 
-        self._monte_carlo()
+        # self._monte_carlo()
 
     def _store_good_run(self, results):
 
@@ -290,6 +319,6 @@ class SensAna(object):
     def __del__(self):
 
         write_sa(self._plus_minus_res, "plus_minus_sa.dat", self._out_dir)
-        barplot_sa(self._out_dir, self._plus_minus_res)
+        #barplot_sa(self._out_dir, self._plus_minus_res)
         #write_sa(self._monte_carlo_res, "monte_carlo_sa.dat", self._out_dir)
         print ('done in {:1.1e} secs'.format(time.time()-self._total_time))
