@@ -56,7 +56,8 @@ class ReadConfig(object):
         # set instance of RecFitData with filled data from obs_mod.dat
         best_fit_dir = self._config.get('BestFit', 'dir')
         self._best_fit_dir = best_fit_dir
-        self.data = self._read_obs_fit_mod(best_fit_dir)
+        self.data_h = self._read_obs_fit_mod(best_fit_dir, 'obs_mod_h.dat')
+        self.data_q = self._read_obs_fit_mod(best_fit_dir, 'obs_mod_q.dat')
 
         # set read best fit params from params.dat
         bfparams = self._read_best_fit_params(best_fit_dir)
@@ -70,13 +71,13 @@ class ReadConfig(object):
         self.rainfall = bfparams[7]
         self.bfss = bfparams[8]
 
-    def _read_obs_fit_mod(self, dir_):
+    def _read_obs_fit_mod(self, dir_, file_):
         """ make RecFitData instance
 
         :param dir_: directory with best fit data (obs_mod.dat)
         :return instance(RecFitData): instance containing the bod and best fit data
         """
-        file_ = '{}{sep}obs_mod.dat'.format(dir_, sep=os.sep)
+        file_ = '{}{sep}{}'.format(dir_, file_, sep=os.sep)
         with open(file_, 'r') as f:
             lines = f.readlines()
 
