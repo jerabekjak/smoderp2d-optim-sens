@@ -42,9 +42,9 @@ class SensAna(object):
         self._proc_mv = 0.1
 
         # stores results from the +- proc sensitivity
-        # self._nparams+1 means + ss
+        # self._nparams+1 means + ss + ns
         self._plus_minus_res = np.zeros(
-            [2*self._nparams+1, self._nparams+2], float)
+            [2*self._nparams+1, self._nparams+4], float)
 
         # stores results from the monte carlo sensitivity
         # self._nparams+1 means + ss
@@ -179,20 +179,23 @@ class SensAna(object):
         """ Run the model
 
         :param mc: allows to record good results during monte carlo runs
+        :return ss, ns: list of ss and ns for h and q calculation
         """
 
         sm.run(self._mod_conf, params, self._cfgs)
 
-        mod_data = self._read_mod_file(self._mod_file, col = 'surfaceFlow[m3/s]')
-        mod_data_wl = self._read_mod_file(self._mod_file, col = 'totalWaterLevel[m]')
+        mod_data_q = self._read_mod_file(self._mod_file, col = 'surfaceFlow[m3/s]')
+        mod_data_h = self._read_mod_file(self._mod_file, col = 'totalWaterLevel[m]')
         
-        self._mod_data_interp = self._interp_mod_data(
-            mod=mod_data, obs=self._bf_data)
-        self._mod_data_interp_wl = self._interp_mod_data(
-            mod=mod_data_wl, obs=self._bf_data)
-
-        ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
-        ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
+        self._mod_data_interp_q = self._interp_mod_data(
+            mod=mod_data_q, obs=self._bf_data_q)
+        self._mod_data_interp_h = self._interp_mod_data(
+            mod=mod_data_h, obs=self._bf_data_h)
+        ss = [sum_of_squares(self._bf_data_h.val, self._mod_data_interp_h.val),
+                sum_of_squares(self._bf_data_q.val,
+                    self._mod_data_interp_q.val)]
+        ns = [nash_sutcliffe(self._bf_data_h.val, self._mod_data_interp_h.val),
+                nash_sutcliffe(self._bf_data_q.val, self._mod_data_interp_q.val)]
         
         return ss, ns
 
@@ -231,27 +234,36 @@ class SensAna(object):
         # first row in _plus_minus_res is the best fir run
         i = 0
         params = self._get_best_param_set()
-        print (params)
         self._plus_minus_res[2*i][0:self._nparams] = params
+        model_res = self._model(params)
         self._plus_minus_res[2 *
-                             i][self._nparams:(self._nparams+2)] = self._model(params)
-        #for i in range(self._nparams):
+                            i][self._nparams:(self._nparams+2)] = model_res[0]
+        self._plus_minus_res[2 *
+                            i][(self._nparams+2):(self._nparams+4)] = model_res[1]
+        for i in range(self._nparams):
 
-        #    sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
-        #    t1 = time.time()
+            sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
+            t1 = time.time()
 
-        #    params = self._gen_plus_minus_param_set(i)
-        #    self._plus_minus_res[2*i+1][0:self._nparams] = params
-        #    self._plus_minus_res[2 *
-        #                         i+1][self._nparams:(self._nparams+2)] = self._model(params)
+            params = self._gen_plus_minus_param_set(i)
+            self._plus_minus_res[2*i+1][0:self._nparams] = params
+            model_res = self._model(params)
+            self._plus_minus_res[2 *
+                                i+1][self._nparams:(self._nparams+2)] = model_res[0]
+            self._plus_minus_res[2 *
+                                i+1][(self._nparams+2):(self._nparams+4)] = model_res[1]
 
-        #    params = self._gen_plus_minus_param_set(i, plus=False)
-        #    self._plus_minus_res[2*i+2][0:self._nparams] = params
-        #    self._plus_minus_res[2*i +
-        #                         2][self._nparams:(self._nparams+2)] = self._model(params)
+            params = self._gen_plus_minus_param_set(i, plus=False)
+            self._plus_minus_res[2*i+2][0:self._nparams] = params
+            model_res = self._model(params)
+            self._plus_minus_res[2 *
+                                i+2][self._nparams:(self._nparams+2)] = model_res[0]
+            self._plus_minus_res[2 *
+                                i+2][(self._nparams+2):(self._nparams+4)] = model_res[1]
 
-        #    t2 = time.time()
-        #    print (' done in {:1.2f} secs'.format(t2-t1))
+            t2 = time.time()
+            print (' done in {:1.2f} secs'.format(t2-t1))
+        print (self._plus_minus_res)
 
     def _monte_carlo(self):
 
