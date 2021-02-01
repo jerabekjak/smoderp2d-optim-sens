@@ -2,6 +2,8 @@ library("readxl")
 setwd("/home/hdd/data/16_smod_paper_optim/smoderp2d-optim-sens/")
 file_ = '../data_raw/obs_data_vnitrni_rychlosti/trebsin2_smoderp.xlsx'
 file_ = '../data_raw/obs_data_vnitrni_rychlosti/trebsin2_smoderp_opraveno.xlsx'
+file_ = '../data_raw/obs_data_vnitrni_rychlosti/nucice_rychlosti.xlsx'
+file_ = '../data_raw/obs_data_vnitrni_rychlosti/vsetaty1_rychlosti.xlsx'
 sheets = excel_sheets(file_)
 pdf_ = T
 
