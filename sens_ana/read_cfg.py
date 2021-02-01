@@ -34,6 +34,9 @@ class ReadConfig(object):
         # number of monte carlo runs
         self.mcruns = self._config.getint('SensParams', 'mcruns')
 
+        self.plotlength = self._config.getfloat('Params', 'plotlength')
+        self.plotwidth  = self._config.getfloat('Params', 'plotwidth')
+
         # X,Y,b,ret are evenly ditributer within margins
         self.X = [float(par) for par in self._config.get(
             'ParamsMargins', 'X').split(',')]
