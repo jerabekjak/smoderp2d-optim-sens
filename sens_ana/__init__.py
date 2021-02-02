@@ -318,8 +318,8 @@ class SensAna(object):
         print_arr = np.zeros([4, n], float)
         print_arr[0] = self._bf_data_h.time
         print_arr[1] = self._bf_data_h.val
-        print_arr[1] = self._bf_data_h.fit_vals
-        print_arr[2] = self._mod_data_interp_h.val
+        print_arr[2] = self._bf_data_h.fit_vals
+        print_arr[3] = self._mod_data_interp_h.val
         print_arr = np.transpose(print_arr)
         np.savetxt(path_run, print_arr, fmt='%1.4e', comments='',
                    header='time;obs;mod_bf;mod_sens', delimiter=';')
@@ -329,8 +329,8 @@ class SensAna(object):
         print_arr = np.zeros([4, n], float)
         print_arr[0] = self._bf_data_q.time
         print_arr[1] = self._bf_data_q.val
-        print_arr[1] = self._bf_data_q.fit_vals
-        print_arr[2] = self._mod_data_interp_q.val
+        print_arr[2] = self._bf_data_q.fit_vals
+        print_arr[3] = self._mod_data_interp_q.val
         print_arr = np.transpose(print_arr)
         np.savetxt(path_run, print_arr, fmt='%1.4e', comments='',
                    header='time;obs;mod_bf;mod_sens', delimiter=';')

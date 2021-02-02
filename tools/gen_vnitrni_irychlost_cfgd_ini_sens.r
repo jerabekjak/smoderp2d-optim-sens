@@ -2,8 +2,8 @@ library("readxl")
 setwd("/home/hdd/data/16_smod_paper_optim/smoderp2d-optim-sens/")
 file_ = '../data_raw/obs_data_vnitrni_rychlosti/trebsin2_smoderp.xlsx'
 file_ = '../data_raw/obs_data_vnitrni_rychlosti/trebsin2_smoderp_opraveno.xlsx'
-#file_ = '../data_raw/obs_data_vnitrni_rychlosti/nucice_rychlosti.xlsx'
-#file_ = '../data_raw/obs_data_vnitrni_rychlosti/vsetaty1_rychlosti.xlsx'
+file_ = '../data_raw/obs_data_vnitrni_rychlosti/nucice_rychlosti.xlsx'
+file_ = '../data_raw/obs_data_vnitrni_rychlosti/vsetaty1_rychlosti.xlsx'
 sheets = excel_sheets(file_)
 pdf_ = T
 
@@ -34,7 +34,7 @@ ret: -0.01,0
 # length of plot meters
 plotlength: 4
 # width of plot meters
-plotwidth: 1
+plotwidth: 0.9
 
 [Model]
 mod_file: ',model_out_path,'/point001.csv
