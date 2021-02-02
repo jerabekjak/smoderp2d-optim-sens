@@ -89,7 +89,7 @@ class SensAna(object):
 
         return (params)
 
-    def _gen_plus_minus_param_set(self, i, plus=True):
+    def _gen_plus_minus_param_set_bak(self, i, plus=True):
         """ generates parameter where one parameter is proc_mv
         from the best fit
 
@@ -143,7 +143,7 @@ class SensAna(object):
 
         return (params)
 
-    def _gen_plus_minus_param_set_bak(self, i, proc_mv):
+    def _gen_plus_minus_param_set(self, i, plus=True):
         """ generates parameter where one parameter is proc_mv
         from the best fit
 
@@ -159,7 +159,8 @@ class SensAna(object):
         params[4] = self._cfgs.bfS
         params[5] = self._cfgs.bfret
 
-        params[i] += params[i]*proc_mv
+        if (plus): params[i] += params[i]*(+self._proc_mv)
+        if (not(plus)): params[i] += params[i]*(-self._proc_mv)
 
         return (params)
 
