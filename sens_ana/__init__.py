@@ -49,7 +49,7 @@ class SensAna(object):
         # stores results from the monte carlo sensitivity
         # self._nparams+1 means + ss
         self._monte_carlo_res = np.zeros(
-            [self._mcruns, self._nparams+2], float)
+            [self._mcruns, self._nparams+4], float)
 
         self._plot = False
         self._total_time = time.time()
@@ -278,17 +278,20 @@ class SensAna(object):
             params = self._gen_monte_carlo_param_set()
 
             # store parameter set
-            results = np.zeros(self._nparams+2)
+            results = np.zeros(self._nparams+4)
             results[0:self._nparams] = params
+            model_res = self._model(params, mc=True)
             results[self._nparams:(self._nparams+2)
-                    ] = self._model(params, mc=True)
+                    ] = model_res[0]
+            results[(self._nparams+2):(self._nparams+4)
+                    ] = model_res[1]
 
             # recond results
             self._monte_carlo_res[i][:] = results
 
-            ns = results[self._nparams+2-1]
-            if (ns > 0):
-                self._store_good_run(results)
+            #ns = results[self._nparams+2-1]
+            #if (ns > 0):
+            self._store_good_run(results)
 
             t2 = time.time()
             print (' done in {:1.2f} secs'.format(t2-t1))
