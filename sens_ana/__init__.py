@@ -4,6 +4,7 @@ import math
 from random import uniform
 import time
 import sys
+from shutil import copyfile
 
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
@@ -338,6 +339,8 @@ class SensAna(object):
         print_arr = np.transpose(print_arr)
         np.savetxt(path_run, print_arr, fmt='%1.4e', comments='',
                    header='time;obs;mod_bf;mod_sens', delimiter=';')
+
+        copyfile(self._mod_file , '{}/point.csv'.format(dir_))
 
         # updata dir name
         self._good_run_dir_int += 1
