@@ -4,6 +4,12 @@ file_ = '../data_raw/obs_data_vnitrni_rychlosti/trebsin2_smoderp.xlsx'
 file_ = '../data_raw/obs_data_vnitrni_rychlosti/trebsin2_smoderp_opraveno.xlsx'
 file_ = '../data_raw/obs_data_vnitrni_rychlosti/nucice_rychlosti.xlsx'
 file_ = '../data_raw/obs_data_vnitrni_rychlosti/vsetaty1_rychlosti.xlsx'
+file_ = '../data_raw/obs_data_vnitrni_rychlosti/Trebesice1_rychlosti.xlsx'
+file_ = '../data_raw/obs_data_vnitrni_rychlosti/Trebesice2_rychlosti.xlsx'
+file_ = '../data_raw/obs_data_vnitrni_rychlosti/Trebesice3_rychlosti_ok.xlsx'
+file_ = '../data_raw/obs_data_vnitrni_rychlosti/straseci_rychlosti_ok.xlsx'
+file_ = '../data_raw/obs_data_vnitrni_rychlosti/risuty_rychlosti_ok.xlsx'
+#file_ = '../data_raw/obs_data_vnitrni_rychlosti/vsetaty2_rychlosti.xlsx'
 sheets = excel_sheets(file_)
 pdf_ = T
 

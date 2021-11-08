@@ -295,9 +295,9 @@ class SensAna(object):
 
     def do_sa(self):
 
-        self._plus_minus_proc()
+        # self._plus_minus_proc()
 
-        # self._monte_carlo()
+        self._monte_carlo()
 
     def _store_good_run(self, results):
 
