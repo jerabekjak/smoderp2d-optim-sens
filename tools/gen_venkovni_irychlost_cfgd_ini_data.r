@@ -1,6 +1,6 @@
 library(lubridate)
 setwd("/home/hdd/data/16_smod_paper_optim/smoderp2d-optim-sens/")
-files_ = list.files('../data_raw/obs_data_venku_prutok_ruchlost_raw/', pattern = '*.csv', full.names = T)[2]
+files_ = list.files('../data_raw/obs_data_venku_prutok_ruchlost_raw/', pattern = '*.csv', full.names = T)[3]
 
 
 outs = ''
@@ -111,6 +111,11 @@ for (i.file in files_) {
     cas = minute(cas) + second(cas)/60
     slope_prc = d$sklon.terénu[1]
     rainfall = d$intenzita[1]
+    if (is.na(rainfall))
+    {
+      print (mer_name)
+      rainfall = 60
+    }
     n.h = length(d$rychlost.na.posledním.úseku..m.s.[!is.na(d$rychlost.na.posledním.úseku..m.s.)])
     n.q = length(d$průtok..l.min.[!is.na(d$průtok..l.min.)])
     prutok_m3_s = d$průtok..l.min./1000/60
