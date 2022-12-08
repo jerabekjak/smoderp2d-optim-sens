@@ -116,7 +116,7 @@ class DiffEvol(object):
         # x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
         premodel = \
         'out-{}'.format((os.path.basename(self._mod_conf).split('.')[0]))
-        path_ = '../vysledky.4/{}/params.dat'.format(premodel)
+        path_ = '../vysledky.4/01/{}/params.dat'.format(premodel)
         with open(path_,'r') as f_:
             lines = f_.readlines()
             Ks = lines[1].split(';')[3]
