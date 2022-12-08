@@ -121,10 +121,11 @@ class DiffEvol(object):
             lines = f_.readlines()
             Ks = lines[1].split(';')[3]
             S = lines[1].split(';')[4]
+            ret = lines[1].split(';')[5]
          
         bounds = [(1, 250), (0.5, 0.5), (5/3, 5/3),
                   (Ks,Ks), (S,S),
-                  (-0.005, 0)]
+                  (ret,ret)]
 
         #self.result = self._minimize(self.model, x0, method='Nelder-Mead')
         #self.result = self._minimize(self.model, x0, method='CG')
