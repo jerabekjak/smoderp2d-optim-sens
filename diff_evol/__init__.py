@@ -116,14 +116,15 @@ class DiffEvol(object):
         # x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
         premodel = \
         'out-{}'.format((os.path.basename(self._mod_conf).split('.')[0]))
-        path_ = '../vysledky.4/01/{}/params.dat'.format(premodel)
+        path_ = '../vysledky.4/02/{}/params.dat'.format(premodel)
         with open(path_,'r') as f_:
             lines = f_.readlines()
+            X = lines[1].split(';')[0]
             Ks = lines[1].split(';')[3]
             S = lines[1].split(';')[4]
             ret = lines[1].split(';')[5]
          
-        bounds = [(1, 250), (0.5, 0.5), (5/3, 5/3),
+        bounds = [(X, X), (0.5/2, 0.5*2), (5/3*0.8, 5/3*1.2),
                   (Ks,Ks), (S,S),
                   (ret,ret)]
 
