@@ -124,41 +124,35 @@ class DiffEvol(object):
             S = lines[1].split(';')[4]
             ret = lines[1].split(';')[5]
          
+
+        
+        loam = ["Nov-2016",  "Ris-2017",  "Tre-2011", "vse-2012", "Vse-2014"]
+        sandyloam = ["Tre-2010"] 
+        siltloam = ["tre-2008", "nuc-2011", "Tre-2014"]
+
         # 10%
-        if 'trebe' in path_: b = 1.534100
-        if 'ris' in path_: b = 1.476300
-        if 'byk' in path_: b = 1.559230
+        if len([i for i in loam if i in path_]) > 0 : b = 1.49430
+        if len([i for i in sandyloam if i in path_]) > 0 : b = 1.5017
+        if len([i for i in siltloam if i in path_]) > 0 : b = 1.50280
 
         # # 25%
-        # if 'trebe' in path_: b = 1.548825
-        # if 'ris' in path_:   b = 1.511300
-        # if 'byk' in path_:   b = 1.577225
 
         # # 50%
-        # if 'trebe' in path_: b = 1.615150
-        # if 'ris' in path_:   b = 1.581100
-        # if 'byk' in path_:   b = 1.716050
 
         # # 75%
-        # if 'trebe' in path_: b = 1.636750
-        # if 'ris' in path_:   b = 1.668675
-        # if 'byk' in path_:   b = 1.729000
 
         # # 75%
-        # if 'trebe' in path_: b = 1.749310
-        # if 'ris' in path_:   b = 1.737700
-        # if 'byk' in path_:   b = 1.762610
 
-        # FIELD
-        # [1] "isuty" = LOAM
-        #      10%      25%      50%      75%      90%
-        # 1.476300 1.511300 1.581100 1.668675 1.737700
-        # [1] "rebes" = LOAMY SAND
-        #      10%      25%      50%      75%      90%
-        # 1.534100 1.548825 1.615150 1.636750 1.749310
-        # [1] "ykovi" = SANDY LOAM
-        #      10%      25%      50%      75%      90%
-        # 1.559230 1.577225 1.716050 1.729000 1.762610
+        # LAB
+        # [1] "loam"
+        #     10%     25%     50%     75%     90% 
+        # 1.49430 1.53090 1.61075 1.69430 1.73749 
+        # [1] "sandyloam"
+        #    10%    25%    50%    75%    90% 
+        # 1.5017 1.5222 1.6443 1.7557 1.7794 
+        # [1] "siltloam"
+        #     10%     25%     50%     75%     90% 
+        # 1.50280 1.54115 1.63570 1.71980 1.75650 
 
         bounds = [(X,X), (0.5/2, 0.5*2), (b, b),
                   (Ks,Ks), (S,S),
