@@ -36,4 +36,13 @@ def read_parser():
         required=False
     )
 
+    parser.add_argument(
+        '-T',
+        '--texture',
+        help='what is the soil texture?',
+        type=str,
+        default='NA',
+        required=False
+    )
+
     return parser.parse_args()
