@@ -27,6 +27,7 @@ class DiffEvol(object):
         :param obs: list of obs_data_handler.RecObsData instances  
         """
         self._obs = obs
+        self._texture = pars.texture
         self._obs_data_h = obs.data_h
         self._obs_data_q = obs.data_q
         self._mod_data_h = None
@@ -131,29 +132,34 @@ class DiffEvol(object):
         siltloam = ["tre-2008", "nuc-2011", "Tre-2014"]
 
         # 10%
-        if len([i for i in loam if i in path_]) > 0 : b = 1.49430
-        if len([i for i in sandyloam if i in path_]) > 0 : b = 1.5017
-        if len([i for i in siltloam if i in path_]) > 0 : b = 1.50280
+        if (self._texture == '10') : # 10%
+            if len([i for i in loam if i in path_]) > 0 : b = 1.49430
+            if len([i for i in sandyloam if i in path_]) > 0 : b = 1.5017
+            if len([i for i in siltloam if i in path_]) > 0 : b = 1.50280
 
         # # 25%
-        # if len([i for i in loam if i in path_]) > 0 : b = 1.53090
-        # if len([i for i in sandyloam if i in path_]) > 0 : b = 1.5222
-        # if len([i for i in siltloam if i in path_]) > 0 : b = 1.54115
+        if (self._texture == '25') : 
+            if len([i for i in loam if i in path_]) > 0 : b = 1.53090
+            if len([i for i in sandyloam if i in path_]) > 0 : b = 1.5222
+            if len([i for i in siltloam if i in path_]) > 0 : b = 1.54115
 
         # # 50%
-        # if len([i for i in loam if i in path_]) > 0 : b = 1.61075
-        # if len([i for i in sandyloam if i in path_]) > 0 : b = 1.6443
-        # if len([i for i in siltloam if i in path_]) > 0 : b = 1.63570
+        if (self._texture == '50') : 
+            if len([i for i in loam if i in path_]) > 0 : b = 1.61075
+            if len([i for i in sandyloam if i in path_]) > 0 : b = 1.6443
+            if len([i for i in siltloam if i in path_]) > 0 : b = 1.63570
 
         # # 75%
-        # if len([i for i in loam if i in path_]) > 0 : b = 1.69430
-        # if len([i for i in sandyloam if i in path_]) > 0 : b = 1.7557
-        # if len([i for i in siltloam if i in path_]) > 0 : b = 1.71980
+        if (self._texture == '75') : 
+            if len([i for i in loam if i in path_]) > 0 : b = 1.69430
+            if len([i for i in sandyloam if i in path_]) > 0 : b = 1.7557
+            if len([i for i in siltloam if i in path_]) > 0 : b = 1.71980
 
         # # 90%
-        # if len([i for i in loam if i in path_]) > 0 : b = 1.73749
-        # if len([i for i in sandyloam if i in path_]) > 0 : b = 1.7794
-        # if len([i for i in siltloam if i in path_]) > 0 : b = 1.75650
+        if (self._texture == '90') : 
+            if len([i for i in loam if i in path_]) > 0 : b = 1.73749
+            if len([i for i in sandyloam if i in path_]) > 0 : b = 1.7794
+            if len([i for i in siltloam if i in path_]) > 0 : b = 1.75650
 
         # LAB
         # [1] "loam"
