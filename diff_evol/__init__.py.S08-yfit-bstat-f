@@ -27,6 +27,7 @@ class DiffEvol(object):
         :param obs: list of obs_data_handler.RecObsData instances  
         """
         self._obs = obs
+        self._texture = pars.texture
         self._obs_data_h = obs.data_h
         self._obs_data_q = obs.data_q
         self._mod_data_h = None
@@ -124,39 +125,39 @@ class DiffEvol(object):
             S = lines[1].split(';')[4]
             ret = lines[1].split(';')[5]
          
-        # 10%
-        if 'trebe' in path_: b = 1.534100
-        if 'ris' in path_: b = 1.476300
-        if 'byk' in path_: b = 1.559230
+        if (self._texture == '10') : # 10%
+            if 'trebe' in path_: b = 1.534100
+            if 'ris' in path_: b = 1.476300
+            if 'byk' in path_: b = 1.559230
 
-        # # 25%
-        # if 'trebe' in path_: b = 1.548825
-        # if 'ris' in path_:   b = 1.511300
-        # if 'byk' in path_:   b = 1.577225
+        if (self._texture == '25') : # 25%
+            if 'trebe' in path_: b = 1.548825
+            if 'ris' in path_:   b = 1.511300
+            if 'byk' in path_:   b = 1.577225
 
-        # # 50%
-        # if 'trebe' in path_: b = 1.615150
-        # if 'ris' in path_:   b = 1.581100
-        # if 'byk' in path_:   b = 1.716050
+        if (self._texture == '50') : # 50%
+            if 'trebe' in path_: b = 1.615150
+            if 'ris' in path_:   b = 1.581100
+            if 'byk' in path_:   b = 1.716050
 
-        # # 75%
-        # if 'trebe' in path_: b = 1.636750
-        # if 'ris' in path_:   b = 1.668675
-        # if 'byk' in path_:   b = 1.729000
+        if (self._texture == '75') : # 75%
+            if 'trebe' in path_: b = 1.636750
+            if 'ris' in path_:   b = 1.668675
+            if 'byk' in path_:   b = 1.729000
 
-        # # 75%
-        # if 'trebe' in path_: b = 1.749310
-        # if 'ris' in path_:   b = 1.737700
-        # if 'byk' in path_:   b = 1.762610
+        if (self._texture == '90') : # 90%
+            if 'trebe' in path_: b = 1.749310
+            if 'ris' in path_:   b = 1.737700
+            if 'byk' in path_:   b = 1.762610
 
         # FIELD
-        # [1] "isuty"
+        # [1] "isuty" = LOAM
         #      10%      25%      50%      75%      90%
         # 1.476300 1.511300 1.581100 1.668675 1.737700
-        # [1] "rebes"
+        # [1] "rebes" = LOAMY SAND
         #      10%      25%      50%      75%      90%
         # 1.534100 1.548825 1.615150 1.636750 1.749310
-        # [1] "ykovi"
+        # [1] "ykovi" = SANDY LOAM
         #      10%      25%      50%      75%      90%
         # 1.559230 1.577225 1.716050 1.729000 1.762610
 
