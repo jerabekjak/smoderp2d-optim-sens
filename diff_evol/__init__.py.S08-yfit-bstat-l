@@ -115,8 +115,8 @@ class DiffEvol(object):
         #          (1e-8, 1e-6), (1e-8, 1e-1), (-0.005, 0)]
         # x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
         premodel = \
-        'out-{}'.format((os.path.basename(self._mod_conf).split('.')[0]))
-        path_ = '../vysledky.4/01.fieldrs/{}/params.dat'.format(premodel)
+        '{}'.format((os.path.basename(self._mod_conf).split('.')[0]))
+        path_ = '../vysledky.4/04.labrs/{}/params.dat'.format(premodel)
         with open(path_,'r') as f_:
             lines = f_.readlines()
             X = lines[1].split(';')[0]
@@ -136,12 +136,24 @@ class DiffEvol(object):
         if len([i for i in siltloam if i in path_]) > 0 : b = 1.50280
 
         # # 25%
+        # if len([i for i in loam if i in path_]) > 0 : b = 1.53090
+        # if len([i for i in sandyloam if i in path_]) > 0 : b = 1.5222
+        # if len([i for i in siltloam if i in path_]) > 0 : b = 1.54115
 
         # # 50%
+        # if len([i for i in loam if i in path_]) > 0 : b = 1.61075
+        # if len([i for i in sandyloam if i in path_]) > 0 : b = 1.6443
+        # if len([i for i in siltloam if i in path_]) > 0 : b = 1.63570
 
         # # 75%
+        # if len([i for i in loam if i in path_]) > 0 : b = 1.69430
+        # if len([i for i in sandyloam if i in path_]) > 0 : b = 1.7557
+        # if len([i for i in siltloam if i in path_]) > 0 : b = 1.71980
 
-        # # 75%
+        # # 90%
+        # if len([i for i in loam if i in path_]) > 0 : b = 1.73749
+        # if len([i for i in sandyloam if i in path_]) > 0 : b = 1.7794
+        # if len([i for i in siltloam if i in path_]) > 0 : b = 1.75650
 
         # LAB
         # [1] "loam"

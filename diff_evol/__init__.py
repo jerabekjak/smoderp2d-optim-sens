@@ -116,7 +116,7 @@ class DiffEvol(object):
         # x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
         premodel = \
         'out-{}'.format((os.path.basename(self._mod_conf).split('.')[0]))
-        path_ = '../vysledky.4/01.fieldrs/{}/params.dat'.format(premodel)
+        path_ = '../vysledky.4/04.fieldrs/{}/params.dat'.format(premodel)
         with open(path_,'r') as f_:
             lines = f_.readlines()
             X = lines[1].split(';')[0]
@@ -124,15 +124,15 @@ class DiffEvol(object):
             S = lines[1].split(';')[4]
             ret = lines[1].split(';')[5]
          
-        # 10%
-        if 'trebe' in path_: b = 1.534100
-        if 'ris' in path_: b = 1.476300
-        if 'byk' in path_: b = 1.559230
+        # # 10%
+        # if 'trebe' in path_: b = 1.534100
+        # if 'ris' in path_: b = 1.476300
+        # if 'byk' in path_: b = 1.559230
 
-        # # 25%
-        # if 'trebe' in path_: b = 1.548825
-        # if 'ris' in path_:   b = 1.511300
-        # if 'byk' in path_:   b = 1.577225
+        # 25%
+        if 'trebe' in path_: b = 1.548825
+        if 'ris' in path_:   b = 1.511300
+        if 'byk' in path_:   b = 1.577225
 
         # # 50%
         # if 'trebe' in path_: b = 1.615150
