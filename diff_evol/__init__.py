@@ -116,8 +116,8 @@ class DiffEvol(object):
         #          (1e-8, 1e-6), (1e-8, 1e-1), (-0.005, 0)]
         # x0 = [1e+01, 5e-01, 1.5e+00, 4.4133e-08, 7.9349e-06, -0.001]
         premodel = \
-        'out-{}'.format((os.path.basename(self._mod_conf).split('.')[0]))
-        path_ = '../vysledky.4/04.fieldrs/{}/params.dat'.format(premodel)
+        '{}'.format((os.path.basename(self._mod_conf).split('.')[0]))
+        path_ = '../vysledky.4/04.labrs/{}/params.dat'.format(premodel)
         with open(path_,'r') as f_:
             lines = f_.readlines()
             X = lines[1].split(';')[0]
@@ -125,41 +125,52 @@ class DiffEvol(object):
             S = lines[1].split(';')[4]
             ret = lines[1].split(';')[5]
          
+
+        
+        loam = ["Nov-2016",  "Ris-2017",  "Tre-2011", "vse-2012", "Vse-2014"]
+        sandyloam = ["Tre-2010"] 
+        siltloam = ["tre-2008", "nuc-2011", "Tre-2014"]
+
+        # 10%
         if (self._texture == '10') : # 10%
-            if 'trebe' in path_: b = 1.534100
-            if 'ris' in path_: b = 1.476300
-            if 'byk' in path_: b = 1.559230
+            if len([i for i in loam if i in path_]) > 0 : b = 1.49430
+            if len([i for i in sandyloam if i in path_]) > 0 : b = 1.5017
+            if len([i for i in siltloam if i in path_]) > 0 : b = 1.50280
 
-        if (self._texture == '25') : # 25%
-            if 'trebe' in path_: b = 1.548825
-            if 'ris' in path_:   b = 1.511300
-            if 'byk' in path_:   b = 1.577225
+        # # 25%
+        if (self._texture == '25') : 
+            if len([i for i in loam if i in path_]) > 0 : b = 1.53090
+            if len([i for i in sandyloam if i in path_]) > 0 : b = 1.5222
+            if len([i for i in siltloam if i in path_]) > 0 : b = 1.54115
 
-        if (self._texture == '50') : # 50%
-            if 'trebe' in path_: b = 1.615150
-            if 'ris' in path_:   b = 1.581100
-            if 'byk' in path_:   b = 1.716050
+        # # 50%
+        if (self._texture == '50') : 
+            if len([i for i in loam if i in path_]) > 0 : b = 1.61075
+            if len([i for i in sandyloam if i in path_]) > 0 : b = 1.6443
+            if len([i for i in siltloam if i in path_]) > 0 : b = 1.63570
 
-        if (self._texture == '75') : # 75%
-            if 'trebe' in path_: b = 1.636750
-            if 'ris' in path_:   b = 1.668675
-            if 'byk' in path_:   b = 1.729000
+        # # 75%
+        if (self._texture == '75') : 
+            if len([i for i in loam if i in path_]) > 0 : b = 1.69430
+            if len([i for i in sandyloam if i in path_]) > 0 : b = 1.7557
+            if len([i for i in siltloam if i in path_]) > 0 : b = 1.71980
 
-        if (self._texture == '90') : # 90%
-            if 'trebe' in path_: b = 1.749310
-            if 'ris' in path_:   b = 1.737700
-            if 'byk' in path_:   b = 1.762610
+        # # 90%
+        if (self._texture == '90') : 
+            if len([i for i in loam if i in path_]) > 0 : b = 1.73749
+            if len([i for i in sandyloam if i in path_]) > 0 : b = 1.7794
+            if len([i for i in siltloam if i in path_]) > 0 : b = 1.75650
 
-        # FIELD
-        # [1] "isuty" = LOAM
-        #      10%      25%      50%      75%      90%
-        # 1.476300 1.511300 1.581100 1.668675 1.737700
-        # [1] "rebes" = LOAMY SAND
-        #      10%      25%      50%      75%      90%
-        # 1.534100 1.548825 1.615150 1.636750 1.749310
-        # [1] "ykovi" = SANDY LOAM
-        #      10%      25%      50%      75%      90%
-        # 1.559230 1.577225 1.716050 1.729000 1.762610
+        # LAB
+        # [1] "loam"
+        #     10%     25%     50%     75%     90% 
+        # 1.49430 1.53090 1.61075 1.69430 1.73749 
+        # [1] "sandyloam"
+        #    10%    25%    50%    75%    90% 
+        # 1.5017 1.5222 1.6443 1.7557 1.7794 
+        # [1] "siltloam"
+        #     10%     25%     50%     75%     90% 
+        # 1.50280 1.54115 1.63570 1.71980 1.75650 
 
         bounds = [(X,X), (0.5/2, 0.5*2), (b, b),
                   (Ks,Ks), (S,S),
