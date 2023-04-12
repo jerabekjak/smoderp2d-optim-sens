@@ -4,11 +4,13 @@ import math
 from random import uniform
 import time
 import sys
+import shutil
 
 from diff_evol.mod_data_handling import read_mod_file
 from diff_evol.mod_data_handling import interpolate
 from diff_evol.mod_data_handling import RecModData
-import model.smoderp2d.main as sm
+#import model.smoderp2d.main as sm
+import model.smoderp2d.main_optim_sens as sm
 from tools.writes import write_sa
 from tools.plots import barplot_sa
 from tools.optim_fnc import sum_of_squares
@@ -22,14 +24,14 @@ class SensAna(object):
 
         :param pars: parser namespace
         """
-        self._bf_data = cfgs.data
+        #self._bf_data = cfgs.data
         self._mod_data = None
         self._mod_data_interp = None
         self._mod_data_interp_wl = None # wl stands for water level
         self._cfgs = cfgs
         self._mod_conf = pars.mod_conf
         self._mod_file = self._cfgs.model_file
-        self._mcruns = cfgs.mcruns
+        #self._mcruns = cfgs.mcruns
 
         self._out_dir = pars.out_dir
 
@@ -47,8 +49,8 @@ class SensAna(object):
 
         # stores results from the monte carlo sensitivity
         # self._nparams+1 means + ss
-        self._monte_carlo_res = np.zeros(
-            [self._mcruns, self._nparams+2], float)
+        #self._monte_carlo_res = np.zeros(
+        #    [self._mcruns, self._nparams+2], float)
 
         self._plot = False
         self._total_time = time.time()
@@ -78,18 +80,26 @@ class SensAna(object):
     def _get_best_param_set(self):
         """ returns parameters of best fit """
 
-        params = np.zeros([self._nparams], float)
-        params[0] = self._cfgs.bfX
-        params[1] = self._cfgs.bfY
-        params[2] = self._cfgs.bfb
-        params[3] = self._cfgs.bfKs
-        params[4] = self._cfgs.bfS
-        params[5] = self._cfgs.bfret
+        premodel = \
+            '{}'.format((os.path.basename(self._mod_conf).split('.')[0]))
+        path_ = '../vysledky.4/02.fieldrs/out-{}/params.dat'.format(premodel)
+        with open(path_,'r') as f_:
+            lines = f_.readlines()
+            X = lines[1].split(';')[0]
+            Y = lines[1].split(';')[1]
+            b = lines[1].split(';')[2]
+            Ks = lines[1].split(';')[3]
+            S = lines[1].split(';')[4]
+            ret = lines[1].split(';')[5]
 
+        params = [X,Y,b,Ks,S,ret]
+        params = [float(i) for i in params]
+        print (params)
         return (params)
 
-    def _gen_plus_minus_param_set(self, i, plus=True):
+    def _gen_plus_minus_param_set(self, i, params, plus = True):
         """ generates parameter where one parameter is proc_mv
+
         from the best fit
 
         :param i: which parameter changes
@@ -128,19 +138,17 @@ class SensAna(object):
                 # ret
                 mult[5] = 1.0/5
             
-        params = np.zeros([self._nparams], float)
-        params[0] = self._cfgs.bfX
-        params[1] = self._cfgs.bfY
-        params[2] = self._cfgs.bfb
-        params[3] = self._cfgs.bfKs
-        params[4] = self._cfgs.bfS
-        params[5] = self._cfgs.bfret
-
+        #newparams = np.zeros([self._nparams], float)
 
         #for i in range(6) :
-        params[i] = params[i]*mult[i]
+        #newparams[i] = params[i]*mult[i]
+        newparams = params[:]
+        if (plus) :
+             newparams[i] += newparams[i]*self._proc_mv
+        if not(plus) :
+             newparams[i] += -newparams[i]*self._proc_mv
 
-        return (params)
+        return (newparams)
 
     def _gen_plus_minus_param_set_bak(self, i, proc_mv):
         """ generates parameter where one parameter is proc_mv
@@ -181,19 +189,20 @@ class SensAna(object):
         """
 
         sm.run(self._mod_conf, params, self._cfgs)
+        #print (self._mod_file)
+        #mod_data = self._read_mod_file(self._mod_file)
+        #input('')
+        #mod_data_wl = self._read_mod_file(self._mod_file, col = 'totalWaterLevel[m]')
+        #
+        #self._mod_data_interp = self._interp_mod_data(
+        #    mod=mod_data, obs=self._bf_data)
+        #self._mod_data_interp_wl = self._interp_mod_data(
+        #    mod=mod_data_wl, obs=self._bf_data)
 
-        mod_data = self._read_mod_file(self._mod_file)
-        mod_data_wl = self._read_mod_file(self._mod_file, col = 'totalWaterLevel[m]')
-        
-        self._mod_data_interp = self._interp_mod_data(
-            mod=mod_data, obs=self._bf_data)
-        self._mod_data_interp_wl = self._interp_mod_data(
-            mod=mod_data_wl, obs=self._bf_data)
-
-        ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
-        ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
-        
-        return ss, ns
+        #ss = sum_of_squares(self._bf_data.val, self._mod_data_interp.val)
+        #ns = nash_sutcliffe(self._bf_data.val, self._mod_data_interp.val)
+        #
+        #return ss, ns
 
     def _plus_minus_proc(self):
 
@@ -202,26 +211,40 @@ class SensAna(object):
         # first row in _plus_minus_res is the best fir run
         i = 0
         params = self._get_best_param_set()
+        print (params)
         self._plus_minus_res[2*i][0:self._nparams] = params
         self._plus_minus_res[2 *
                              i][self._nparams:(self._nparams+2)] = self._model(params)
+
+
+        shutil.copyfile(self._mod_file, '{}/{}.csv'.format(self._out_dir,i))
+        write_sa(self._plus_minus_res, "plus_minus_sa.dat", self._out_dir)
+        bestparams = params
         for i in range(self._nparams):
 
-            sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
+            #sys.stdout.write('run {}/{}'.format((i+1)*2, self._nparams*2))
             t1 = time.time()
 
-            params = self._gen_plus_minus_param_set(i)
+            params = self._gen_plus_minus_param_set(i,bestparams)
+
+            print ('    {}'.format(bestparams))
+            print (params)
             self._plus_minus_res[2*i+1][0:self._nparams] = params
             self._plus_minus_res[2 *
                                  i+1][self._nparams:(self._nparams+2)] = self._model(params)
+            shutil.copyfile(self._mod_file,
+                    '{}/{}plus.csv'.format(self._out_dir,i+1))
 
-            params = self._gen_plus_minus_param_set(i, plus=False)
+            params = self._gen_plus_minus_param_set(i, bestparams, plus=False)
+            print (params)
             self._plus_minus_res[2*i+2][0:self._nparams] = params
             self._plus_minus_res[2*i +
                                  2][self._nparams:(self._nparams+2)] = self._model(params)
+            shutil.copyfile(self._mod_file,
+                    '{}/{}minus.csv'.format(self._out_dir,i+1))
 
             t2 = time.time()
-            print (' done in {:1.2f} secs'.format(t2-t1))
+            #print (' done in {:1.2f} secs'.format(t2-t1))
 
     def _monte_carlo(self):
 
@@ -251,9 +274,9 @@ class SensAna(object):
 
     def do_sa(self):
 
-        #self._plus_minus_proc()
+        self._plus_minus_proc()
 
-        self._monte_carlo()
+        #self._monte_carlo()
 
     def _store_good_run(self, results):
 
@@ -290,6 +313,6 @@ class SensAna(object):
     def __del__(self):
 
         write_sa(self._plus_minus_res, "plus_minus_sa.dat", self._out_dir)
-        barplot_sa(self._out_dir, self._plus_minus_res)
+        #barplot_sa(self._out_dir, self._plus_minus_res)
         #write_sa(self._monte_carlo_res, "monte_carlo_sa.dat", self._out_dir)
         print ('done in {:1.1e} secs'.format(time.time()-self._total_time))
