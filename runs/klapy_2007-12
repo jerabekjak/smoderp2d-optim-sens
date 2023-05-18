@@ -1,0 +1,1 @@
+./optim.py -o out-klapy_2007-12 -m model/klapy_2007-12.ini -O cfgs/klapy_2007-12.cfg > logs/out-klapy_2007-12.log

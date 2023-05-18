@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2017-04-24_uho-any_m -m model/2017-04-24_uho-any_m.ini -O cfgs/2017-04-24_uho-any_m.cfgs &> logs/2017-04-24_uho-any_m.log

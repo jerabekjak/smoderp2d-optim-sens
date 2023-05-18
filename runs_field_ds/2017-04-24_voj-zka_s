@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2017-04-24_voj-zka_s -m model/2017-04-24_voj-zka_s.ini -O cfgs/2017-04-24_voj-zka_s.cfgs &> logs/2017-04-24_voj-zka_s.log

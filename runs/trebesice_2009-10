@@ -1,0 +1,1 @@
+./optim.py -o out-trebesice_2009-10 -m model/trebesice_2009-10.ini -O cfgs/trebesice_2009-10.cfg > logs/out-trebesice_2009-10.log

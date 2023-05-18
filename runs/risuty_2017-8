@@ -1,0 +1,1 @@
+./optim.py -o out-risuty_2017-8 -m model/risuty_2017-8.ini -O cfgs/risuty_2017-8.cfg > logs/out-risuty_2017-8.log

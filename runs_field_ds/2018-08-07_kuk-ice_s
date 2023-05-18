@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2018-08-07_kuk-ice_s -m model/2018-08-07_kuk-ice_s.ini -O cfgs/2018-08-07_kuk-ice_s.cfgs &> logs/2018-08-07_kuk-ice_s.log

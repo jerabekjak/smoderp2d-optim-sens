@@ -1,0 +1,1 @@
+./optim.py -o outs/Vse-2014-9-labds -m model/Vse-2014-9-labds.ini -O cfgs/Vse-2014-9-labds.cfgs &> logs/Vse-2014-9-labds.log

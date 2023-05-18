@@ -1,0 +1,11 @@
+./optim.py -o outs/Vse-2014-10-labds -m model/Vse-2014-10-labds.ini -O cfgs/Vse-2014-10-labds.cfgs &> logs/Vse-2014-10-labds.log
+./optim.py -o outs/Vse-2014-11-labds -m model/Vse-2014-11-labds.ini -O cfgs/Vse-2014-11-labds.cfgs &> logs/Vse-2014-11-labds.log
+./optim.py -o outs/Vse-2014-14-labds -m model/Vse-2014-14-labds.ini -O cfgs/Vse-2014-14-labds.cfgs &> logs/Vse-2014-14-labds.log
+./optim.py -o outs/Vse-2014-15-labds -m model/Vse-2014-15-labds.ini -O cfgs/Vse-2014-15-labds.cfgs &> logs/Vse-2014-15-labds.log
+./optim.py -o outs/Vse-2014-16-labds -m model/Vse-2014-16-labds.ini -O cfgs/Vse-2014-16-labds.cfgs &> logs/Vse-2014-16-labds.log
+./optim.py -o outs/Vse-2014-3-labds -m model/Vse-2014-3-labds.ini -O cfgs/Vse-2014-3-labds.cfgs &> logs/Vse-2014-3-labds.log
+./optim.py -o outs/Vse-2014-4-labds -m model/Vse-2014-4-labds.ini -O cfgs/Vse-2014-4-labds.cfgs &> logs/Vse-2014-4-labds.log
+./optim.py -o outs/Vse-2014-5-labds -m model/Vse-2014-5-labds.ini -O cfgs/Vse-2014-5-labds.cfgs &> logs/Vse-2014-5-labds.log
+./optim.py -o outs/Vse-2014-6-labds -m model/Vse-2014-6-labds.ini -O cfgs/Vse-2014-6-labds.cfgs &> logs/Vse-2014-6-labds.log
+./optim.py -o outs/Vse-2014-8-labds -m model/Vse-2014-8-labds.ini -O cfgs/Vse-2014-8-labds.cfgs &> logs/Vse-2014-8-labds.log
+./optim.py -o outs/Vse-2014-9-labds -m model/Vse-2014-9-labds.ini -O cfgs/Vse-2014-9-labds.cfgs &> logs/Vse-2014-9-labds.log

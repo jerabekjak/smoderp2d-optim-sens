@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2017-05-22_rep-ima_s -m model/2017-05-22_rep-ima_s.ini -O cfgs/2017-05-22_rep-ima_s.cfgs &> logs/2017-05-22_rep-ima_s.log

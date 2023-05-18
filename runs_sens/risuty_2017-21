@@ -1,0 +1,1 @@
+./sens.py -o out-sens-risuty_2017-21 -m model/risuty_2017-21.ini -O cfgs_sens/risuty_2017-21.cfg > logs/out-sens-risuty_2017-21.log

@@ -1,0 +1,1 @@
+./optim.py -o outs/Nov-2016-11-labds -m model/Nov-2016-11-labds.ini -O cfgs/Nov-2016-11-labds.cfgs &> logs/Nov-2016-11-labds.log

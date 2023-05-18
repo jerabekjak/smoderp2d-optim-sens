@@ -1,0 +1,1 @@
+./optim.py -o out-trebsin_i_2004-16 -m model/trebsin_i_2004-16.ini -O cfgs/trebsin_i_2004-16.cfg > logs/out-trebsin_i_2004-16.log

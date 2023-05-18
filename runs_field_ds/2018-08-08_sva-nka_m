@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2018-08-08_sva-nka_m -m model/2018-08-08_sva-nka_m.ini -O cfgs/2018-08-08_sva-nka_m.cfgs &> logs/2018-08-08_sva-nka_m.log

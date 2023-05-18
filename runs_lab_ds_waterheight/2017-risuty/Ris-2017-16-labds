@@ -1,0 +1,1 @@
+./optim.py -o outs/Ris-2017-16-labds -m model/Ris-2017-16-labds.ini -O cfgs/Ris-2017-16-labds.cfgs &> logs/Ris-2017-16-labds.log

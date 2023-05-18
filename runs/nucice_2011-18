@@ -1,0 +1,1 @@
+./optim.py -o out-nucice_2011-18 -m model/nucice_2011-18.ini -O cfgs/nucice_2011-18.cfg > logs/out-nucice_2011-18.log

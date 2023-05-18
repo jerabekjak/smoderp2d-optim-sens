@@ -1,0 +1,14 @@
+./optim.py -o outs/nuc-2011-11-labds -m model/nuc-2011-11-labds.ini -O cfgs/nuc-2011-11-labds.cfgs &> logs/nuc-2011-11-labds.log
+./optim.py -o outs/nuc-2011-12-labds -m model/nuc-2011-12-labds.ini -O cfgs/nuc-2011-12-labds.cfgs &> logs/nuc-2011-12-labds.log
+./optim.py -o outs/nuc-2011-13-labds -m model/nuc-2011-13-labds.ini -O cfgs/nuc-2011-13-labds.cfgs &> logs/nuc-2011-13-labds.log
+./optim.py -o outs/nuc-2011-14-labds -m model/nuc-2011-14-labds.ini -O cfgs/nuc-2011-14-labds.cfgs &> logs/nuc-2011-14-labds.log
+./optim.py -o outs/nuc-2011-15-labds -m model/nuc-2011-15-labds.ini -O cfgs/nuc-2011-15-labds.cfgs &> logs/nuc-2011-15-labds.log
+./optim.py -o outs/nuc-2011-18-labds -m model/nuc-2011-18-labds.ini -O cfgs/nuc-2011-18-labds.cfgs &> logs/nuc-2011-18-labds.log
+./optim.py -o outs/nuc-2011-19-labds -m model/nuc-2011-19-labds.ini -O cfgs/nuc-2011-19-labds.cfgs &> logs/nuc-2011-19-labds.log
+./optim.py -o outs/nuc-2011-20-labds -m model/nuc-2011-20-labds.ini -O cfgs/nuc-2011-20-labds.cfgs &> logs/nuc-2011-20-labds.log
+./optim.py -o outs/nuc-2011-21-labds -m model/nuc-2011-21-labds.ini -O cfgs/nuc-2011-21-labds.cfgs &> logs/nuc-2011-21-labds.log
+./optim.py -o outs/nuc-2011-22-labds -m model/nuc-2011-22-labds.ini -O cfgs/nuc-2011-22-labds.cfgs &> logs/nuc-2011-22-labds.log
+./optim.py -o outs/nuc-2011-24-labds -m model/nuc-2011-24-labds.ini -O cfgs/nuc-2011-24-labds.cfgs &> logs/nuc-2011-24-labds.log
+./optim.py -o outs/nuc-2011-25-labds -m model/nuc-2011-25-labds.ini -O cfgs/nuc-2011-25-labds.cfgs &> logs/nuc-2011-25-labds.log
+./optim.py -o outs/nuc-2011-27-labds -m model/nuc-2011-27-labds.ini -O cfgs/nuc-2011-27-labds.cfgs &> logs/nuc-2011-27-labds.log
+./optim.py -o outs/nuc-2011-3-labds -m model/nuc-2011-3-labds.ini -O cfgs/nuc-2011-3-labds.cfgs &> logs/nuc-2011-3-labds.log

@@ -1,0 +1,1 @@
+./sens.py -o out-sens-nove_straseci_2015-11 -m model/nove_straseci_2015-11.ini -O cfgs_sens/nove_straseci_2015-11.cfg > logs/out-sens-nove_straseci_2015-11.log

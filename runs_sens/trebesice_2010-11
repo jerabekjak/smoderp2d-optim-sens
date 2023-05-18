@@ -1,0 +1,1 @@
+./sens.py -o out-sens-trebesice_2010-11 -m model/trebesice_2010-11.ini -O cfgs_sens/trebesice_2010-11.cfg > logs/out-sens-trebesice_2010-11.log

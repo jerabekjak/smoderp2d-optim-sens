@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2013-04-29_pse-ima_s -m model/2013-04-29_pse-ima_s.ini -O cfgs/2013-04-29_pse-ima_s.cfgs &> logs/2013-04-29_pse-ima_s.log

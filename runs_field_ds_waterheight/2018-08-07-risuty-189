@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2018-08-07-risuty-189 -m model/2018-08-07-risuty-189.ini -O cfgs/2018-08-07-risuty-189.cfgs &> logs/2018-08-07-risuty-189.log

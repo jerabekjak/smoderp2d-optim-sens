@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2018-08-08_hra-rni_s -m model/2018-08-08_hra-rni_s.ini -O cfgs/2018-08-08_hra-rni_s.cfgs &> logs/2018-08-08_hra-rni_s.log

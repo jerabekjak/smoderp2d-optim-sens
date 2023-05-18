@@ -1,0 +1,1 @@
+./sens.py -o out-sens-neustupov_2006-5 -m model/neustupov_2006-5.ini -O cfgs_sens/neustupov_2006-5.cfg > logs/out-sens-neustupov_2006-5.log

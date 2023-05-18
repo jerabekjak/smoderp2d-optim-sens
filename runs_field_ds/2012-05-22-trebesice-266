@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2012-05-22-trebesice-266 -m model/2012-05-22-trebesice-266.ini -O cfgs/2012-05-22-trebesice-266.cfgs &> logs/2012-05-22-trebesice-266.log

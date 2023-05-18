@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2014-05-23-bykovice-294 -m model/2014-05-23-bykovice-294.ini -O cfgs/2014-05-23-bykovice-294.cfgs &> logs/2014-05-23-bykovice-294.log

@@ -1,0 +1,1 @@
+./sens.py -o out-sens-vsetaty_2013-16 -m model/vsetaty_2013-16.ini -O cfgs_sens/vsetaty_2013-16.cfg > logs/out-sens-vsetaty_2013-16.log

@@ -1,0 +1,17 @@
+./optim.py -o outs/vse-2012-10-labds -m model/vse-2012-10-labds.ini -O cfgs/vse-2012-10-labds.cfgs &> logs/vse-2012-10-labds.log
+./optim.py -o outs/vse-2012-11-labds -m model/vse-2012-11-labds.ini -O cfgs/vse-2012-11-labds.cfgs &> logs/vse-2012-11-labds.log
+./optim.py -o outs/vse-2012-12-labds -m model/vse-2012-12-labds.ini -O cfgs/vse-2012-12-labds.cfgs &> logs/vse-2012-12-labds.log
+./optim.py -o outs/vse-2012-13-labds -m model/vse-2012-13-labds.ini -O cfgs/vse-2012-13-labds.cfgs &> logs/vse-2012-13-labds.log
+./optim.py -o outs/vse-2012-14-labds -m model/vse-2012-14-labds.ini -O cfgs/vse-2012-14-labds.cfgs &> logs/vse-2012-14-labds.log
+./optim.py -o outs/vse-2012-15-labds -m model/vse-2012-15-labds.ini -O cfgs/vse-2012-15-labds.cfgs &> logs/vse-2012-15-labds.log
+./optim.py -o outs/vse-2012-16-labds -m model/vse-2012-16-labds.ini -O cfgs/vse-2012-16-labds.cfgs &> logs/vse-2012-16-labds.log
+./optim.py -o outs/vse-2012-1-labds -m model/vse-2012-1-labds.ini -O cfgs/vse-2012-1-labds.cfgs &> logs/vse-2012-1-labds.log
+./optim.py -o outs/vse-2012-20-labds -m model/vse-2012-20-labds.ini -O cfgs/vse-2012-20-labds.cfgs &> logs/vse-2012-20-labds.log
+./optim.py -o outs/vse-2012-21-labds -m model/vse-2012-21-labds.ini -O cfgs/vse-2012-21-labds.cfgs &> logs/vse-2012-21-labds.log
+./optim.py -o outs/vse-2012-22-labds -m model/vse-2012-22-labds.ini -O cfgs/vse-2012-22-labds.cfgs &> logs/vse-2012-22-labds.log
+./optim.py -o outs/vse-2012-2a-labds -m model/vse-2012-2a-labds.ini -O cfgs/vse-2012-2a-labds.cfgs &> logs/vse-2012-2a-labds.log
+./optim.py -o outs/vse-2012-2b-labds -m model/vse-2012-2b-labds.ini -O cfgs/vse-2012-2b-labds.cfgs &> logs/vse-2012-2b-labds.log
+./optim.py -o outs/vse-2012-4-labds -m model/vse-2012-4-labds.ini -O cfgs/vse-2012-4-labds.cfgs &> logs/vse-2012-4-labds.log
+./optim.py -o outs/vse-2012-7-labds -m model/vse-2012-7-labds.ini -O cfgs/vse-2012-7-labds.cfgs &> logs/vse-2012-7-labds.log
+./optim.py -o outs/vse-2012-8-labds -m model/vse-2012-8-labds.ini -O cfgs/vse-2012-8-labds.cfgs &> logs/vse-2012-8-labds.log
+./optim.py -o outs/vse-2012-9-labds -m model/vse-2012-9-labds.ini -O cfgs/vse-2012-9-labds.cfgs &> logs/vse-2012-9-labds.log

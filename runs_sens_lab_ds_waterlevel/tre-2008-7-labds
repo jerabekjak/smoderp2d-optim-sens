@@ -1,0 +1,1 @@
+./sens.py -o outs_sens/tre-2008-7-labds -m model/tre-2008-7-labds.ini -O cfgs_sens/tre-2008-7-labds.cfgs &> logs_sens/tre-2008-7-labds.log

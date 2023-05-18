@@ -1,0 +1,2 @@
+./pareto_calc.py   -o outs_tmp/out-2012-06-07-trebesice-268 -m model/2012-06-07-trebesice-268.ini -O cfgs/2012-06-07-trebesice-268.cfgs 
+

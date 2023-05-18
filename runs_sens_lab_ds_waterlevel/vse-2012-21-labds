@@ -1,0 +1,1 @@
+./sens.py -o outs_sens/vse-2012-21-labds -m model/vse-2012-21-labds.ini -O cfgs_sens/vse-2012-21-labds.cfgs &> logs_sens/vse-2012-21-labds.log

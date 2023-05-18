@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2016-07-28_hor-ice_s -m model/2016-07-28_hor-ice_s.ini -O cfgs/2016-07-28_hor-ice_s.cfgs &> logs/2016-07-28_hor-ice_s.log

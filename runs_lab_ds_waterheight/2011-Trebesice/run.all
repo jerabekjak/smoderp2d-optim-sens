@@ -1,0 +1,5 @@
+./optim.py -o outs/Tre-2011-14-labds -m model/Tre-2011-14-labds.ini -O cfgs/Tre-2011-14-labds.cfgs &> logs/Tre-2011-14-labds.log
+./optim.py -o outs/Tre-2011-23-labds -m model/Tre-2011-23-labds.ini -O cfgs/Tre-2011-23-labds.cfgs &> logs/Tre-2011-23-labds.log
+./optim.py -o outs/Tre-2011-3-labds -m model/Tre-2011-3-labds.ini -O cfgs/Tre-2011-3-labds.cfgs &> logs/Tre-2011-3-labds.log
+./optim.py -o outs/Tre-2011-6-labds -m model/Tre-2011-6-labds.ini -O cfgs/Tre-2011-6-labds.cfgs &> logs/Tre-2011-6-labds.log
+./optim.py -o outs/Tre-2011-7-labds -m model/Tre-2011-7-labds.ini -O cfgs/Tre-2011-7-labds.cfgs &> logs/Tre-2011-7-labds.log

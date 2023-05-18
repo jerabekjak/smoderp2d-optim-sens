@@ -1,0 +1,1 @@
+./optim.py -o out-nove_straseci_2015-11 -m model/nove_straseci_2015-11.ini -O cfgs/nove_straseci_2015-11.cfg > logs/out-nove_straseci_2015-11.log

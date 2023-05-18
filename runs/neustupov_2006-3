@@ -1,0 +1,1 @@
+./optim.py -o out-neustupov_2006-3 -m model/neustupov_2006-3.ini -O cfgs/neustupov_2006-3.cfg > logs/out-neustupov_2006-3.log

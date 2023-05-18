@@ -1,0 +1,1 @@
+./optim.py -o outs/Tre-2011-23-labds -m model/Tre-2011-23-labds.ini -O cfgs/Tre-2011-23-labds.cfgs &> logs/Tre-2011-23-labds.log

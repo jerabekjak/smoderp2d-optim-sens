@@ -1,0 +1,1 @@
+./sens.py -o out-sens-klapy_2007-2 -m model/klapy_2007-2.ini -O cfgs_sens/klapy_2007-2.cfg > logs/out-sens-klapy_2007-2.log

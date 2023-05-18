@@ -1,0 +1,1 @@
+./optim.py -o outs/nuc-2011-11-labds -m model/nuc-2011-11-labds.ini -O cfgs/nuc-2011-11-labds.cfgs &> logs/nuc-2011-11-labds.log

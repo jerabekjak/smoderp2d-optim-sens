@@ -1,0 +1,7 @@
+./optim.py -o outs/Nov-2016-11-labds -m model/Nov-2016-11-labds.ini -O cfgs/Nov-2016-11-labds.cfgs &> logs/Nov-2016-11-labds.log
+./optim.py -o outs/Nov-2016-12-labds -m model/Nov-2016-12-labds.ini -O cfgs/Nov-2016-12-labds.cfgs &> logs/Nov-2016-12-labds.log
+./optim.py -o outs/Nov-2016-13-labds -m model/Nov-2016-13-labds.ini -O cfgs/Nov-2016-13-labds.cfgs &> logs/Nov-2016-13-labds.log
+./optim.py -o outs/Nov-2016-4-labds -m model/Nov-2016-4-labds.ini -O cfgs/Nov-2016-4-labds.cfgs &> logs/Nov-2016-4-labds.log
+./optim.py -o outs/Nov-2016-6-labds -m model/Nov-2016-6-labds.ini -O cfgs/Nov-2016-6-labds.cfgs &> logs/Nov-2016-6-labds.log
+./optim.py -o outs/Nov-2016-7-labds -m model/Nov-2016-7-labds.ini -O cfgs/Nov-2016-7-labds.cfgs &> logs/Nov-2016-7-labds.log
+./optim.py -o outs/Nov-2016-8-labds -m model/Nov-2016-8-labds.ini -O cfgs/Nov-2016-8-labds.cfgs &> logs/Nov-2016-8-labds.log

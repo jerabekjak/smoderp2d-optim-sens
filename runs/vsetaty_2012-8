@@ -1,0 +1,1 @@
+./optim.py -o out-vsetaty_2012-8 -m model/vsetaty_2012-8.ini -O cfgs/vsetaty_2012-8.cfg > logs/out-vsetaty_2012-8.log

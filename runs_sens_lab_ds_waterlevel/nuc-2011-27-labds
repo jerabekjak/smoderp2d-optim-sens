@@ -1,0 +1,1 @@
+./sens.py -o outs_sens/nuc-2011-27-labds -m model/nuc-2011-27-labds.ini -O cfgs_sens/nuc-2011-27-labds.cfgs &> logs_sens/nuc-2011-27-labds.log

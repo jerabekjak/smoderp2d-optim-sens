@@ -1,0 +1,1 @@
+./sens.py -o out-sens-trebsin_ii_2008-7 -m model/trebsin_ii_2008-7.ini -O cfgs_sens/trebsin_ii_2008-7.cfg > logs/out-sens-trebsin_ii_2008-7.log

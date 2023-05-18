@@ -1,0 +1,1 @@
+./sens.py -o out-sens-nucice_2011-31 -m model/nucice_2011-31.ini -O cfgs_sens/nucice_2011-31.cfg > logs/out-sens-nucice_2011-31.log

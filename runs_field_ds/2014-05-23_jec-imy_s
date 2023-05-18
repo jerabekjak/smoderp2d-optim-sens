@@ -1,0 +1,1 @@
+./optim.py -o outs/out-2014-05-23_jec-imy_s -m model/2014-05-23_jec-imy_s.ini -O cfgs/2014-05-23_jec-imy_s.cfgs &> logs/2014-05-23_jec-imy_s.log
