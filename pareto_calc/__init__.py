@@ -56,10 +56,22 @@ class ParetoCalc(object):
         """
 
         sm.run(self._mod_conf, params, self._cfgs)
-        print (self._mod_file)
         mod_data = self._read_mod_file(self._mod_file)
-        #input('')
         mod_data_wl = self._read_mod_file(self._mod_file, col = 'totalWaterLevel[m]')
+
+        # in which times to see the restsul
+        times =  (np.arange(60, max(mod_data.time), 60))
+        
+        mod_data_itnerp = np.interp(times, mod_data.time, mod_data.val)
+        mod_data_wl_itnerp = np.interp(times, mod_data_wl.time, mod_data_wl.val)
+        
+        
+        outfile_ = '{}/run.{:05d}'.format(self._out_dir, self._run_dir_int)
+        self._run_dir_int += 1
+                
+        table = np.array([times, mod_data_itnerp, mod_data_wl_itnerp])
+        np.savetxt(outfile_, np.transpose(table), fmt= '%.5e')
+        #mod_data_wl_interp = self._read_mod_file(self._mod_file, col = 'totalWaterLevel[m]')
 
         # TODO zapsat_vysledky
         #
@@ -88,9 +100,6 @@ class ParetoCalc(object):
         for line in lines:
             params =  [float(x) for x in line.split(' ')]
             self._model(params)
-        #self._plus_minus_proc()
-
-        #self._monte_carlo()
 
 
     def __del__(self):
