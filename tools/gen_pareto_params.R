@@ -1,6 +1,4 @@
-load('/home/jakub/ownCloud/Data-in-progress/16_smod_paper_optim/rdata.4/field/pareto_front_vysledky.4.04.fieldrs.rda', verbose = T)
-
-
+load('/home/jakub/ownCloud/Data-in-progress/16_smod_paper_optim/rdata.4/field/pareto_front_vysledky.4.01.fieldrs.rda', verbose = T)
 
 npar = names(pareto.lists)
 
@@ -12,4 +10,5 @@ for (inpar in npar)
   
   write.table(pars, file = newfiles, row.names = F, col.names = F)
 }
+
 
